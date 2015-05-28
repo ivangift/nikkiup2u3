@@ -1,6 +1,6 @@
 <html>
   <head>
-    <script type='text/javascript' src='nikki.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='nikki.js'></script>
 		<style>
 		table
 		{
@@ -33,10 +33,11 @@
 		</style>
     
   </head>
-  <body>
-    <input type='text' id='cookie' onChange='updateCookie()'/>
+    Hello world
+    <div id = "clothes">
+    </div>
     <script>
-		document.getElementById("cookie").value = loadCookie();
+      drawTable(clothes, "clothes");
     </script>
   </body>
 </html>
