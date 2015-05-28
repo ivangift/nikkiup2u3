@@ -20,7 +20,7 @@ var THEAD = "<thead><tr>\
 var FEATURES = ["simple", "cute", "active", "pure", "cool"];
 
 // parses a csv row into object
-// Clothes: name, type, id, stars, gorgeous, simple, elegant, active, mature, cute, pure, sexy, cool, warm，extra
+// Clothes: name, type, id, stars, gorgeous, simple, elegant, active, mature, cute, sexy, pure, cool, warm，extra
 //          0     1     2   3      4         5       6        7       8       9     10    11    12    13    14
 Clothes = function(csv) {
 	return {
@@ -32,7 +32,7 @@ Clothes = function(csv) {
 		simple: normalizeRating(csv[5], csv[4]),
 		cute: normalizeRating(csv[9], csv[8]),
 		active: normalizeRating(csv[7], csv[6]),
-		pure: normalizeRating(csv[10], csv[11]),
+		pure: normalizeRating(csv[11], csv[10]),
 		cool: normalizeRating(csv[12], csv[13]),
 		extra: csv[14],
 		toCsv: function() {
