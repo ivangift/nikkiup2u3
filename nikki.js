@@ -98,8 +98,8 @@ function tr(tds) {
 	return "<tr>" + tds + "</tr>";
 }
 
-function td(data) {
-	return "<td>" + data + "</td>";
+function td(data, cls) {
+	return "<td class='" + cls + "'>" + data + "</td>";
 }
 
 function inventoryCheckbox(id, own) {
@@ -119,12 +119,23 @@ function toggleInventory(id) {
 }
 
 function row(piece) {
-	var ret = td(inventoryCheckbox(piece.name, piece.own));
+	var ret = td(inventoryCheckbox(piece.name, piece.own), "");
 	var csv = piece.toCsv();
 	for (var i in csv) {
-		ret += td(csv[i]);
+		ret += td(csv[i], getStyle(csv[i]));
 	}
 	return tr(ret);
+}
+
+function getStyle(rating) {
+	switch (rating) {
+		case "SS": return 'S';
+		case "S": return 'S';
+		case "A": return 'A';
+		case "B": return 'B';
+		case "C": return 'C';
+		default: return ""
+	}
 }
 
 function list(rows) {
