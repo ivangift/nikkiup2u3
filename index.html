@@ -1,5 +1,7 @@
 <html>
   <head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  	<script type='text/javascript' charset="UTF-8" src='wardrobe.js'></script>
     <script type='text/javascript' charset="UTF-8" src='nikki.js'></script>
 		<style>
 		table
@@ -8,9 +10,8 @@
 			font-size: 12px;
 			background: #fff;
 			margin: 45px;
-			width: 480px;
 			border-collapse: collapse;
-			text-align: left;
+			text-align: center;
 		}
 		th
 		{
@@ -33,10 +34,48 @@
 		</style>
     
   </head>
-    Hello world
-    <div id = "clothes">
+    <div>Hello world</div>
+    <div>
+    	<form name="filter_form">
+	    	<div>
+	    		<input type="radio" name="simple" value="0" onClick="filter()" /> 皆可
+	    		<input type="radio" name="simple" value="1" onClick="filter()" /> 简约
+	    		<input type="radio" name="simple" value="-1" onClick="filter()" /> 华丽
+	    	</div>
+	    	<div>
+	    		<input type="radio" name="cute" value="0" onClick="filter()" /> 皆可
+	    		<input type="radio" name="cute" value="1" onClick="filter()" /> 可爱
+	    		<input type="radio" name="cute" value="-1" onClick="filter()" /> 成熟
+	    	</div>
+	    	<div>
+	    		<input type="radio" name="active" value="0" onClick="filter()" /> 皆可
+	    		<input type="radio" name="active" value="1" onClick="filter()" /> 活泼
+	    		<input type="radio" name="active" value="-1" onClick="filter()" /> 优雅
+	    	</div>
+	    	<div>
+	    		<input type="radio" name="pure" value="0" onClick="filter()" /> 皆可
+	    		<input type="radio" name="pure" value="1" onClick="filter()" /> 清纯
+	    		<input type="radio" name="pure" value="-1" onClick="filter()" /> 性感
+	    	</div>
+	    	<div>
+	    		<input type="radio" name="cool" value="0" onClick="filter()" /> 皆可
+	    		<input type="radio" name="cool" value="1" onClick="filter()" /> 清凉
+	    		<input type="radio" name="cool" value="-1" onClick="filter()" /> 保暖
+	    	</div>
+	    	<div>
+	    		<input type="checkbox" name="inventory" value="own" onClick="filter()" checked /> 拥有
+	    		<input type="checkbox" name="inventory" value="missing" onClick="filter()" checked /> 没有
+	    	</div>
+    	</form>
     </div>
+    <div id = "clothes"></div>
+    <hr>
+    <p> My clothes </p>
+    <textarea id="myClothes" rows=5 style="width:480px"></textarea>
+    <br/>
+    <button onClick="loadCustomInventory()">Update inventory</button>
     <script>
+      loadFromStorage();
       drawTable(clothes, "clothes");
     </script>
   </body>

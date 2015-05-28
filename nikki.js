@@ -1,44 +1,92 @@
-var types = ["头发", "连衣裙", "外套", "上装", "下装", "袜子", "鞋子", "饰品", "妆容"];
 
-// Clothes: name, type, simple, gorgeous, cute, mature, active, elegant, pure, sexy, cool, warm，extra
-var raw = [
-  ["默认粉毛", 0, "S", "", "A", "", "A", "", "A", "", "", "A", ""]
-];
+var THEAD = "<thead><tr>\
+  <th>拥有</th>\
+  <th>名称</th>\
+  <th>类别</th>\
+  <th>简约</th>\
+  <th>华丽</th>\
+  <th>可爱</th>\
+  <th>成熟</th>\
+  <th>活泼</th>\
+  <th>优雅</th>\
+  <th>清纯</th>\
+  <th>性感</th>\
+  <th>清凉</th>\
+  <th>保暖</th>\
+  <th>特殊属性</th>\
+  </tr></thead>";
+
+var FEATURES = ["simple", "cute", "active", "pure", "cool"];
+
+// parses a csv row into object
+// Clothes: name, type, id, stars, gorgeous, simple, elegant, active, mature, cute, pure, sexy, cool, warm，extra
+//          0     1     2   3      4         5       6        7       8       9     10    11    12    13    14
+Clothes = function(csv) {
+	return {
+		own: false,
+		name: csv[0],
+		type: csv[1],
+		id: csv[2],
+		stars: csv[3],
+		simple: normalizeRating(csv[5], csv[4]),
+		cute: normalizeRating(csv[9], csv[8]),
+		active: normalizeRating(csv[7], csv[6]),
+		pure: normalizeRating(csv[10], csv[11]),
+		cool: normalizeRating(csv[12], csv[13]),
+		extra: csv[14],
+		toCsv: function() {
+			name = this.name;
+			type = this.type;
+			simple = this.simple;
+			cute = this.cute;
+			active = this.active;
+			pure = this.pure;
+			cool = this.cool;
+			extra = this.extra;
+			return [name, type, rating(simple), rating(-simple), rating(cute), rating(-cute),
+			    rating(active), rating(-active), rating(pure), rating(-pure), rating(cool),
+			    rating(-cool), extra];
+		}
+	};
+}
 
 var clothes = function() {
 	var ret = [];
-  for (var i in raw) {
-  	ret.push(Clothes(clothes[i]));
+  for (var i in wardrobe) {
+  	ret.push(Clothes(wardrobe[i]));
   }
   return ret;
 }();
 
-function rating(a, b) {
+var clothesSet = function() {
+	var ret = {};
+	for (var i in clothes) {
+		ret[clothes[i].name] = clothes[i];
+	}
+	return ret;
+}();
+
+function normalizeRating(a, b) {
 	realRating = a ? a : b;
+	symbol = a ? 1 : -1;
 	switch (realRating) {
-		case "SS": return 5;
-		case "S": return 4;
-		case "A": return 3;
-		case "B": return 2;
-		case "C": return 1;
+		case "SS": return 5 * symbol;
+		case "S": return 4 * symbol;
+		case "A": return 3 * symbol;
+		case "B": return 2 * symbol;
+		case "C": return 1 * symbol;
 	}
 }
 
-// parses a csv row into object
-Clothes = function(csv) {
-	return {
-		name: csv[0],
-		type: types[csv[1]],
-		simple: rating(csv[2], csv[3]),
-		cute: rating(csv[4], csv[5]),
-		active: rating(csv[6], csv[7]),
-		pure: rating(csv[8], csv[9]),
-		cool: rating(csv[10], csv[11]),
-		extra: csv[12],
-		toCsv = function() {
-			
-		}
-	};
+function rating(num) {
+	switch (num) {
+		case 1: return "C";
+		case 2: return "B";
+		case 3: return "A";
+		case 4: return "S";
+		case 5: return "SS";
+		default: return "-";
+	}
 }
 
 // for table use
@@ -54,16 +102,33 @@ function td(data) {
 	return "<td>" + data + "</td>";
 }
 
+function inventoryCheckbox(id, own) {
+	var ret = "<input type = 'checkbox' name = 'inventory' id = '" + id
+	    + "' onClick='toggleInventory(\"" + id + "\")'";
+	if (own) {
+		ret += "checked";
+	}
+	ret += "/>";
+	return ret;
+}
+
+function toggleInventory(id) {
+	var checked = document.getElementById(id).checked;
+	clothesSet[id].own = checked;
+	save();
+}
+
 function row(piece) {
-	ret = ""
-	for (var i in piece) {
-		ret += td(piece[i]);
+	var ret = td(inventoryCheckbox(piece.name, piece.own));
+	var csv = piece.toCsv();
+	for (var i in csv) {
+		ret += td(csv[i]);
 	}
 	return tr(ret);
 }
 
 function list(rows) {
-	ret = ""
+	ret = THEAD;
 	for (var i in rows) {
 		ret += row(rows[i]);
 	}
@@ -73,6 +138,100 @@ function list(rows) {
 function drawTable(data, div) {
   container = document.getElementById(div);
   container.innerHTML = list(data);
+}
+
+function filter() {
+	var filters = {};
+	for (var i in document.filter_form.elements) {
+		var element = document.filter_form.elements[i];
+		if (element.type == "radio" && element.checked) {
+			filters[element.name] = parseInt(element.value);
+		}
+	}
+	for (var i in document.filter_form.inventory) {
+		var element = document.filter_form.inventory[i];
+		if (element.checked) {
+			filters[element.value] = true;
+		}
+	}
+
+	drawTable(filtering(filters), "clothes");
+}
+
+function filtering(filters) {
+	var result = [];
+	for (var i in clothes) {
+		if (matches(clothes[i], filters)) {
+			result.push(clothes[i]);
+		}
+	}
+	return result;
+}
+
+function matches(c, filters) {
+	for (var i in FEATURES) {
+		var f = FEATURES[i];
+		if (filters[f] && filters[f] * c[f] < 0) {
+			return false;
+		}
+	}
+	return (c.own && filters.own) || (!c.own && filters.missing);
+}
+
+function getMyClothes() {
+	var mine = [];
+	for (var i in clothes) {
+		if (clothes[i].own) {
+			mine.push(clothes[i].name);
+		}
+	}
+	return mine.join(",");
+}
+
+function save() {
+	var myClothes = getMyClothes();
+	document.getElementById("myClothes").innerText = myClothes;
+	if (localStorage) {
+		localStorage.myClothes = myClothes;
+	} else {
+		setCookie("mine", myClothes, 3650);
+	}
+}
+
+function load(myClothes) {
+	var cs = myClothes.split(",");
+	for (var i in clothes) {
+		clothes[i].own = false;
+	}
+	for (var i in cs) {
+		if (clothesSet[cs[i]]) {
+			clothesSet[cs[i]].own = true;
+		}
+	}
+	for (var i in clothes) {
+		var checkBox = document.getElementById(clothes[i].name);
+		if (checkBox) {
+			checkBox.checked = clothes[i].own;
+		}
+	}
+	document.getElementById("myClothes").innerText = myClothes;
+}
+
+function loadFromStorage() {
+	var myClothes;
+	if (localStorage) {
+		myClothes = localStorage.myClothes;
+	} else {
+		myClothes = getCookie("mine");
+	}
+	if (myClothes) {
+    load(myClothes);
+	}
+}
+
+function loadCustomInventory() {
+	var myClothes = document.getElementById("myClothes").value;
+  load(myClothes);
 }
 
 function getCookie(c_name) {
@@ -96,23 +255,3 @@ function setCookie(c_name,value,expiredays) {
 	document.cookie=c_name+ "=" +escape(value)+
 	((expiredays==null) ? "" : "; expires="+exdate.toGMTString())
 }
-
-function updateCookie() {
-	var mine=document.getElementById("cookie").value;
-	setCookie('mine', mine, 3650);
-	
-	//cookie = "mine=" + mine + "; expires=" + (new Date("December 31, 2020").toGMTString());
-	//document.cookie=cookie;
-}
-
-function loadCookie() {
-	return getCookie("mine");
-	/*
-	var cookies = document.cookie.split(";");
-	for (var i in cookies) {
-	  var c = cookies[i].trim();
-		var name = "mine=";
-	  if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-	}
-	return "";
-	*/
