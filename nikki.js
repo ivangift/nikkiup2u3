@@ -3,6 +3,7 @@ var THEAD = "<thead><tr>\
   <th>拥有</th>\
   <th>名称</th>\
   <th>类别</th>\
+  <th>编号</th>\
   <th>简约</th>\
   <th>华丽</th>\
   <th>可爱</th>\
@@ -37,13 +38,14 @@ Clothes = function(csv) {
 		toCsv: function() {
 			name = this.name;
 			type = this.type;
+			id = this.id;
 			simple = this.simple;
 			cute = this.cute;
 			active = this.active;
 			pure = this.pure;
 			cool = this.cool;
 			extra = this.extra;
-			return [name, type, rating(simple), rating(-simple), rating(cute), rating(-cute),
+			return [name, type, id, rating(simple), rating(-simple), rating(cute), rating(-cute),
 			    rating(active), rating(-active), rating(pure), rating(-pure), rating(cool),
 			    rating(-cool), extra];
 		}
@@ -165,7 +167,12 @@ function filter() {
 			filters[element.value] = true;
 		}
 	}
-
+	for (var i in document.filter_form.category) {
+		var element = document.filter_form.category[i];
+		if (element.checked) {
+			filters[element.value] = true;
+		}
+	}
 	drawTable(filtering(filters), "clothes");
 }
 
@@ -186,7 +193,7 @@ function matches(c, filters) {
 			return false;
 		}
 	}
-	return (c.own && filters.own) || (!c.own && filters.missing);
+	return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type];
 }
 
 function getMyClothes() {
@@ -265,4 +272,28 @@ function setCookie(c_name,value,expiredays) {
 	exdate.setDate(exdate.getDate()+expiredays)
 	document.cookie=c_name+ "=" +escape(value)+
 	((expiredays==null) ? "" : "; expires="+exdate.toGMTString())
+}
+
+function selectAllCategories() {
+	var all = document.getElementById('allCategory');
+	for (var i in document.filter_form.category) {
+		var element = document.filter_form.category[i];
+		element.checked = all.checked;
+	}
+	filter();
+}
+
+function drawFilter() {
+	cate = document.getElementById("category_div");
+	out = "<input type='checkbox' id='allCategory' onClick='selectAllCategories()' checked /> 全选<br/>\n";
+	for (var i in category) {
+		out += "<input type='checkbox' name='category' value='" + category[i]
+		    + "'' onClick='filter()' checked />" + category[i] + "\n";
+	}
+	cate.innerHTML = out;
+}
+
+function init() {
+	loadFromStorage();
+	drawFilter();
 }

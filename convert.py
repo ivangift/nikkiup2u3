@@ -37,13 +37,17 @@ def process(name, file, subtype = None):
 	return out
 
 writer = open('tmp.js', 'w');
+category = []
 writer.write("var wardrobe = [\n")
 for f in fileorder:
 	out = process(f, files[f][0], files[f][1])
 	for key in out:
 		for row in out[key]:
+			if key not in category:
+				category.append(key)
 			# output in forms of name, *type*, id, stars, features....
 			newrow = [row[0]] + [key] + row[1:]
 			writer.write("  [%s],\n" % (','.join(["'" + i + "'" for i in newrow])))
 writer.write("];\n");
+writer.write("var category = [%s];\n" % (','.join(["'" + i + "'" for i in category])))
 writer.close()

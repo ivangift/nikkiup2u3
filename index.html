@@ -78,6 +78,8 @@
 	    		<input type="checkbox" name="inventory" value="own" onClick="filter()" checked /> 拥有
 	    		<input type="checkbox" name="inventory" value="missing" onClick="filter()" checked /> 没有
 	    	</div>
+	    	<div id='category_div'>
+	    	</div>
     	</form>
     </div>
     <div id = "clothes"></div>
@@ -87,7 +89,7 @@
     <br/>
     <button onClick="loadCustomInventory()">Update inventory</button>
     <script>
-      loadFromStorage();
+      init();
       drawTable(clothes, "clothes");
     </script>
   </body>
