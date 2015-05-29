@@ -250,6 +250,7 @@ function loadFromStorage() {
 function loadCustomInventory() {
 	var myClothes = document.getElementById("myClothes").value;
   load(myClothes);
+  save();
 }
 
 function getCookie(c_name) {
