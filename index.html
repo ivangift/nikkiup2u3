@@ -1,89 +1,107 @@
 <html>
   <head>
-  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  	<script type='text/javascript' charset="UTF-8" src='wardrobe.js'></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type='text/javascript' charset="UTF-8" src='wardrobe.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='scoring.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
     <script type='text/javascript' charset="UTF-8" src='nikki.js'></script>
-		<style>
-		table
-		{
-			font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-			font-size: 12px;
-			background: #fff;
-			margin: 45px;
-			border-collapse: collapse;
-			text-align: center;
-		}
-		th
-		{
-			font-size: 14px;
-			font-weight: normal;
-			color: #039;
-			padding: 10px 8px;
-			border-bottom: 2px solid #6678b1;
-		}
-		 td
-		{
-			color: #669;
-			padding: 9px 8px 0px 8px;
-		}
-		tbody tr:hover td
-		{
-			color: #009;
-		}
-		td.S {
-			color: #FB3;
-		}
-		td.A {
-			color: #F0A;
-		}
-		td.B {
-			color: #A66;
-		}
-		td.C {
-			color: #38F;
-		}
-		
-		</style>
+    <style>
+    table
+    {
+      font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+      font-size: 12px;
+      background: #fff;
+      margin: 45px;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    th
+    {
+      font-size: 14px;
+      font-weight: normal;
+      color: #039;
+      padding: 10px 8px;
+      border-bottom: 2px solid #6678b1;
+    }
+     td
+    {
+      color: #669;
+      padding: 9px 8px 0px 8px;
+    }
+    tbody tr:hover td
+    {
+      color: #009;
+    }
+    td.S {
+      color: #FB3;
+    }
+    td.A {
+      color: #F0A;
+    }
+    td.B {
+      color: #A66;
+    }
+    td.C {
+      color: #38F;
+    }
+    div.facet {
+      margin-left:10px;
+    }
+    </style>
     
   </head>
     <div>
-    	Nikki's wardrobe. By Ivan's workshop<br/>
-    	服装数据来自jillhx@贴吧 20150530
+      Nikki's wardrobe. By Ivan's workshop<br/>
+      服装数据来自jillhx@贴吧 20150530
+      Update 20150531:增加了分数排序，可以根据关卡权重来挑选服装，不过饰品的分数计算还有问题，请不要过于相信。
     </div>
     <div>
-    	<form name="filter_form">
-	    	<div>
-	    		<input type="radio" name="simple" value="0" onClick="filter()" /> 皆可
-	    		<input type="radio" name="simple" value="1" onClick="filter()" /> 简约
-	    		<input type="radio" name="simple" value="-1" onClick="filter()" /> 华丽
-	    	</div>
-	    	<div>
-	    		<input type="radio" name="cute" value="0" onClick="filter()" /> 皆可
-	    		<input type="radio" name="cute" value="1" onClick="filter()" /> 可爱
-	    		<input type="radio" name="cute" value="-1" onClick="filter()" /> 成熟
-	    	</div>
-	    	<div>
-	    		<input type="radio" name="active" value="0" onClick="filter()" /> 皆可
-	    		<input type="radio" name="active" value="1" onClick="filter()" /> 活泼
-	    		<input type="radio" name="active" value="-1" onClick="filter()" /> 优雅
-	    	</div>
-	    	<div>
-	    		<input type="radio" name="pure" value="0" onClick="filter()" /> 皆可
-	    		<input type="radio" name="pure" value="1" onClick="filter()" /> 清纯
-	    		<input type="radio" name="pure" value="-1" onClick="filter()" /> 性感
-	    	</div>
-	    	<div>
-	    		<input type="radio" name="cool" value="0" onClick="filter()" /> 皆可
-	    		<input type="radio" name="cool" value="1" onClick="filter()" /> 清凉
-	    		<input type="radio" name="cool" value="-1" onClick="filter()" /> 保暖
-	    	</div>
-	    	<div>
-	    		<input type="checkbox" name="inventory" value="own" onClick="filter()" checked /> 拥有
-	    		<input type="checkbox" name="inventory" value="missing" onClick="filter()" checked /> 没有
-	    	</div>
-	    	<div id='category_div'>
-	    	</div>
-    	</form>
+      <form name="filter_form">
+        <div>
+          <input type="radio" name="mode" value="filtering" onClick="changeMode(true)" checked/> 筛选
+          <input type="radio" name="mode" value="ranking" onClick="changeMode(false)" /> 计分
+          <select id="theme" onChange="changeTheme()" disabled></select>
+        </div>
+        <div class='facet'>
+          <div>
+            <input type="radio" name="simple" value="0" onClick="changeFilter()" /> 皆可
+            <input type="radio" name="simple" value="1" onClick="changeFilter()" /> 简约
+            <input type="radio" name="simple" value="-1" onClick="changeFilter()" /> 华丽
+            &nbsp;&nbsp;权重 <input type="text" id="simpleWeight" name="simpleWeight" value="1" onChange="changeFilter()" />
+          </div>
+          <div>
+            <input type="radio" name="cute" value="0" onClick="changeFilter()" /> 皆可
+            <input type="radio" name="cute" value="1" onClick="changeFilter()" /> 可爱
+            <input type="radio" name="cute" value="-1" onClick="changeFilter()" /> 成熟
+            &nbsp;&nbsp;权重 <input type="text" id="cuteWeight" name="cuteWeight" value="1" onChange="changeFilter()" />
+          </div>
+          <div>
+            <input type="radio" name="active" value="0" onClick="changeFilter()" /> 皆可
+            <input type="radio" name="active" value="1" onClick="changeFilter()" /> 活泼
+            <input type="radio" name="active" value="-1" onClick="changeFilter()" /> 优雅
+            &nbsp;&nbsp;权重 <input type="text" id="activeWeight" name="activeWeight" value="1" onChange="changeFilter()" />
+          </div>
+          <div>
+            <input type="radio" name="pure" value="0" onClick="changeFilter()" /> 皆可
+            <input type="radio" name="pure" value="1" onClick="changeFilter()" /> 清纯
+            <input type="radio" name="pure" value="-1" onClick="changeFilter()" /> 性感
+            &nbsp;&nbsp;权重 <input type="text" id="pureWeight" name="pureWeight" value="1" onChange="changeFilter()" />
+          </div>
+          <div>
+            <input type="radio" name="cool" value="0" onClick="changeFilter()" /> 皆可
+            <input type="radio" name="cool" value="1" onClick="changeFilter()" /> 清凉
+            <input type="radio" name="cool" value="-1" onClick="changeFilter()" /> 保暖
+            &nbsp;&nbsp;权重 <input type="text" id="coolWeight" name="coolWeight" value="1" onChange="changeFilter()" />
+          </div>
+        </div>
+        <div>
+          <input type="checkbox" name="inventory" value="own" onClick="refreshTable()" checked /> 拥有
+          <input type="checkbox" name="inventory" value="missing" onClick="refreshTable()" checked /> 没有
+        </div>
+
+        <div id='category_div'>
+        </div>
+      </form>
     </div>
     <div id = "clothes"></div>
     <hr>
