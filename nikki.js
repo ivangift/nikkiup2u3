@@ -382,7 +382,7 @@ function setFilters(filters) {
 function drawTheme() {
   var dropdown = document.getElementById("theme");
   var def = document.createElement('option');
-  def.text = '自定义';
+  def.text = '自定义关卡';
   def.value = 'custom' 
   dropdown.add(def);
   for (var theme in allThemes) {
