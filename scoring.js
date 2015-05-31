@@ -16,11 +16,11 @@ var dressScoring = {
 };
 
 var coatScoring = {
-  'SS': [450, 525], // highly est
+  'SS': [490, 520], // based on dianashusy's data
   'S': [370, 450],
   'A': [300, 360],
   'B': [230, 280],
-  'C': [210, 210],  // highly est
+  'C': [190, 210],  // highly est
 };
 
 var topScoring = {
@@ -40,11 +40,11 @@ var bottomScoring = {
 };
 
 var sockScoring = {
-  'SS': [700, 900], // no data, purely mocking
+  'SS': [860, 860], // based on dianashusy's data
   'S': [570, 650],
   'A': [440, 550],
   'B': [400, 440],
-  'C': [350, 350],  // no data, purely mocking
+  'C': [270, 300],  // ased on dianashusy's data
 };
 
 var shoeScoring = {
