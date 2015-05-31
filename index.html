@@ -96,6 +96,7 @@
         </div>
         <div>
           <input type="checkbox" name="inventory" value="own" onClick="refreshTable()" checked /> 拥有
+          <span id='inventoryCount'> </span>
           <input type="checkbox" name="inventory" value="missing" onClick="refreshTable()" checked /> 没有
         </div>
 
@@ -105,8 +106,8 @@
     </div>
     <div id = "clothes"></div>
     <hr>
-    <p> My clothes </p>
-    <textarea id="myClothes" rows=5 style="width:480px"></textarea>
+    <p>我拥有的服装 （复制衣橱文本框内容以备份衣橱）</p>
+    <textarea id="myClothes" rows=10 style="width:600px"></textarea>
     <br/>
     <button onClick="loadCustomInventory()">Update inventory</button>
     <script>

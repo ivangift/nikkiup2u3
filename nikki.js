@@ -242,16 +242,18 @@ function getMyClothes() {
       mine.push(clothes[i].name);
     }
   }
-  return mine.join(",");
+  return mine;
 }
 
 function save() {
   var myClothes = getMyClothes();
-  document.getElementById("myClothes").innerText = myClothes;
+  document.getElementById("inventoryCount").innerText = '(' + myClothes.length + ')';
+  var txt = myClothes.join(",");
+  document.getElementById("myClothes").innerText = txt;
   if (localStorage) {
-    localStorage.myClothes = myClothes;
+    localStorage.myClothes = txt;
   } else {
-    setCookie("mine", myClothes, 3650);
+    setCookie("mine", txt, 3650);
   }
 }
 
@@ -271,6 +273,7 @@ function load(myClothes) {
       checkBox.checked = clothes[i].own;
     }
   }
+  document.getElementById("inventoryCount").innerText = '(' + cs.length + ')';
   document.getElementById("myClothes").innerText = myClothes;
 }
 
