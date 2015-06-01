@@ -44,7 +44,7 @@ def process(name, file, subtype = None):
     for i in xrange(3,13):
       if row[i] in mapping:
         row[i] = mapping[row[i]]
-    if len(row) > 13 and len(row[14]) > 0:
+    if len(row) > 14 and len(row[14]) > 0:
       row[13] = row[13] + "," + row[14]
     out[key].append(row[:14])
   for k in out:
