@@ -4,6 +4,7 @@
     <script type='text/javascript' charset="UTF-8" src='wardrobe.js'></script>
     <script type='text/javascript' charset="UTF-8" src='scoring.js'></script>
     <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='model.js'></script>
     <script type='text/javascript' charset="UTF-8" src='nikki.js'></script>
     <style>
     table
@@ -14,7 +15,6 @@
       margin: 45px;
       border-collapse: collapse;
       text-align: center;
-      table-layout: fixed;
     }
     th
     {
@@ -54,10 +54,13 @@
     <div>
       Nikki's wardrobe. By Ivan's workshop<br/>
       服装数据来自jillhx@贴吧 20150601<br/>
-      Update 20150602: 加入了少女1的属性权重<br/>
-      Update 20150602: 更新了服装数据，合计1663，衣柜百分比85.6%<br/>
-      <strong>更新后修正了许多名称，请注意检查自己的衣柜</strong>
-      <strong>注意！饰品穿多了有衰减，请不要穿戴1000分以下的饰品</strong>
+      Update 20150602:<br/>
+      &nbsp;&nbsp;- 加入了少女1的属性权重<br/>
+      &nbsp;&nbsp;- 更新了服装数据，合计1663，衣柜百分比85.6%<br/>
+      &nbsp;&nbsp;- 重构了代码，改用id来存放数据，求各种捉虫<br/>
+      &nbsp;&nbsp;- 现在支持按照类别和id批量导入衣柜了<br/>
+      &nbsp;&nbsp;- <strong>更新后修正了许多名称，有些衣服可能会从自己的衣柜中移除，请注意核对一下</strong><br/>
+      <strong>注意！饰品穿多了有衰减，请不要穿超过10件饰品，不要穿低分饰品</strong>
     </div>
     <div>
       <form name="filter_form">
@@ -108,12 +111,21 @@
         </div>
       </form>
     </div>
+    <hr>
+    导入批量id，请先选择要导入的类别，然后在文本框内输入id（保留百位和十位的0），用空格、逗号或者换行隔开
+    <div id = "import">
+      <select id="importCate" onChange="clearImport()"></select> <br/>
+      <textarea id="importData" rows=5 style="width:600px"></textarea>
+      <button onClick="doImport()">导入</button>
+    </div>
+    <hr>
     <div id = "clothes"></div>
     <hr>
     <p>我拥有的服装 （复制衣橱文本框内容以备份衣橱）</p>
     <textarea id="myClothes" rows=10 style="width:600px"></textarea>
     <br/>
     <button onClick="loadCustomInventory()">Update inventory</button>
+    <br/>
     <script>
       init();
     </script>

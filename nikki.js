@@ -37,74 +37,6 @@ var THEAD_SCORE = "<thead><tr>\
 
 var FEATURES = ["simple", "cute", "active", "pure", "cool"];
 
-// parses a csv row into object
-// Clothes: name, type, id, stars, gorgeous, simple, elegant, active, mature, cute, sexy, pure, cool, warm，extra
-//          0     1     2   3      4         5       6        7       8       9     10    11    12    13    14
-Clothes = function(csv) {
-  return {
-    own: false,
-    name: csv[0],
-    type: csv[1],
-    id: csv[2],
-    stars: csv[3],
-    simple: realRating(csv[5], csv[4], csv[1]),
-    cute: realRating(csv[9], csv[8], csv[1]),
-    active: realRating(csv[7], csv[6], csv[1]),
-    pure: realRating(csv[11], csv[10], csv[1]),
-    cool: realRating(csv[12], csv[13], csv[1]),
-    extra: csv[14],
-    toCsv: function() {
-      name = this.name;
-      type = this.type;
-      id = this.id;
-      simple = this.simple;
-      cute = this.cute;
-      active = this.active;
-      pure = this.pure;
-      cool = this.cool;
-      extra = this.extra;
-      return [name, type, id, simple[0], simple[1], cute[0], cute[1],
-          active[0], active[1], pure[0], pure[1], cool[0],
-          cool[1], extra];
-    },
-    calc: function(filters) {
-      var s = 0;
-      var self = this;
-      for (var i in FEATURES) {
-        var f = FEATURES[i];
-        if (filters[f] && filters[f] * self[f][2] > 0) {
-          s += filters[f] * self[f][2];
-        }
-      }
-      this.tmpScore = Math.round(s);
-    }
-  };
-}
-
-var clothes = function() {
-  var ret = [];
-  for (var i in wardrobe) {
-    ret.push(Clothes(wardrobe[i]));
-  }
-  return ret;
-}();
-
-var clothesSet = function() {
-  var ret = {};
-  for (var i in clothes) {
-    ret[clothes[i].name] = clothes[i];
-  }
-  return ret;
-}();
-
-function realRating(a, b, type) {
-  real = a ? a : b;
-  symbol = a ? 1 : -1;
-  score = symbol * getScore(type)[real];
-  dev = getDeviation(type)[real];
-  return [a, b, score, dev];
-}
-
 // for table use
 function table(tdata) {
   return "<table>" + tdata + "</table>";
@@ -131,7 +63,7 @@ function inventoryCheckbox(id, own) {
 function toggleInventory(id) {
   var checked = document.getElementById(id).checked;
   clothesSet[id].own = checked;
-  save();
+  saveAndUpdate();
 }
 
 function row(piece) {
@@ -235,86 +167,14 @@ function matches(c, filters) {
   return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type];
 }
 
-function getMyClothes() {
-  var mine = [];
-  for (var i in clothes) {
-    if (clothes[i].own) {
-      mine.push(clothes[i].name);
-    }
-  }
-  return mine;
-}
-
-function save() {
-  var myClothes = getMyClothes();
-  document.getElementById("inventoryCount").innerText = '(' + myClothes.length + ')';
-  var txt = myClothes.join(",");
-  document.getElementById("myClothes").innerText = txt;
-  if (localStorage) {
-    localStorage.myClothes = txt;
-  } else {
-    setCookie("mine", txt, 3650);
-  }
-}
-
-function load(myClothes) {
-  var cs = myClothes.split(",");
-  for (var i in clothes) {
-    clothes[i].own = false;
-  }
-  for (var i in cs) {
-    if (clothesSet[cs[i]]) {
-      clothesSet[cs[i]].own = true;
-    }
-  }
-  for (var i in clothes) {
-    var checkBox = document.getElementById(clothes[i].name);
-    if (checkBox) {
-      checkBox.checked = clothes[i].own;
-    }
-  }
-  document.getElementById("inventoryCount").innerText = '(' + cs.length + ')';
-  document.getElementById("myClothes").innerText = myClothes;
-}
-
-function loadFromStorage() {
-  var myClothes;
-  if (localStorage) {
-    myClothes = localStorage.myClothes;
-  } else {
-    myClothes = getCookie("mine");
-  }
-  if (myClothes) {
-    load(myClothes);
-  }
-}
-
 function loadCustomInventory() {
   var myClothes = document.getElementById("myClothes").value;
-  load(myClothes);
-  save();
-}
-
-function getCookie(c_name) {
-  if (document.cookie.length>0) { 
-    c_start=document.cookie.indexOf(c_name + "=")
-    if (c_start!=-1) { 
-      c_start=c_start + c_name.length+1 
-      c_end=document.cookie.indexOf(";",c_start)
-      if (c_end==-1) {
-        c_end=document.cookie.length
-      }
-      return unescape(document.cookie.substring(c_start,c_end))
-    }
-  }
-  return ""
-}
-
-function setCookie(c_name,value,expiredays) {
-  var exdate=new Date()
-  exdate.setDate(exdate.getDate()+expiredays)
-  document.cookie=c_name+ "=" +escape(value)+
-  ((expiredays==null) ? "" : "; expires="+exdate.toGMTString())
+  if (myClothes.indexOf('|') > 0) {
+    loadNew(myClothes);
+  } else {
+    load(myClothes);
+  } 
+  saveAndUpdate();
 }
 
 function selectAllCategories() {
@@ -396,9 +256,65 @@ function drawTheme() {
   }
 }
 
+function drawImport() {
+  var dropdown = document.getElementById("importCate");
+  var def = document.createElement('option');
+  def.text = '请选择类别';
+  def.value = '';
+  dropdown.add(def);
+  for (var cate in scoring) {
+    var option = document.createElement('option');
+    option.text = cate;
+    option.value = cate;
+    dropdown.add(option);
+  }
+}
+
+function clearImport() {
+  document.getElementById("importData").value = "";
+}
+
+function saveAndUpdate() {
+  var mine = save();
+  document.getElementById("inventoryCount").innerText = '(' + mine.size + ')';
+  document.getElementById("myClothes").innerText = mine.serialize();
+}
+
+function doImport() {
+  var dropdown = document.getElementById("importCate");
+  var type = dropdown.options[dropdown.selectedIndex].value;
+  var raw = document.getElementById("importData").value;
+  var data = raw.match(/\d+/g);
+  var mapping = {}
+  for (var i in data) {
+    mapping[data[i]] = true;
+  }
+  var updating = [];
+  for (var i in clothes) {
+    if (clothes[i].getType() == type && mapping[clothes[i].id]) {
+      updating.push(clothes[i].name);
+    }
+  }
+  var names = updating.join(",");
+  if (confirm("你将要在>>" + type + "<<中导入：\n" + names)) {
+    var myClothes = MyClothes();
+    myClothes.filter(clothes);
+    if (myClothes.mine[type]) {
+      myClothes.mine[type] = myClothes.mine[type].concat(data);
+      myClothes.update(clothes);
+      saveAndUpdate();
+      refreshTable();
+      clearImport();
+    }
+  }
+}
+
 function init() {
-  loadFromStorage();
+  var mine = loadFromStorage();
+  document.getElementById("inventoryCount").innerText = '(' + mine.size + ')';
+  document.getElementById("myClothes").innerText = mine.serialize();
   drawFilter();
   drawTheme();
+  drawImport();
   changeMode(true);
 }
