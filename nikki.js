@@ -301,11 +301,13 @@ function doImport() {
     myClothes.filter(clothes);
     if (myClothes.mine[type]) {
       myClothes.mine[type] = myClothes.mine[type].concat(data);
-      myClothes.update(clothes);
-      saveAndUpdate();
-      refreshTable();
-      clearImport();
+    } else {
+      myClothes.mine[type] = data;
     }
+    myClothes.update(clothes);
+    saveAndUpdate();
+    refreshTable();
+    clearImport();
   }
 }
 
