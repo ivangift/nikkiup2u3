@@ -96,7 +96,9 @@ function MyClothes() {
       }
       for (var i in clothes) {
         clothes[i].own = false;
-        if (x[clothes[i].getType()][clothes[i].id]) {
+        var t = clothes[i].getType();
+        var id = clothes[i].id
+        if (x[t] && x[t][clothes[i].id]) {
           clothes[i].own = true;
         }
       }
