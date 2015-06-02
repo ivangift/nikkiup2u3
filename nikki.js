@@ -175,6 +175,7 @@ function loadCustomInventory() {
     load(myClothes);
   } 
   saveAndUpdate();
+  refreshTable();
 }
 
 function selectAllCategories() {
@@ -276,8 +277,8 @@ function clearImport() {
 
 function saveAndUpdate() {
   var mine = save();
-  document.getElementById("inventoryCount").innerText = '(' + mine.size + ')';
-  document.getElementById("myClothes").innerText = mine.serialize();
+  document.getElementById("inventoryCount").innerHTML = '(' + mine.size + ')';
+  document.getElementById("myClothes").value = mine.serialize();
 }
 
 function doImport() {
@@ -313,8 +314,8 @@ function doImport() {
 
 function init() {
   var mine = loadFromStorage();
-  document.getElementById("inventoryCount").innerText = '(' + mine.size + ')';
-  document.getElementById("myClothes").innerText = mine.serialize();
+  document.getElementById("inventoryCount").innerHTML = '(' + mine.size + ')';
+  document.getElementById("myClothes").value = mine.serialize();
   drawFilter();
   drawTheme();
   drawImport();
