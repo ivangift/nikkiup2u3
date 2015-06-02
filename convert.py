@@ -7,20 +7,18 @@ header = """// Clothes: name, type, id, gorgeous, simple, elegant, active, matur
 """
 
 files = {
-  '下装': ('bottoms.csv', None),
-  '外套':  ('coat.csv', None),
-  '连衣裙': ('dress.csv', None),
-  '发型': ('hair.csv', None),
-  '妆容': ('makeup.csv', None),
-  '鞋子': ('shoes.csv', None),
-  '袜子': ('socks.csv', None),
-  '上装': ('tops.csv', None),
-  '饰品': ('accessories.csv', 3),
+  '下装': ('bottoms.csv', None, 2),
+  '外套':  ('coat.csv', None, 2),
+  '连衣裙': ('dress.csv', None, 2),
+  '发型': ('hair.csv', None, 2),
+  '妆容': ('makeup.csv', None, 1),
+  '鞋子': ('shoes.csv', None, 2),
+  '袜子': ('socks.csv', None, 2),
+  '上装': ('tops.csv', None, 2),
+  '饰品': ('accessories.csv', 3, 2),
 }
 
 fileorder = ['发型', '连衣裙', '外套', '上装', '下装', '袜子', '鞋子', '饰品', '妆容']
-
-special = "accessories.csv"
 
 mapping = {
   '2': 'C',
@@ -29,10 +27,10 @@ mapping = {
   '5': 'S',
   '6': 'SS',
 }
-def process(name, file, subtype = None):
+def process(name, file, subtype = None, skip = 2):
   reader = csv.reader(open(PATH + "/" + file))
-  reader.next()
-  reader.next()
+  for i in xrange(skip):
+    reader.next()
   out = {}
   for row in reader:
     key = name
@@ -56,7 +54,7 @@ category = []
 writer.write(header)
 writer.write("var wardrobe = [\n")
 for f in fileorder:
-  out = process(f, files[f][0], files[f][1])
+  out = process(f, files[f][0], files[f][1], files[f][2])
   for key in out:
     for row in out[key]:
       if key not in category:
