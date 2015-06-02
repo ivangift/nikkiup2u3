@@ -117,7 +117,11 @@ var clothes = function() {
 var clothesSet = function() {
   var ret = {};
   for (var i in clothes) {
-    ret[clothes[i].name] = clothes[i];
+    var t = clothes[i].getType();
+    if (!ret[t]) {
+      ret[t] = {};
+    }
+    ret[clothes[i].getType()][clothes[i].id] = clothes[i];
   }
   return ret;
 }();
@@ -134,10 +138,8 @@ function load(myClothes) {
   var cs = myClothes.split(",");
   for (var i in clothes) {
     clothes[i].own = false;
-  }
-  for (var i in cs) {
-    if (clothesSet[cs[i]]) {
-      clothesSet[cs[i]].own = true;
+    if (cs.indexOf(clothes[i].name) >= 0) {
+      clothes[i].own = true;
     }
   }
   var mine = MyClothes();

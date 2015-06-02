@@ -50,9 +50,9 @@ function td(data, cls) {
   return "<td class='" + cls + "'>" + data + "</td>";
 }
 
-function inventoryCheckbox(id, own) {
-  var ret = "<input type = 'checkbox' name = 'inventory' id = '" + id
-      + "' onClick='toggleInventory(\"" + id + "\")'";
+function inventoryCheckbox(type, id, own) {
+  var ret = "<input type = 'checkbox' name = 'inventory' id = '" + (type + id)
+      + "' onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'";
   if (own) {
     ret += "checked";
   }
@@ -60,14 +60,14 @@ function inventoryCheckbox(id, own) {
   return ret;
 }
 
-function toggleInventory(id) {
-  var checked = document.getElementById(id).checked;
-  clothesSet[id].own = checked;
+function toggleInventory(type, id) {
+  var checked = document.getElementById(type + id).checked;
+  clothesSet[type][id].own = checked;
   saveAndUpdate();
 }
 
 function row(piece) {
-  var ret = td(inventoryCheckbox(piece.name, piece.own), "");
+  var ret = td(inventoryCheckbox(piece.getType(), piece.id, piece.own), "");
   if (!isFilteringMode) {
     ret += td(piece.tmpScore);
   }
