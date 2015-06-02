@@ -165,6 +165,7 @@ function loadFromStorage() {
   } else if (myClothes) {
     return load(myClothes);
   }
+  return MyClothes();
 }
 
 function getCookie(c_name) {
