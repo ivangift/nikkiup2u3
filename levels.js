@@ -16,7 +16,7 @@ competitionsRaw = {
   '穿越进行时': '优雅 简约 清纯 保暖 成熟',
   '艳阳当空照': '简约 优雅 清凉 可爱 清纯',
   '年轻的春游': '简约 活泼 可爱 清纯 清凉'
-,}
+}
 
 function parseCriteria(criteria) {
   var cs = criteria.split(" ");
@@ -48,7 +48,7 @@ maidenRaw = {
   '1-6': [1, 1, -2, 3, 1],
   '1-7': [3, -2, -2, 1, 1],
   '1-8': [-1, -2, -2, -3, 1],
-  '1-9': [-1.2, -2.4, 2.4, -3.6, 1.2],
+  '1-9': [-1.2, -2.4, 2.4, -3.6, 1.2]
 }
 
 function parseCriteriaList(criteria) {
@@ -57,7 +57,7 @@ function parseCriteriaList(criteria) {
     'cute': criteria[1],
     'active': criteria[2],
     'pure': criteria[3],
-    'cool': criteria[4],
+    'cool': criteria[4]
   }
 }
 

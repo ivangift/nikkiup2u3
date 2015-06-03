@@ -4,7 +4,7 @@ var hairScoring = {
   'S': [950, 1150],
   'A': [750, 900],
   'B': [550, 750],
-  'C': [550, 550],  // est
+  'C': [550, 550]  // est
 };
 
 var dressScoring = {
@@ -12,7 +12,7 @@ var dressScoring = {
   'S': [3800, 4200],
   'A': [3000, 3800],
   'B': [2500, 3000],
-  'C': [1900, 2500],  // est
+  'C': [1900, 2500]  // est
 };
 
 var coatScoring = {
@@ -20,7 +20,7 @@ var coatScoring = {
   'S': [370, 450],
   'A': [300, 360],
   'B': [230, 280],
-  'C': [190, 210],  // highly est
+  'C': [190, 210]  // highly est
 };
 
 var topScoring = {
@@ -28,7 +28,7 @@ var topScoring = {
   'S': [1750, 2100],
   'A': [1400, 1700],
   'B': [1250, 1400],
-  'C': [800, 1200],  // est
+  'C': [800, 1200]  // est
 };
 
 var bottomScoring = {
@@ -36,7 +36,7 @@ var bottomScoring = {
   'S': [1800, 2100],
   'A': [1400, 1800],
   'B': [1250, 1400],
-  'C': [800, 1200],  // est
+  'C': [800, 1200]  // est
 };
 
 var sockScoring = {
@@ -44,7 +44,7 @@ var sockScoring = {
   'S': [570, 650],
   'A': [440, 550],
   'B': [400, 440],
-  'C': [270, 300],  // ased on dianashusy's data
+  'C': [270, 300]  // ased on dianashusy's data
 };
 
 var shoeScoring = {
@@ -52,7 +52,7 @@ var shoeScoring = {
   'S': [770, 950],
   'A': [640, 750],
   'B': [530, 580],
-  'C': [380, 450],  // est
+  'C': [380, 450]  // est
 };
 
 var accessoriesScoring = {
@@ -60,7 +60,7 @@ var accessoriesScoring = {
   'S': [370, 450],
   'A': [290, 370],
   'B': [220, 280],
-  'C': [190, 210],  // est
+  'C': [190, 210]  // est
 };
 
 var makeupScoring = {
@@ -68,7 +68,7 @@ var makeupScoring = {
   'S': [190, 190], // est
   'A': [130, 130], // est
   'B': [120, 120], // est
-  'C': [100, 100],  // no data, purely mocking
+  'C': [100, 100]  // no data, purely mocking
 };
 
 function avg(score) {

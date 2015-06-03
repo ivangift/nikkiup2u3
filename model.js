@@ -102,7 +102,7 @@ function MyClothes() {
           clothes[i].own = true;
         }
       }
-    },
+    }
   };
 }
 
