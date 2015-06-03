@@ -2,7 +2,7 @@
 import csv
 PATH = 'raw'
 
-header = """// Clothes: name, type, id, gorgeous, simple, elegant, active, mature, cute, sexy, pure, cool, warm，extra
+header = """// Clothes: name, type, id, gorgeous, simple, elegant, active, mature, cute, sexy, pure, cool, warm，extra, source
 // credits to jillhx@tieba
 """
 
@@ -44,7 +44,10 @@ def process(name, file, subtype = None, skip = 2):
         row[i] = mapping[row[i]]
     if len(row) > 14 and len(row[14]) > 0:
       row[13] = row[13] + "," + row[14]
-    out[key].append(row[:14])
+    tbd = row[:14]
+    if len(row) > 15:
+      tbd.append(row[15])
+    out[key].append(tbd)
   for k in out:
     print k, len(out[k])
   return out

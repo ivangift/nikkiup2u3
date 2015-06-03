@@ -14,6 +14,7 @@ Clothes = function(csv) {
     pure: realRating(csv[11], csv[10], csv[1]),
     cool: realRating(csv[12], csv[13], csv[1]),
     extra: csv[14],
+    source: csv[15],
     toCsv: function() {
       name = this.name;
       type = this.type;
@@ -24,9 +25,10 @@ Clothes = function(csv) {
       pure = this.pure;
       cool = this.cool;
       extra = this.extra;
+      source = this.source;
       return [name, type, id, simple[0], simple[1], cute[0], cute[1],
           active[0], active[1], pure[0], pure[1], cool[0],
-          cool[1], extra];
+          cool[1], extra, source];
     },
     calc: function(filters) {
       var s = 0;

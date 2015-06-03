@@ -14,6 +14,7 @@ var THEAD = "<thead><tr>\
   <th>清凉</th>\
   <th>保暖</th>\
   <th>特殊属性</th>\
+  <th>来源</th>\
   </tr></thead>\n";
   
 var THEAD_SCORE = "<thead><tr>\
@@ -33,6 +34,7 @@ var THEAD_SCORE = "<thead><tr>\
   <th>清凉</th>\
   <th>保暖</th>\
   <th>特殊属性</th>\
+  <th>来源</th>\
   </tr></thead>\n";
 
 var FEATURES = ["simple", "cute", "active", "pure", "cool"];
