@@ -112,21 +112,24 @@ function refreshTable() {
     if (!weight) {
       weight = 1;
     }
-    for (var j in document.filter_form[f]) {
-      var element = document.filter_form[f][j];
-      if (element.type == "radio" && element.checked) {
+    var radios = document.getElementsByName(f);
+    for (var j in radios) {
+      var element = radios[j];
+      if (element.checked) {
         filters[element.name] = parseInt(element.value) * weight;
       }
     }
   }
-  for (var i in document.filter_form.inventory) {
-    var element = document.filter_form.inventory[i];
+  var invs = document.getElementsByName('inventory');
+  for (var i in invs) {
+    var element = invs[i];
     if (element.checked) {
       filters[element.value] = true;
     }
   }
-  for (var i in document.filter_form.category) {
-    var element = document.filter_form.category[i];
+  var categories = document.getElementsByName('category');
+  for (var i in categories) {
+    var element = categories[i];
     if (element.checked) {
       filters[element.value] = true;
     }
@@ -182,8 +185,9 @@ function loadCustomInventory() {
 
 function selectAllCategories() {
   var all = document.getElementById('allCategory');
-  for (var i in document.filter_form.category) {
-    var element = document.filter_form.category[i];
+  var categories = document.getElementsByName('category');
+  for (var i in categories) {
+    var element = categories[i];
     element.checked = all.checked;
   }
   refreshTable();
@@ -234,8 +238,9 @@ function setFilters(filters) {
     var f = FEATURES[i];
     var weight = filters[f];
     document.getElementById(f + "Weight").value = Math.abs(weight);
-    for (var j in document.filter_form[f]) {
-      var element = document.filter_form[f][j];
+    var radios = document.getElementsByName(f);
+    for (var j in radios) {
+      var element = radios[j];
       if (parseInt(element.value) * weight > 0) {
         element.checked = true;
         break;
