@@ -209,9 +209,9 @@ var isFilteringMode = true;
 function changeMode(isFiltering) {
   for (var i in FEATURES) {
     var f = FEATURES[i];
-    document.getElementById(f + "Weight").disabled = isFiltering;
+    document.getElementById(f + "Weight").style.display = isFiltering ? 'none' : '';
   }
-  document.getElementById("theme").disabled = isFiltering;
+  document.getElementById("theme").style.display = isFiltering ? 'none' : '';
   isFilteringMode = isFiltering;
   refreshTable();
 }
