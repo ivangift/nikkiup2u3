@@ -14,7 +14,7 @@ var THEAD = "<thead><tr>\
   <th>清凉</th>\
   <th>保暖</th>\
   <th>特殊属性</th>\
-  </tr></thead>";
+  </tr></thead>\n";
   
 var THEAD_SCORE = "<thead><tr>\
   <th>拥有</th>\
@@ -33,7 +33,7 @@ var THEAD_SCORE = "<thead><tr>\
   <th>清凉</th>\
   <th>保暖</th>\
   <th>特殊属性</th>\
-  </tr></thead>";
+  </tr></thead>\n";
 
 var FEATURES = ["simple", "cute", "active", "pure", "cool"];
 
@@ -43,7 +43,7 @@ function table(tdata) {
 }
 
 function tr(tds) {
-  return "<tr>" + tds + "</tr>";
+  return "<tr>" + tds + "</tr>\n";
 }
 
 function td(data, cls) {
@@ -91,9 +91,11 @@ function getStyle(rating) {
 
 function list(rows) {
   ret = isFilteringMode ? THEAD : THEAD_SCORE;
+  ret += "<tbody>";
   for (var i in rows) {
     ret += row(rows[i]);
   }
+  ret += "</tbody>";
   return table(ret);
 }
 
