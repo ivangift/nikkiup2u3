@@ -57,7 +57,7 @@
       Update 20150605:<br/>
       &nbsp;&nbsp;- jillhx的衣柜已经更新到：合计1812 衣柜占比93% 离全收集已经不远了！！<br/>
       &nbsp;&nbsp;- 已经在amy_翡翠的帮助下将袜子和饰品按照装备部位区分，更方便选择<br/>
-      &nbsp;&nbsp;- 还有神秘更新，即将放出！<br/>
+      &nbsp;&nbsp;- 关卡权重更新了，注意公主关和少女关权重一样(谢谢dianashusy和娘娘不干啦的帮助)。楼主无能，还没有开启第六章支线，等待好心人解救中。你们使用时可以把大喵的提示加倍。<br/>
       <strong>衣服属性错误请汇报给<a href="http://tieba.baidu.com/p/3783436049">jillhx的衣柜贴</a></strong><br/>
       <strong>请抽空去<a href="http://tieba.baidu.com/p/3803353203">amy_翡翠的完善召集令</a>看看有没有你可以帮忙补充的衣服情报</strong><br/>
       <strong>注意！饰品穿多了有衰减，请不要穿超过10件饰品，不要穿低分饰品</strong><br/>
@@ -67,14 +67,14 @@
         <div>
           <input type="radio" name="mode" value="filtering" onClick="changeMode(true)" checked/> 筛选
           <input type="radio" name="mode" value="ranking" onClick="changeMode(false)" /> 计分
-          <select id="theme" onChange="changeTheme()"></select>
+          <select id="theme" onChange="changeTheme()" style="display: none"></select>
         </div>
         <div class='facet'>
           <div>
             <input type="radio" name="simple" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="simple" value="1" onClick="changeFilter()" /> 简约
             <input type="radio" name="simple" value="-1" onClick="changeFilter()" /> 华丽
-            <div style="display: inline" id = "simpleWeightContainer">
+            <div style="display: none" id = "simpleWeightContainer">
             	&nbsp;&nbsp;权重 <input type="text" id="simpleWeight" name="simpleWeight" value="1" onChange="changeFilter()" />
           	</div>
           </div>
@@ -82,7 +82,7 @@
             <input type="radio" name="cute" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="cute" value="1" onClick="changeFilter()" /> 可爱
             <input type="radio" name="cute" value="-1" onClick="changeFilter()" /> 成熟
-            <div style="display: inline" id = "cuteWeightContainer">
+            <div style="display: none" id = "cuteWeightContainer">
             	&nbsp;&nbsp;权重 <input type="text" id="cuteWeight" name="cuteWeight" value="1" onChange="changeFilter()" />
             </div>
           </div>
@@ -90,7 +90,7 @@
             <input type="radio" name="active" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="active" value="1" onClick="changeFilter()" /> 活泼
             <input type="radio" name="active" value="-1" onClick="changeFilter()" /> 优雅
-            <div style="display: inline" id = "activeWeightContainer">
+            <div style="display: none" id = "activeWeightContainer">
               &nbsp;&nbsp;权重 <input type="text" id="activeWeight" name="activeWeight" value="1" onChange="changeFilter()" />
             </div>
           </div>
@@ -98,7 +98,7 @@
             <input type="radio" name="pure" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="pure" value="1" onClick="changeFilter()" /> 清纯
             <input type="radio" name="pure" value="-1" onClick="changeFilter()" /> 性感
-            <div style="display: inline" id = "pureWeightContainer">
+            <div style="display: none" id = "pureWeightContainer">
               &nbsp;&nbsp;权重 <input type="text" id="pureWeight" name="pureWeight" value="1" onChange="changeFilter()" />
             </div>
           </div>
@@ -106,7 +106,7 @@
             <input type="radio" name="cool" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="cool" value="1" onClick="changeFilter()" /> 清凉
             <input type="radio" name="cool" value="-1" onClick="changeFilter()" /> 保暖
-            <div style="display: inline" id = "coolWeightContainer">
+            <div style="display: none" id = "coolWeightContainer">
               &nbsp;&nbsp;权重 <input type="text" id="coolWeight" name="coolWeight" value="1" onChange="changeFilter()" />
             </div>
           </div>

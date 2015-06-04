@@ -1,3 +1,4 @@
+// Ivan's Workshop
 // in pairs of lower bound, upper bound
 var hairScoring = {
   'SS': [1250, 1250], // est
