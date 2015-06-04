@@ -209,7 +209,7 @@ var isFilteringMode = true;
 function changeMode(isFiltering) {
   for (var i in FEATURES) {
     var f = FEATURES[i];
-    document.getElementById(f + "Weight").style.display = isFiltering ? 'none' : '';
+    document.getElementById(f + "WeightContainer").style.display = isFiltering ? 'none' : 'inline';
   }
   document.getElementById("theme").style.display = isFiltering ? 'none' : '';
   isFilteringMode = isFiltering;
