@@ -64,7 +64,7 @@ function inventoryCheckbox(type, id, own) {
 }
 
 function toggleInventory(type, id) {
-  var checked = $('#' + type + id).checked;
+  var checked = $('#' + type + id)[0].checked;
   clothesSet[type][id].own = checked;
   saveAndUpdate();
 }
@@ -110,7 +110,7 @@ function refreshTable() {
   var filters = {};
   for (var i in FEATURES) {
     var f = FEATURES[i];
-    var weight = parseFloat($('#' + f + "Weight").value);
+    var weight = parseFloat($('#' + f + "Weight").val());
     if (!weight) {
       weight = 1;
     }
