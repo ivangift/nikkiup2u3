@@ -2,6 +2,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>奇迹暖暖在线配装器</title>
+    <script type='text/javascript' charset="UTF-8" src='jquery.js'></script>
     <script type='text/javascript' charset="UTF-8" src='wardrobe.js'></script>
     <script type='text/javascript' charset="UTF-8" src='scoring.js'></script>
     <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
@@ -52,6 +53,9 @@
     div.announcement {
       max-width: 800px;
     }
+    div.weightContainer {
+      display: inline-block;
+    }
     </style>
     
   </head>
@@ -81,7 +85,7 @@
             <input type="radio" name="simple" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="simple" value="1" onClick="changeFilter()" /> 简约
             <input type="radio" name="simple" value="-1" onClick="changeFilter()" /> 华丽
-            <div style="display: none" id = "simpleWeightContainer">
+            <div class='weightContainer' style="display: none" id = "simpleWeightContainer">
             	&nbsp;&nbsp;权重 <input type="text" id="simpleWeight" name="simpleWeight" value="1" onChange="changeFilter()" />
           	</div>
           </div>
@@ -89,7 +93,7 @@
             <input type="radio" name="cute" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="cute" value="1" onClick="changeFilter()" /> 可爱
             <input type="radio" name="cute" value="-1" onClick="changeFilter()" /> 成熟
-            <div style="display: none" id = "cuteWeightContainer">
+            <div class='weightContainer' style="display: none" id = "cuteWeightContainer">
             	&nbsp;&nbsp;权重 <input type="text" id="cuteWeight" name="cuteWeight" value="1" onChange="changeFilter()" />
             </div>
           </div>
@@ -97,7 +101,7 @@
             <input type="radio" name="active" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="active" value="1" onClick="changeFilter()" /> 活泼
             <input type="radio" name="active" value="-1" onClick="changeFilter()" /> 优雅
-            <div style="display: none" id = "activeWeightContainer">
+            <div class='weightContainer' style="display: none" id = "activeWeightContainer">
               &nbsp;&nbsp;权重 <input type="text" id="activeWeight" name="activeWeight" value="1" onChange="changeFilter()" />
             </div>
           </div>
@@ -105,7 +109,7 @@
             <input type="radio" name="pure" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="pure" value="1" onClick="changeFilter()" /> 清纯
             <input type="radio" name="pure" value="-1" onClick="changeFilter()" /> 性感
-            <div style="display: none" id = "pureWeightContainer">
+            <div class='weightContainer' style="display: none" id = "pureWeightContainer">
               &nbsp;&nbsp;权重 <input type="text" id="pureWeight" name="pureWeight" value="1" onChange="changeFilter()" />
             </div>
           </div>
@@ -113,7 +117,7 @@
             <input type="radio" name="cool" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="cool" value="1" onClick="changeFilter()" /> 清凉
             <input type="radio" name="cool" value="-1" onClick="changeFilter()" /> 保暖
-            <div style="display: none" id = "coolWeightContainer">
+            <div class='weightContainer' style="display: none" id = "coolWeightContainer">
               &nbsp;&nbsp;权重 <input type="text" id="coolWeight" name="coolWeight" value="1" onChange="changeFilter()" />
             </div>
           </div>
@@ -143,8 +147,5 @@
     <br/>
     <button onClick="loadCustomInventory()">Update inventory</button>
     <br/>
-    <script>
-      init();
-    </script>
   </body>
 </html>

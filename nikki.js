@@ -64,7 +64,7 @@ function inventoryCheckbox(type, id, own) {
 }
 
 function toggleInventory(type, id) {
-  var checked = document.getElementById(type + id).checked;
+  var checked = $('#' + type + id).checked;
   clothesSet[type][id].own = checked;
   saveAndUpdate();
 }
@@ -103,40 +103,30 @@ function list(rows) {
 }
 
 function drawTable(data, div) {
-  container = document.getElementById(div);
-  container.innerHTML = list(data);
+  $('#' + div).html(list(data));
 }
 
 function refreshTable() {
   var filters = {};
   for (var i in FEATURES) {
     var f = FEATURES[i];
-    var weight = parseFloat(document.getElementById(f + "Weight").value);
+    var weight = parseFloat($('#' + f + "Weight").value);
     if (!weight) {
       weight = 1;
     }
-    var radios = document.getElementsByName(f);
-    for (var j in radios) {
-      var element = radios[j];
-      if (element.checked) {
-        filters[element.name] = parseInt(element.value) * weight;
-      }
+    var checked = $('input[name=' + f + ']:radio:checked');
+    if (checked.length) {
+      filters[f] = parseInt(checked.val()) * weight;
     }
   }
-  var invs = document.getElementsByName('inventory');
-  for (var i in invs) {
-    var element = invs[i];
-    if (element.checked) {
-      filters[element.value] = true;
-    }
-  }
-  var categories = document.getElementsByName('category');
-  for (var i in categories) {
-    var element = categories[i];
-    if (element.checked) {
-      filters[element.value] = true;
-    }
-  }
+  
+  $('input[name=inventory]:checked').each(function() {
+    filters[$(this).val()] = true;
+  });
+  
+  $('input[name=category]:checked').each(function() {
+    filters[$(this).val()] = true;
+  });
   drawTable(filtering(filters), "clothes");
 }
 
@@ -176,7 +166,7 @@ function matches(c, filters) {
 }
 
 function loadCustomInventory() {
-  var myClothes = document.getElementById("myClothes").value;
+  var myClothes = $("#myClothes").val();
   if (myClothes.indexOf('|') > 0) {
     loadNew(myClothes);
   } else {
@@ -187,44 +177,49 @@ function loadCustomInventory() {
 }
 
 function selectAllCategories() {
-  var all = document.getElementById('allCategory');
-  var categories = document.getElementsByName('category');
-  for (var i in categories) {
-    var element = categories[i];
-    element.checked = all.checked;
-  }
+  var all = $('#allCategory')[0].checked;
+  var x = $('input[name=category]:checkbox');
+  x.each(function() {
+    this.checked = all;
+  });
   refreshTable();
 }
 
 function drawFilter() {
-  cate = document.getElementById("category_div");
   out = "<input type='checkbox' id='allCategory' onClick='selectAllCategories()' checked /> 全选<br/>\n";
   for (var i in category) {
     out += "<input type='checkbox' name='category' value='" + category[i]
         + "'' onClick='refreshTable()' checked />" + category[i] + "\n";
   }
-  cate.innerHTML = out;
+  $('#category_div').html(out);
 }
 
 var isFilteringMode = true;
 function changeMode(isFiltering) {
   for (var i in FEATURES) {
     var f = FEATURES[i];
-    document.getElementById(f + "WeightContainer").style.display = isFiltering ? 'none' : 'inline';
+    if (isFiltering) {
+      $('#' + f + 'WeightContainer').hide();
+    } else {
+      $('#' + f + 'WeightContainer').show();
+    }
   }
-  document.getElementById("theme").style.display = isFiltering ? 'none' : '';
+  if (isFiltering) {
+    $("#theme").hide();
+  } else {
+    $("#theme").show();
+  }
   isFilteringMode = isFiltering;
   refreshTable();
 }
 
 function changeFilter() {
-  var dropdown = document.getElementById("theme");
-  dropdown.options[0].selected = true;
+  $("#theme")[0].options[0].selected = true;
   refreshTable();
 }
 
 function changeTheme() {
-  var dropdown = document.getElementById("theme");
+  var dropdown = $("#theme")[0];
   for (var i in dropdown.options) {
     if (dropdown.options[i].selected) {
       var theme = dropdown.options[i].value;
@@ -240,8 +235,8 @@ function setFilters(filters) {
   for (var i in FEATURES) {
     var f = FEATURES[i];
     var weight = filters[f];
-    document.getElementById(f + "Weight").value = Math.abs(weight);
-    var radios = document.getElementsByName(f);
+    $('#' + f + 'Weight').val(Math.abs(weight));
+    var radios = $('input[name=' + f + ']:radio');
     for (var j in radios) {
       var element = radios[j];
       if (parseInt(element.value) * weight > 0) {
@@ -254,7 +249,7 @@ function setFilters(filters) {
 }
 
 function drawTheme() {
-  var dropdown = document.getElementById("theme");
+  var dropdown = $("#theme")[0];
   var def = document.createElement('option');
   def.text = '自定义关卡';
   def.value = 'custom' 
@@ -268,7 +263,7 @@ function drawTheme() {
 }
 
 function drawImport() {
-  var dropdown = document.getElementById("importCate");
+  var dropdown = $("#importCate")[0];
   var def = document.createElement('option');
   def.text = '请选择类别';
   def.value = '';
@@ -282,19 +277,19 @@ function drawImport() {
 }
 
 function clearImport() {
-  document.getElementById("importData").value = "";
+  $("#importData").val("");
 }
 
 function saveAndUpdate() {
   var mine = save();
-  document.getElementById("inventoryCount").innerHTML = '(' + mine.size + ')';
-  document.getElementById("myClothes").value = mine.serialize();
+  $("#inventoryCount").text('(' + mine.size + ')');
+  $("#myClothes").val(mine.serialize());
 }
 
 function doImport() {
-  var dropdown = document.getElementById("importCate");
+  var dropdown = $("#importCate")[0];
   var type = dropdown.options[dropdown.selectedIndex].value;
-  var raw = document.getElementById("importData").value;
+  var raw = $("#importData").val();
   var data = raw.match(/\d+/g);
   var mapping = {}
   for (var i in data) {
@@ -324,10 +319,13 @@ function doImport() {
 
 function init() {
   var mine = loadFromStorage();
-  document.getElementById("inventoryCount").innerHTML = '(' + mine.size + ')';
-  document.getElementById("myClothes").value = mine.serialize();
+  $("#inventoryCount").text('(' + mine.size + ')');
+  $("#myClothes").text(mine.serialize());
   drawFilter();
   drawTheme();
   drawImport();
   changeMode(true);
 }
+$(document).ready(function() {
+  init()
+});
