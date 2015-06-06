@@ -3,6 +3,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>奇迹暖暖在线配装器</title>
     <script type='text/javascript' charset="UTF-8" src='jquery.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='jquery-ui.js'></script>
     <script type='text/javascript' charset="UTF-8" src='wardrobe.js'></script>
     <script type='text/javascript' charset="UTF-8" src='scoring.js'></script>
     <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
@@ -56,16 +57,56 @@
     div.weightContainer {
       display: inline-block;
     }
+    
+    ul.tabs {
+    	margin: 0;
+    	padding: 0;
+    	float: left;
+    	list-style: none;
+    	height: 32px;
+    	border-bottom: 1px solid #999;
+    	border-left: 1px solid #999;
+    	width: 100%;
+    }
+    ul.tabs li {
+    	float: left;
+    	margin: 0;
+    	padding: 0;
+    	height: 31px;
+    	line-height: 31px;
+    	border: 1px solid #999;
+    	border-left: none;
+    	margin-bottom: -1px;
+    	background: #F0F0F0;
+    	overflow: hidden;
+    	position: relative;
+    }
+    ul.tabs li a {
+    	text-decoration: none;
+    	color: #000;
+    	display: block;
+    	font-size: 1.2em;
+    	padding: 0 20px;
+    	border: 1px solid #fff;
+    	outline: none;
+    }
+    ul.tabs li a:hover {
+    	background: #ccc;
+    }	
+    html ul.tabs li.active, html ul.tabs li.active a:hover  {
+    	background: #fff;
+    	border-bottom: 1px solid #fff;
+    }
     </style>
     
   </head>
     <div class='announcement'>
       Nikki's wardrobe. By Ivan's workshop<br/>
       服装数据来自jillhx@贴吧 20150605<br/>
-      Update 20150605晚:<br/>
+      Update 20150606:<br/>
       <ul>
-        <li>jillhx的衣柜已经更新到：合计1845 衣柜占比95% 离全收集已经不远了！请检查jillhx的衣柜贴看看有没有可以帮忙补完的。</li>
-        <li>已经更新全部关卡权重，具体数值可能有0.5的误差，不过基本不影响使用。</li>
+        <li>重写了部分代码，使用jQuery来处理兼容性问题，可能会有大量bug，欢迎举报</li>
+        <li>为了提高页面效率将衣服按照大类拆开显示</li>
       </ul>
       <strong>衣服属性错误请汇报给<a href="http://tieba.baidu.com/p/3783436049">jillhx的衣柜贴</a></strong><br/>
       <strong>注意！饰品穿多了有衰减，请不要穿超过10件饰品，不要穿低分饰品</strong><br/>
@@ -133,14 +174,18 @@
       </form>
     </div>
     <hr>
+    
+    <div id='category_container'> 
+    </div>
+    <div id = "clothes"></div>
+    <hr>
     导入批量衣服，请先选择要导入的类别，然后在文本框内输入编号（保留百位和十位的0），用空格、逗号或者换行隔开。不知道编号在哪儿的请点<a href="http://tieba.baidu.com/p/3808711082" target="_blank">这里</a>
     <div id = "import">
       <select id="importCate" onChange="clearImport()"></select> <br/>
       <textarea id="importData" rows=5 style="width:600px"></textarea>
       <button onClick="doImport()">导入</button>
     </div>
-    <hr>
-    <div id = "clothes"></div>
+
     <hr>
     <p>我拥有的服装 （复制衣橱文本框内容以备份衣橱）</p>
     <textarea id="myClothes" rows=10 style="width:600px"></textarea>

@@ -124,9 +124,12 @@ function refreshTable() {
     filters[$(this).val()] = true;
   });
   
+  /*
   $('input[name=category]:checked').each(function() {
     filters[$(this).val()] = true;
   });
+  */
+  filters[currentCategory] = true;
   drawTable(filtering(filters), "clothes");
 }
 
@@ -162,7 +165,7 @@ function matches(c, filters) {
       }
     }
   } 
-  return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type];
+  return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.getType()];
 }
 
 function loadCustomInventory() {
@@ -185,13 +188,34 @@ function selectAllCategories() {
   refreshTable();
 }
 
+var maincate = ['发型', '连衣裙', '外套', '上装', '下装', '袜子', '鞋子', '饰品', '妆容'];
 function drawFilter() {
-  out = "<input type='checkbox' id='allCategory' onClick='selectAllCategories()' checked /> 全选<br/>\n";
+  /*
+  var out = "<input type='checkbox' id='allCategory' onClick='selectAllCategories()' checked /> 全选<br/>\n";
   for (var i in category) {
     out += "<input type='checkbox' name='category' value='" + category[i]
         + "'' onClick='refreshTable()' checked />" + category[i] + "\n";
   }
   $('#category_div').html(out);
+  */
+  out = "<ul class='tabs' id='categoryTab'>";
+  for (var i in maincate) {
+    out += '<li id="' + maincate[i] + '"><a href="#tab-' + i + '" onClick="switchCate(' + i + ')">' + maincate[i] + '</a></li>';
+  }
+  out += "</ul>";
+  for (var i in maincate) {
+    out += '<div id="tab-' + i + '"></div>';
+  }
+  $('#category_container').html(out);
+}
+
+var currentCategory;
+function switchCate(i) {
+  currentCategory = maincate[i];
+  $( "#category_container" ).tabs({
+    active: i
+  });
+  refreshTable();
 }
 
 var isFilteringMode = true;
