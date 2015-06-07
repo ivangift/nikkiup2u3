@@ -129,7 +129,16 @@ function refreshTable() {
     filters[$(this).val()] = true;
   });
   */
-  filters[currentCategory] = true;
+  if (currentCategory) {
+    if (maincate[currentCategory].length > 1) {
+      $('input[name=category-' + currentCategory + ']:checked').each(function() {
+        filters[$(this).val()] = true;
+      });
+    } else {
+      filters[currentCategory] = true;
+    }
+  }
+  
   drawTable(filtering(filters), "clothes");
 }
 
@@ -165,7 +174,7 @@ function matches(c, filters) {
       }
     }
   } 
-  return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.getType()];
+  return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type];
 }
 
 function loadCustomInventory() {
@@ -188,7 +197,18 @@ function selectAllCategories() {
   refreshTable();
 }
 
-var maincate = ['发型', '连衣裙', '外套', '上装', '下装', '袜子', '鞋子', '饰品', '妆容'];
+var maincate = function() {
+  var ret = {};
+  for (var i in category) {
+    var type = category[i].split('-')[0];
+    if (!ret[type]) {
+      ret[type] = [];
+    }
+    ret[type].push(category[i]);
+  }
+  return ret;
+}();
+
 function drawFilter() {
   /*
   var out = "<input type='checkbox' id='allCategory' onClick='selectAllCategories()' checked /> 全选<br/>\n";
@@ -199,24 +219,32 @@ function drawFilter() {
   $('#category_div').html(out);
   */
   out = "<ul class='tabs' id='categoryTab'>";
-  for (var i in maincate) {
-    out += '<li id="' + maincate[i] + '"><a href="#tab-' + i + '" onClick="switchCate(' + i + ')">' + maincate[i] + '</a></li>';
+  for (var c in maincate) {
+    out += '<li id="' + c + '"><a href="#category-' + c + '" onClick="switchCate(\'' + c + '\')">' + c + '</a></li>';
   }
   out += "</ul>";
-  for (var i in maincate) {
-    out += '<div id="tab-' + i + '"></div>';
+  for (var c in maincate) {
+    out += '<div id="category-' + c + '" style="display:none">';
+    if (maincate[c].length > 1) {
+      // draw sub categories
+      for (var i in maincate[c]) {
+        out += "<input type='checkbox' name='category-" + c + "' value='" + maincate[c][i]
+            + "'' onClick='refreshTable()' checked />" + maincate[c][i] + "\n";
+      }
+    }
+    out += '</div>';
   }
   $('#category_container').html(out);
 }
 
 var currentCategory;
-function switchCate(i) {
-  currentCategory = maincate[i];
+function switchCate(c) {
+  currentCategory = c;
   $( "#category_container" ).tabs({
-    active: i
+    active: c
   });
   $("ul.tabs li").removeClass("active");
-  $("#" + maincate[i]).addClass("active");
+  $("#" + c).addClass("active");
   refreshTable();
 }
 
@@ -354,6 +382,7 @@ function init() {
   drawTheme();
   drawImport();
   changeMode(true);
+  switchCate(category[0]);
 }
 $(document).ready(function() {
   init()
