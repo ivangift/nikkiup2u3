@@ -210,14 +210,6 @@ var maincate = function() {
 }();
 
 function drawFilter() {
-  /*
-  var out = "<input type='checkbox' id='allCategory' onClick='selectAllCategories()' checked /> 全选<br/>\n";
-  for (var i in category) {
-    out += "<input type='checkbox' name='category' value='" + category[i]
-        + "'' onClick='refreshTable()' checked />" + category[i] + "\n";
-  }
-  $('#category_div').html(out);
-  */
   out = "<ul class='tabs' id='categoryTab'>";
   for (var c in maincate) {
     out += '<li id="' + c + '"><a href="#category-' + c + '" onClick="switchCate(\'' + c + '\')">' + c + '</a></li>';
