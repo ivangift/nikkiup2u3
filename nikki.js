@@ -215,6 +215,8 @@ function switchCate(i) {
   $( "#category_container" ).tabs({
     active: i
   });
+  $("ul.tabs li").removeClass("active");
+  $("#" + maincate[i]).addClass("active");
   refreshTable();
 }
 
@@ -317,6 +319,9 @@ function doImport() {
   var data = raw.match(/\d+/g);
   var mapping = {}
   for (var i in data) {
+    while (data[i].length < 3) {
+      data[i] = "0" + data[i];
+    }
     mapping[data[i]] = true;
   }
   var updating = [];
