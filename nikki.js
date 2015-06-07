@@ -40,6 +40,18 @@ var THEAD_SCORE = "<thead><tr>\
 
 var FEATURES = ["simple", "cute", "active", "pure", "cool"];
 
+var CATEGORY_HIERARCHY = function() {
+  var ret = {};
+  for (var i in category) {
+    var type = category[i].split('-')[0];
+    if (!ret[type]) {
+      ret[type] = [];
+    }
+    ret[type].push(category[i]);
+  }
+  return ret;
+}();
+
 // for table use
 function table(tdata) {
   return "<table>" + tdata + "</table>";
@@ -108,6 +120,7 @@ function drawTable(data, div) {
 
 function refreshTable() {
   var filters = {};
+  var accfilters = {}
   for (var i in FEATURES) {
     var f = FEATURES[i];
     var weight = parseFloat($('#' + f + "Weight").val());
@@ -117,20 +130,16 @@ function refreshTable() {
     var checked = $('input[name=' + f + ']:radio:checked');
     if (checked.length) {
       filters[f] = parseInt(checked.val()) * weight;
+      accfilters[f] = parseInt(checked.val()) * weight;
     }
   }
   
   $('input[name=inventory]:checked').each(function() {
     filters[$(this).val()] = true;
   });
-  
-  /*
-  $('input[name=category]:checked').each(function() {
-    filters[$(this).val()] = true;
-  });
-  */
+
   if (currentCategory) {
-    if (maincate[currentCategory].length > 1) {
+    if (CATEGORY_HIERARCHY[currentCategory].length > 1) {
       $('input[name=category-' + currentCategory + ']:checked').each(function() {
         filters[$(this).val()] = true;
       });
@@ -138,14 +147,69 @@ function refreshTable() {
       filters[currentCategory] = true;
     }
   }
-  
+  if (!isFilteringMode) {
+    // show top accessories
+    drawTable(filterTopAccessories(accfilters), "topAccessoriesTable");
+    $('topAccessories').show();
+  } else {
+    $('topAccessories').hide();
+  }
+
   drawTable(filtering(filters), "clothes");
 }
 
-function byScore(a, b) {
+function byCategoryAndScore(a, b) {
   var cata = category.indexOf(a.type);
   var catb = category.indexOf(b.type);
   return (cata - catb == 0) ? b.tmpScore - a.tmpScore : cata - catb;
+}
+
+function byScore(a, b) {
+  return b.tmpScore - a.tmpScore;
+}
+
+function filterTopAccessories(filters) {
+  filters['own'] = true;
+  var accCate = CATEGORY_HIERARCHY['饰品'];
+  for (var i in accCate) {
+    filters[accCate[i]] = true;
+  }
+  var result = {};
+  for (var i in clothes) {
+    if (matches(clothes[i], filters)) {
+      if (!isFilteringMode) {
+        clothes[i].calc(filters);
+        if (!result[clothes[i].type]) {
+          result[clothes[i].type] = clothes[i];
+        } else if (clothes[i].tmpScore > result[clothes[i].type].tmpScore) {
+          result[clothes[i].type] = clothes[i];
+        }
+      }
+    }
+  }
+  var toSort = [];
+  for (var c in result) {
+    toSort.push(result[c]);
+  }
+  toSort.sort(byScore);
+  var total = 0;
+  var i;
+  for (i = 0; i < toSort.length; i++) {
+    realScoreBefore = accScore(total, i-1);
+    realScore = accScore(total + toSort[i].tmpScore, i);
+    if (realScore < realScoreBefore) {
+      break;
+    }
+    total += toSort[i].tmpScore;
+  }
+  return toSort.slice(0, i);
+}
+
+function accScore(total, items) {
+  if (items <= 3) {
+    return total;
+  }
+  return total * (1 - 0.06 * (items-3)); 
 }
 
 function filtering(filters) {
@@ -159,7 +223,7 @@ function filtering(filters) {
     }
   }
   if (!isFilteringMode) {
-    result.sort(byScore);
+    result.sort(byCategoryAndScore);
   }
   return result;
 }
@@ -197,31 +261,19 @@ function selectAllCategories() {
   refreshTable();
 }
 
-var maincate = function() {
-  var ret = {};
-  for (var i in category) {
-    var type = category[i].split('-')[0];
-    if (!ret[type]) {
-      ret[type] = [];
-    }
-    ret[type].push(category[i]);
-  }
-  return ret;
-}();
-
 function drawFilter() {
   out = "<ul class='tabs' id='categoryTab'>";
-  for (var c in maincate) {
+  for (var c in CATEGORY_HIERARCHY) {
     out += '<li id="' + c + '"><a href="#category-' + c + '" onClick="switchCate(\'' + c + '\')">' + c + '</a></li>';
   }
   out += "</ul>";
-  for (var c in maincate) {
+  for (var c in CATEGORY_HIERARCHY) {
     out += '<div id="category-' + c + '" style="display:none">';
-    if (maincate[c].length > 1) {
+    if (CATEGORY_HIERARCHY[c].length > 1) {
       // draw sub categories
-      for (var i in maincate[c]) {
-        out += "<input type='checkbox' name='category-" + c + "' value='" + maincate[c][i]
-            + "'' onClick='refreshTable()' checked />" + maincate[c][i] + "\n";
+      for (var i in CATEGORY_HIERARCHY[c]) {
+        out += "<input type='checkbox' name='category-" + c + "' value='" + CATEGORY_HIERARCHY[c][i]
+            + "'' onClick='refreshTable()' checked />" + CATEGORY_HIERARCHY[c][i] + "\n";
       }
     }
     out += '</div>';

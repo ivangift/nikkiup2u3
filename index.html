@@ -108,6 +108,7 @@
         <li>更新到jillhx衣柜阶段终结版，合计1907，占比98%。仅有6件可获得物品尚未获得，详情见<a href="http://tieba.baidu.com/p/3783436049?pid=69500845673#69500845673">jillhx的衣柜贴</a> </li>
         <li>略微修正了界面, 提供了两层分类筛选</li>
         <li>批量导入不再要求编号百十位填0</li>
+        <li>仅供参考用的饰品建议模式，最大化饰品评分</li>
       </ul>
       <strong>注意！饰品穿多了有衰减，请不要穿超过10件饰品，不要穿低分饰品</strong><br/>
       说起来，看到各位纷纷拿到了连胜或者第一的各种成就，我很欣慰，其实最初的目的只是想让大家节省一些脑细胞和时间，不要把时间都浪费在无聊地筛选数字上，这种事情电脑做合适。
@@ -164,14 +165,18 @@
           </div>
         </div>
         <div>
-          <input type="checkbox" name="inventory" value="own" onClick="refreshTable()" checked /> 拥有
+          <input type="checkbox" name="inventory" value="own" onClick="refreshTable()" checked />拥有
           <span id='inventoryCount'> </span>
           <input type="checkbox" name="inventory" value="missing" onClick="refreshTable()" checked /> 没有
         </div>
       </form>
     </div>
     <hr>
-    
+    <div id='topAccessories'>
+      [测试] 不要再去挑饰品了，直接用下面这些就可以了
+      <div id='topAccessoriesTable'>
+      </div>
+    </div>
     <div id='category_container'> 
     </div>
     <div id = "clothes"></div>
