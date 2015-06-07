@@ -1,42 +1,4 @@
 // Ivan's Workshop
-var THEAD = "<thead><tr>\
-  <th>拥有</th>\
-  <th>名称</th>\
-  <th>类别</th>\
-  <th>编号</th>\
-  <th>简约</th>\
-  <th>华丽</th>\
-  <th>可爱</th>\
-  <th>成熟</th>\
-  <th>活泼</th>\
-  <th>优雅</th>\
-  <th>清纯</th>\
-  <th>性感</th>\
-  <th>清凉</th>\
-  <th>保暖</th>\
-  <th>特殊属性</th>\
-  <th>来源</th>\
-  </tr></thead>\n";
-  
-var THEAD_SCORE = "<thead><tr>\
-  <th>拥有</th>\
-  <th>分数</th>\
-  <th>名称</th>\
-  <th>类别</th>\
-  <th>编号</th>\
-  <th>简约</th>\
-  <th>华丽</th>\
-  <th>可爱</th>\
-  <th>成熟</th>\
-  <th>活泼</th>\
-  <th>优雅</th>\
-  <th>清纯</th>\
-  <th>性感</th>\
-  <th>清凉</th>\
-  <th>保暖</th>\
-  <th>特殊属性</th>\
-  <th>来源</th>\
-  </tr></thead>\n";
 
 var FEATURES = ["simple", "cute", "active", "pure", "cool"];
 
@@ -53,6 +15,32 @@ var CATEGORY_HIERARCHY = function() {
 }();
 
 // for table use
+function thead(simple, score) {
+  var ret = "<thead><tr>";
+  if (!simple) {
+    ret += "<th>拥有</th>";
+  }
+  if (score) {
+    ret += "<th>分数</th>";
+  }
+  return ret + "<th>名称</th>\
+  <th>类别</th>\
+  <th>编号</th>\
+  <th>简约</th>\
+  <th>华丽</th>\
+  <th>可爱</th>\
+  <th>成熟</th>\
+  <th>活泼</th>\
+  <th>优雅</th>\
+  <th>清纯</th>\
+  <th>性感</th>\
+  <th>清凉</th>\
+  <th>保暖</th>\
+  <th>特殊属性</th>\
+  <th>来源</th>\
+  </tr></thead>\n";
+}
+
 function table(tdata) {
   return "<table>" + tdata + "</table>";
 }
@@ -81,8 +69,8 @@ function toggleInventory(type, id) {
   saveAndUpdate();
 }
 
-function row(piece) {
-  var ret = td(inventoryCheckbox(piece.getType(), piece.id, piece.own), "");
+function row(piece, simple) {
+  var ret = simple ? "" : td(inventoryCheckbox(piece.getType(), piece.id, piece.own), "");
   if (!isFilteringMode) {
     ret += td(piece.tmpScore);
   }
@@ -104,18 +92,18 @@ function getStyle(rating) {
   }
 }
 
-function list(rows) {
-  ret = isFilteringMode ? THEAD : THEAD_SCORE;
+function list(rows, simple) {
+  ret = thead(simple, !isFilteringMode);
   ret += "<tbody>";
   for (var i in rows) {
-    ret += row(rows[i]);
+    ret += row(rows[i], simple);
   }
   ret += "</tbody>";
   return table(ret);
 }
 
-function drawTable(data, div) {
-  $('#' + div).html(list(data));
+function drawTable(data, div, simple) {
+  $('#' + div).html(list(data, simple));
 }
 
 function refreshTable() {
@@ -149,13 +137,13 @@ function refreshTable() {
   }
   if (!isFilteringMode) {
     // show top accessories
-    drawTable(filterTopAccessories(accfilters), "topAccessoriesTable");
-    $('topAccessories').show();
+    $('#topAccessories').show();
+    drawTable(filterTopAccessories(accfilters), "topAccessoriesTable", true);
   } else {
-    $('topAccessories').hide();
+    $('#topAccessories').hide();
   }
 
-  drawTable(filtering(filters), "clothes");
+  drawTable(filtering(filters), "clothes", false);
 }
 
 function byCategoryAndScore(a, b) {
