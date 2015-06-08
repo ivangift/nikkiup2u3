@@ -252,11 +252,11 @@ function selectAllCategories() {
 function drawFilter() {
   out = "<ul class='tabs' id='categoryTab'>";
   for (var c in CATEGORY_HIERARCHY) {
-    out += '<li id="' + c + '"><a href="#category-' + c + '" onClick="switchCate(\'' + c + '\')">' + c + '</a></li>';
+    out += '<li id="' + c + '"><a href="#dummy" onClick="switchCate(\'' + c + '\')">' + c + '</a></li>';
   }
   out += "</ul>";
   for (var c in CATEGORY_HIERARCHY) {
-    out += '<div id="category-' + c + '" style="display:none">';
+    out += '<div id="category-' + c + '">';
     if (CATEGORY_HIERARCHY[c].length > 1) {
       // draw sub categories
       for (var i in CATEGORY_HIERARCHY[c]) {
@@ -272,11 +272,10 @@ function drawFilter() {
 var currentCategory;
 function switchCate(c) {
   currentCategory = c;
-  $( "#category_container" ).tabs({
-    active: c
-  });
   $("ul.tabs li").removeClass("active");
+  $("#category_container div").removeClass("active");
   $("#" + c).addClass("active");
+  $("#category-" + c).addClass("active");
   refreshTable();
 }
 
