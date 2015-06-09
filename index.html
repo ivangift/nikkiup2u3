@@ -1,6 +1,8 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>奇迹暖暖在线配装器</title>
+    <script type='text/javascript' charset="UTF-8" src='jquery.js'></script>
     <script type='text/javascript' charset="UTF-8" src='wardrobe.js'></script>
     <script type='text/javascript' charset="UTF-8" src='scoring.js'></script>
     <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
@@ -48,87 +50,151 @@
     div.facet {
       margin-left:10px;
     }
+    div.announcement {
+      max-width: 800px;
+    }
+    div.weightContainer {
+      display: inline-block;
+    }
+    
+    ul.tabs {
+    	margin: 0;
+    	padding: 0;
+    	list-style: none;
+    	height: 32px;
+    	border-bottom: 1px solid #999;
+    	border-left: 1px solid #999;
+    	width: 100%;
+    }
+    ul.tabs li {
+    	float: left;
+    	margin: 0;
+    	padding: 0;
+    	height: 31px;
+    	line-height: 31px;
+    	border: 1px solid #999;
+    	border-left: none;
+    	margin-bottom: -1px;
+    	background: #F0F0F0;
+    	overflow: hidden;
+    	position: relative;
+    }
+    ul.tabs li a {
+    	text-decoration: none;
+    	color: #000;
+    	display: block;
+    	font-size: 1.2em;
+    	padding: 0 20px;
+    	border: 1px solid #fff;
+    	outline: none;
+    }
+    ul.tabs li a:hover {
+    	background: #ccc;
+    }	
+    html ul.tabs li.active, html ul.tabs li.active a:hover  {
+    	background: #fff;
+    	border-bottom: 1px solid #fff;
+    }
+    #category_container div {
+    	display:none;
+    }
+    #category_container div.active {
+    	display:block;
+    }
     </style>
     
   </head>
-    <div>
+  <body>
+    <div class='announcement'>
       Nikki's wardrobe. By Ivan's workshop<br/>
-      服装数据来自jillhx@贴吧 20150601<br/>
-      Update 20150602:<br/>
-      &nbsp;&nbsp;- 紧急修正，之前没有自定义衣柜会导致页面无法加载的bug<br/>
-      &nbsp;&nbsp;- 加入了少女1的属性权重<br/>
-      &nbsp;&nbsp;- 更新了服装数据，合计1663，衣柜百分比85.6%<br/>
-      &nbsp;&nbsp;- 重构了代码，改用id来存放数据，求各种捉虫<br/>
-      &nbsp;&nbsp;- 现在支持按照类别和id批量导入衣柜了<br/>
-      &nbsp;&nbsp;- <strong>更新后修正了许多名称，有些衣服可能会从自己的衣柜中移除，请注意核对一下</strong><br/>
-      <strong>注意！饰品穿多了有衰减，请不要穿超过10件饰品，不要穿低分饰品</strong>
+      服装数据来自jillhx@贴吧 20150608<br/>
+      Update 20150609:<br/>
+      <ul>
+        <li>根据最新的衣柜信息进行了更正</li>
+        <li>修正了若干兼容性问题</li>
+      </ul>
+      <strong style="color:red">每关的tag要求不一样，碰到F就不要去帖子里哭了，赶紧换一件连衣裙或者外套是正经，做任务的时候也要看看任务描述，人家文案好歹也写了那么多字呢。</strong><br/>
+      ip君要回老家结婚去了，这两周不定期更新，只修bug不加功能，报错请去<a href="http://tieba.baidu.com/p/3792563906">主贴</a><br/>
     </div>
+    <hr/>
     <div>
       <form name="filter_form">
         <div>
           <input type="radio" name="mode" value="filtering" onClick="changeMode(true)" checked/> 筛选
           <input type="radio" name="mode" value="ranking" onClick="changeMode(false)" /> 计分
-          <select id="theme" onChange="changeTheme()" disabled></select>
+          <select id="theme" onChange="changeTheme()" style="display: none"></select>
         </div>
         <div class='facet'>
           <div>
             <input type="radio" name="simple" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="simple" value="1" onClick="changeFilter()" /> 简约
             <input type="radio" name="simple" value="-1" onClick="changeFilter()" /> 华丽
-            &nbsp;&nbsp;权重 <input type="text" id="simpleWeight" name="simpleWeight" value="1" onChange="changeFilter()" />
+            <div class='weightContainer' style="display: none" id = "simpleWeightContainer">
+            	&nbsp;&nbsp;权重 <input type="text" id="simpleWeight" name="simpleWeight" value="1" onChange="changeFilter()" />
+          	</div>
           </div>
           <div>
             <input type="radio" name="cute" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="cute" value="1" onClick="changeFilter()" /> 可爱
             <input type="radio" name="cute" value="-1" onClick="changeFilter()" /> 成熟
-            &nbsp;&nbsp;权重 <input type="text" id="cuteWeight" name="cuteWeight" value="1" onChange="changeFilter()" />
+            <div class='weightContainer' style="display: none" id = "cuteWeightContainer">
+            	&nbsp;&nbsp;权重 <input type="text" id="cuteWeight" name="cuteWeight" value="1" onChange="changeFilter()" />
+            </div>
           </div>
           <div>
             <input type="radio" name="active" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="active" value="1" onClick="changeFilter()" /> 活泼
             <input type="radio" name="active" value="-1" onClick="changeFilter()" /> 优雅
-            &nbsp;&nbsp;权重 <input type="text" id="activeWeight" name="activeWeight" value="1" onChange="changeFilter()" />
+            <div class='weightContainer' style="display: none" id = "activeWeightContainer">
+              &nbsp;&nbsp;权重 <input type="text" id="activeWeight" name="activeWeight" value="1" onChange="changeFilter()" />
+            </div>
           </div>
           <div>
             <input type="radio" name="pure" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="pure" value="1" onClick="changeFilter()" /> 清纯
             <input type="radio" name="pure" value="-1" onClick="changeFilter()" /> 性感
-            &nbsp;&nbsp;权重 <input type="text" id="pureWeight" name="pureWeight" value="1" onChange="changeFilter()" />
+            <div class='weightContainer' style="display: none" id = "pureWeightContainer">
+              &nbsp;&nbsp;权重 <input type="text" id="pureWeight" name="pureWeight" value="1" onChange="changeFilter()" />
+            </div>
           </div>
           <div>
             <input type="radio" name="cool" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="cool" value="1" onClick="changeFilter()" /> 清凉
             <input type="radio" name="cool" value="-1" onClick="changeFilter()" /> 保暖
-            &nbsp;&nbsp;权重 <input type="text" id="coolWeight" name="coolWeight" value="1" onChange="changeFilter()" />
+            <div class='weightContainer' style="display: none" id = "coolWeightContainer">
+              &nbsp;&nbsp;权重 <input type="text" id="coolWeight" name="coolWeight" value="1" onChange="changeFilter()" />
+            </div>
           </div>
         </div>
         <div>
-          <input type="checkbox" name="inventory" value="own" onClick="refreshTable()" checked /> 拥有
+          <input type="checkbox" name="inventory" value="own" onClick="refreshTable()" checked />拥有
           <span id='inventoryCount'> </span>
           <input type="checkbox" name="inventory" value="missing" onClick="refreshTable()" checked /> 没有
-        </div>
-
-        <div id='category_div'>
         </div>
       </form>
     </div>
     <hr>
-    导入批量id，请先选择要导入的类别，然后在文本框内输入id（保留百位和十位的0），用空格、逗号或者换行隔开
+    <div id='topAccessories'>
+      [测试] 不要再去挑饰品了，直接用下面这些就可以了
+      <div id='topAccessoriesTable'>
+      </div>
+    </div>
+    <div id='category_container'> 
+    </div>
+    <div id = "clothes"></div>
+    <hr>
+    导入批量衣服，请先选择要导入的类别，然后在文本框内输入编号，用空格、逗号或者换行隔开。不知道编号在哪儿的请点<a href="http://tieba.baidu.com/p/3808711082" target="_blank">这里</a>
     <div id = "import">
       <select id="importCate" onChange="clearImport()"></select> <br/>
       <textarea id="importData" rows=5 style="width:600px"></textarea>
       <button onClick="doImport()">导入</button>
     </div>
-    <hr>
-    <div id = "clothes"></div>
+
     <hr>
     <p>我拥有的服装 （复制衣橱文本框内容以备份衣橱）</p>
     <textarea id="myClothes" rows=10 style="width:600px"></textarea>
     <br/>
     <button onClick="loadCustomInventory()">Update inventory</button>
     <br/>
-    <script>
-      init();
-    </script>
   </body>
 </html>

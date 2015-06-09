@@ -1,3 +1,5 @@
+// Ivan's Workshop
+
 // parses a csv row into object
 // Clothes: name, type, id, stars, gorgeous, simple, elegant, active, mature, cute, sexy, pure, cool, warm，extra
 //          0     1     2   3      4         5       6        7       8       9     10    11    12    13    14
@@ -14,6 +16,7 @@ Clothes = function(csv) {
     pure: realRating(csv[11], csv[10], csv[1]),
     cool: realRating(csv[12], csv[13], csv[1]),
     extra: csv[14],
+    source: csv[15],
     toCsv: function() {
       name = this.name;
       type = this.type;
@@ -24,9 +27,10 @@ Clothes = function(csv) {
       pure = this.pure;
       cool = this.cool;
       extra = this.extra;
+      source = this.source;
       return [name, type, id, simple[0], simple[1], cute[0], cute[1],
           active[0], active[1], pure[0], pure[1], cool[0],
-          cool[1], extra];
+          cool[1], extra, source];
     },
     calc: function(filters) {
       var s = 0;
@@ -102,7 +106,7 @@ function MyClothes() {
           clothes[i].own = true;
         }
       }
-    },
+    }
   };
 }
 
@@ -117,7 +121,11 @@ var clothes = function() {
 var clothesSet = function() {
   var ret = {};
   for (var i in clothes) {
-    ret[clothes[i].name] = clothes[i];
+    var t = clothes[i].getType();
+    if (!ret[t]) {
+      ret[t] = {};
+    }
+    ret[clothes[i].getType()][clothes[i].id] = clothes[i];
   }
   return ret;
 }();
@@ -134,10 +142,8 @@ function load(myClothes) {
   var cs = myClothes.split(",");
   for (var i in clothes) {
     clothes[i].own = false;
-  }
-  for (var i in cs) {
-    if (clothesSet[cs[i]]) {
-      clothesSet[cs[i]].own = true;
+    if (cs.indexOf(clothes[i].name) >= 0) {
+      clothes[i].own = true;
     }
   }
   var mine = MyClothes();
