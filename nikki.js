@@ -367,8 +367,23 @@ function clearImport() {
 
 function saveAndUpdate() {
   var mine = save();
+  updateSize(mine);
+}
+
+function updateSize(mine) {
   $("#inventoryCount").text('(' + mine.size + ')');
   $("#myClothes").val(mine.serialize());
+  var subcount = {};
+  for (c in mine.mine) {
+    var type = c.split('-')[0];
+    if (!subcount[type]) {
+      subcount[type] = 0;
+    }
+    subcount[type] += mine.mine[type].length;
+  }
+  for (c in subcount) {
+    $("#" + c + ">a").text(c + "(" + subcount[c] + ")");
+  }
 }
 
 function doImport() {
@@ -407,13 +422,12 @@ function doImport() {
 
 function init() {
   var mine = loadFromStorage();
-  $("#inventoryCount").text('(' + mine.size + ')');
-  $("#myClothes").text(mine.serialize());
   drawFilter();
   drawTheme();
   drawImport();
   changeMode(true);
   switchCate(category[0]);
+  updateSize(mine);
 }
 $(document).ready(function() {
   init()
