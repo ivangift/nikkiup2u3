@@ -8,6 +8,28 @@
     <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
     <script type='text/javascript' charset="UTF-8" src='model.js'></script>
     <script type='text/javascript' charset="UTF-8" src='nikki.js'></script>
+    <script type='text/javascript'>
+      var googletag = googletag || {};
+      googletag.cmd = googletag.cmd || [];
+      (function() {
+        var gads = document.createElement('script');
+        gads.async = true;
+        gads.type = 'text/javascript';
+        var useSSL = 'https:' == document.location.protocol;
+        gads.src = (useSSL ? 'https:' : 'http:') +
+          '//www.googletagservices.com/tag/js/gpt.js';
+        var node = document.getElementsByTagName('script')[0];
+        node.parentNode.insertBefore(gads, node);
+      })();
+    </script>
+
+    <script type='text/javascript'>
+      googletag.cmd.push(function() {
+        googletag.defineSlot('/17828477/noogler_201307/noogler_yfchen', [728, 90], 'div-gpt-ad-1433922605968-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+      });
+    </script>
     <style>
     table
     {
@@ -195,5 +217,13 @@
     <br/>
     <button onClick="loadCustomInventory()">Update inventory</button>
     <br/>
+    <hr>
+    以下为广告，别点，点了我也不会赚钱的<br/>
+    <!-- /17828477/noogler_201307/noogler_yfchen -->
+    <div id='div-gpt-ad-1433922605968-0' style='height:90px; width:728px;'>
+    <script type='text/javascript'>
+    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1433922605968-0'); });
+    </script>
+    </div>
   </body>
 </html>
