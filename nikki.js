@@ -422,6 +422,8 @@ function doImport() {
 
 function init() {
   var mine = loadFromStorage();
+  // do backfilling before rendering anything
+  backfillTag();
   drawFilter();
   drawTheme();
   drawImport();

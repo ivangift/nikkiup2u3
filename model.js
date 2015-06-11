@@ -209,3 +209,20 @@ function save() {
   }
   return myClothes;
 }
+
+function backfillTag() {
+  for (var type in clothesSet) {
+    var cs = clothesSet[type];
+    for (var id in cs) {
+      var c = cs[id];
+      if (c.source.indexOf("定") >= 0) {
+        var origin = c.source.substring(1, 4);
+        if (cs[origin]) {
+          if (c.extra.length == 0) {
+            c.extra = cs[origin].extra;
+          }
+        } 
+      }
+    }
+  }
+}
