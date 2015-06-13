@@ -70,7 +70,7 @@ function toggleInventory(type, id) {
 }
 
 function row(piece, simple) {
-  var ret = simple ? "" : td(inventoryCheckbox(piece.getType(), piece.id, piece.own), "");
+  var ret = simple ? "" : td(inventoryCheckbox(piece.type.mainType, piece.id, piece.own), "");
   if (!isFilteringMode) {
     ret += td(piece.tmpScore);
   }
@@ -143,12 +143,44 @@ function refreshTable() {
     $('#topAccessories').hide();
   }
 
+  drawLevelInfo();
   drawTable(filtering(filters), "clothes", false);
 }
 
+function drawLevelInfo() {
+  var info = "";
+  if (currentLevel) {
+    var log = [];
+    if (currentLevel.filter) {
+      if (currentLevel.filter.tagWhitelist) {
+        log.push("tag允许: [" + currentLevel.filter.tagWhitelist + "]");
+      }
+      if (currentLevel.filter.nameWhitelist) {
+        log.push("名字含有: [" + currentLevel.filter.nameWhitelist + "]");
+      }
+    }
+    if (currentLevel.bonus) {
+      for (var i in currentLevel.bonus) {
+        var bonus = currentLevel.bonus[i];
+        var match = "(";
+        if (bonus.tagWhitelist) {
+          match += "tag符合: " + bonus.tagWhitelist + " ";
+        }
+        if (bonus.nameWhitelist) {
+          match += "名字含有: " + bonus.nameWhitelist;
+        }
+        match += ")";
+        log.push(match + ": [" + bonus.note + " " + bonus.param + "]");
+      }
+    }
+    info = log.join(" ");
+  }
+  $("#tagInfo").text(info);
+}
+
 function byCategoryAndScore(a, b) {
-  var cata = category.indexOf(a.type);
-  var catb = category.indexOf(b.type);
+  var cata = category.indexOf(a.type.type);
+  var catb = category.indexOf(b.type.type);
   return (cata - catb == 0) ? b.tmpScore - a.tmpScore : cata - catb;
 }
 
@@ -167,10 +199,10 @@ function filterTopAccessories(filters) {
     if (matches(clothes[i], filters)) {
       if (!isFilteringMode) {
         clothes[i].calc(filters);
-        if (!result[clothes[i].type]) {
-          result[clothes[i].type] = clothes[i];
-        } else if (clothes[i].tmpScore > result[clothes[i].type].tmpScore) {
-          result[clothes[i].type] = clothes[i];
+        if (!result[clothes[i].type.type]) {
+          result[clothes[i].type.type] = clothes[i];
+        } else if (clothes[i].tmpScore > result[clothes[i].type.type].tmpScore) {
+          result[clothes[i].type.type] = clothes[i];
         }
       }
     }
@@ -226,7 +258,7 @@ function matches(c, filters) {
       }
     }
   } 
-  return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type];
+  return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type.type];
 }
 
 function loadCustomInventory() {
@@ -291,8 +323,10 @@ function changeMode(isFiltering) {
   }
   if (isFiltering) {
     $("#theme").hide();
+    $("#tagInfo").hide();
   } else {
     $("#theme").show();
+    $("#tagInfo").show();
   }
   isFilteringMode = isFiltering;
   refreshTable();
@@ -300,6 +334,7 @@ function changeMode(isFiltering) {
 
 function changeFilter() {
   $("#theme")[0].options[0].selected = true;
+  currentLevel = null;
   refreshTable();
 }
 
@@ -316,10 +351,13 @@ function changeTheme() {
   }
 }
 
-function setFilters(filters) {
+var currentLevel; // used for post filtering.
+function setFilters(level) {
+  currentLevel = level;
+  var weights = level.weight;
   for (var i in FEATURES) {
     var f = FEATURES[i];
-    var weight = filters[f];
+    var weight = weights[f];
     $('#' + f + 'Weight').val(Math.abs(weight));
     var radios = $('input[name=' + f + ']:radio');
     for (var j in radios) {
@@ -400,7 +438,7 @@ function doImport() {
   }
   var updating = [];
   for (var i in clothes) {
-    if (clothes[i].getType() == type && mapping[clothes[i].id]) {
+    if (clothes[i].type.mainType == type && mapping[clothes[i].id]) {
       updating.push(clothes[i].name);
     }
   }
