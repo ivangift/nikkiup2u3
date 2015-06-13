@@ -45,6 +45,8 @@ def process(name, file, skip = 2):
     reader.next()
   out = {}
   for row in reader:
+    if len(row[0]) == 0:
+      continue # skip empty rows
     key = name
     if len(row[3]) > 0:
       key = key + "-" + row[3]
