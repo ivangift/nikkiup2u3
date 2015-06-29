@@ -188,6 +188,10 @@ function byScore(a, b) {
   return b.tmpScore - a.tmpScore;
 }
 
+function byId(a, b) {
+  return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0);
+}
+
 function filterTopAccessories(filters) {
   filters['own'] = true;
   var accCate = CATEGORY_HIERARCHY['饰品'];
@@ -242,9 +246,11 @@ function filtering(filters) {
       result.push(clothes[i]);
     }
   }
-  if (!isFilteringMode) {
+  if (isFilteringMode) {
+    result.sort(byId);
+  } else {
     result.sort(byCategoryAndScore);
-  }
+  } 
   return result;
 }
 
@@ -272,9 +278,9 @@ function loadCustomInventory() {
   refreshTable();
 }
 
-function selectAllCategories() {
-  var all = $('#allCategory')[0].checked;
-  var x = $('input[name=category]:checkbox');
+function toggleAll(c) {
+  var all = $('#all-' + c)[0].checked;
+  var x = $('input[name=category-' + c + ']:checkbox');
   x.each(function() {
     this.checked = all;
   });
@@ -290,10 +296,14 @@ function drawFilter() {
   for (var c in CATEGORY_HIERARCHY) {
     out += '<div id="category-' + c + '">';
     if (CATEGORY_HIERARCHY[c].length > 1) {
+      // draw a select all checkbox...
+      out += "<input type='checkbox' id='all-" + c + "' onClick='toggleAll(\"" + c + "\")' checked>"
+          + "<label for='all-" + c + "'>全选</label><br/>";
       // draw sub categories
       for (var i in CATEGORY_HIERARCHY[c]) {
         out += "<input type='checkbox' name='category-" + c + "' value='" + CATEGORY_HIERARCHY[c][i]
-            + "'' onClick='refreshTable()' checked />" + CATEGORY_HIERARCHY[c][i] + "\n";
+            + "'' id='" + CATEGORY_HIERARCHY[c][i] + "' onClick='refreshTable()' checked /><label for='"
+            + CATEGORY_HIERARCHY[c][i] + "'>" + CATEGORY_HIERARCHY[c][i] + "</label>\n";
       }
     }
     out += '</div>';

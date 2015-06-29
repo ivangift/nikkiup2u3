@@ -12,7 +12,7 @@ files = {
   '外套':  ('coat.csv', 2),
   '连衣裙': ('dress.csv', 2),
   '发型': ('hair.csv', 2),
-  '妆容': ('makeup.csv', 1),
+  '妆容': ('makeup.csv', 2),
   '鞋子': ('shoes.csv', 2),
   '袜子': ('socks.csv', 2),
   '上装': ('tops.csv', 2),
