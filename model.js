@@ -1,5 +1,7 @@
 // Ivan's Workshop
 
+var FEATURES = ["simple", "cute", "active", "pure", "cool"];
+
 // parses a csv row into object
 // Clothes: name, type, id, stars, gorgeous, simple, elegant, active, mature, cute, sexy, pure, cool, warm，extra
 //          0     1     2   3      4         5       6        7       8       9     10    11    12    13    14
@@ -36,10 +38,28 @@ Clothes = function(csv) {
     calc: function(filters) {
       var s = 0;
       var self = this;
+      this.tmpScoreByCategory = ScoreByCategory();
       for (var i in FEATURES) {
-        var f = FEATURES[i];
-        if (filters[f] && filters[f] * self[f][2] > 0) {
-          s += filters[f] * self[f][2];
+        var f = FEATURES[i]; 
+        if (filters[f]) {
+          var sub = filters[f] * self[f][2];
+          if (filters[f] > 0) {
+            if (sub > 0) {
+              this.tmpScoreByCategory.record(f, sub, 0); // matched with major
+            } else {
+              this.tmpScoreByCategory.record(f, 0, sub); // mismatch with minor
+            }
+          } else {
+            if (sub > 0) {
+              this.tmpScoreByCategory.record(f, 0, sub); // matched with minor
+            } else {
+              this.tmpScoreByCategory.record(f, sub, 0); // mismatch with major
+            }
+            
+          }
+          if (sub > 0) {
+            s += sub;
+          }
         }
       }
 
@@ -71,6 +91,31 @@ Clothes = function(csv) {
   };
 }
 
+function ScoreByCategory() {
+  var initial = {};
+  for (var c in FEATURES) {
+    initial[FEATURES[c]] = [0, 0];
+  }
+  return {
+    scores: initial,
+    // score: positive - matched, negative - no matched
+    record: function(category, major, minor) {
+      this.scores[category] = [major, minor];
+    },
+    add: function(other) {
+      for (var c in other.scores) {
+        this.scores[c][0] += other.scores[c][0];
+        this.scores[c][1] += other.scores[c][1];
+      }
+    },
+    round: function() {
+      for (var c in this.scores) {
+        this.scores[c][0] = Math.round(this.scores[c][0]);
+        this.scores[c][1] = Math.round(this.scores[c][1]);
+      }
+    }
+  };
+}
 
 function MyClothes() {
   return {
@@ -152,6 +197,87 @@ var clothesSet = function() {
   return ret;
 }();
 
+var shoppingCart = {
+  cart: {},
+  totalScore: fakeClothes(this.cart),
+  clear: function() {
+    this.cart = {};
+  },
+  contains: function(c) {
+    return this.cart[c.type.type] == c;
+  },
+  remove: function(c) {
+    delete this.cart[c];
+  },
+  putAll: function(clothes) {
+    for (var i in clothes) {
+      this.put(clothes[i]);
+    }
+  },
+  put: function(c) {
+    this.cart[c.type.type] = c;
+  },
+  toList: function(sortBy) {
+    var ret = [];
+    for (var t in this.cart) {
+      ret.push(this.cart[t]);
+    }
+    return ret.sort(sortBy);
+  },
+  calc: function(criteria) {
+    for (var c in this.cart) {
+      this.cart[c].calc(criteria);
+    }
+    // fake a clothes
+    this.totalScore = fakeClothes(this.cart);
+  }
+};
+
+function accScore(total, items) {
+  if (items <= 3) {
+    return total;
+  }
+  return total * (1 - 0.06 * (items-3)); 
+}
+
+function fakeClothes(cart) {
+  var totalScore = 0;
+  var totalAccessories = 0;
+  var totalScoreByCategory = ScoreByCategory();
+  var totalAccessoriesByCategory = ScoreByCategory();
+  var numAccessories = 0;
+  for (var c in cart) {
+    if (c.split('-')[0] == "饰品") {
+      totalAccessories += cart[c].tmpScore;
+      totalAccessoriesByCategory.add(cart[c].tmpScoreByCategory);
+      numAccessories ++;
+    } else {
+      totalScore += cart[c].tmpScore;
+      totalScoreByCategory.add(cart[c].tmpScoreByCategory);
+    }
+  }
+  totalScore += accScore(totalAccessories, numAccessories);
+  for (var c in totalAccessoriesByCategory.scores) {
+    totalAccessoriesByCategory.scores[c][0] = accScore(totalAccessoriesByCategory.scores[c][0],
+        numAccessories);
+    totalAccessoriesByCategory.scores[c][1] = accScore(totalAccessoriesByCategory.scores[c][1],
+        numAccessories);
+  }
+  totalScoreByCategory.add(totalAccessoriesByCategory);
+  totalScoreByCategory.round();
+  
+  var scores = totalScoreByCategory.scores;
+  return {
+    name: '总分',
+    tmpScore: Math.round(totalScore),
+    toCsv: function() {
+      return [this.name, '', '', scores.simple[0], scores.simple[1], scores.cute[0], scores.cute[1],
+          scores.active[0], scores.active[1], scores.pure[0], scores.pure[1], scores.cool[0],
+          scores.cool[1], '', ''];
+    }
+  };
+}
+
 function realRating(a, b, type) {
   real = a ? a : b;
   symbol = a ? 1 : -1;
@@ -210,7 +336,7 @@ function getCookie(c_name) {
       return unescape(document.cookie.substring(c_start,c_end))
     }
   }
-  return ""
+  return "";
 }
 
 function setCookie(c_name,value,expiredays) {
@@ -230,21 +356,4 @@ function save() {
     setCookie("mine2", txt, 3650);
   }
   return myClothes;
-}
-
-function backfillTag() {
-  for (var type in clothesSet) {
-    var cs = clothesSet[type];
-    for (var id in cs) {
-      var c = cs[id];
-      if (c.source.indexOf("定") >= 0) {
-        var origin = c.source.substring(1, 4);
-        if (cs[origin]) {
-          if (c.tags.length == 0) {
-            c.tags = cs[origin].tags;
-          }
-        } 
-      }
-    }
-  }
 }

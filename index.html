@@ -36,7 +36,7 @@
       font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
       font-size: 12px;
       background: #fff;
-      margin: 45px;
+      margin: 10px 20px;
       border-collapse: collapse;
       text-align: center;
     }
@@ -48,7 +48,7 @@
       padding: 10px 8px;
       border-bottom: 2px solid #6678b1;
     }
-     td
+    td
     {
       color: #669;
       padding: 9px 8px 0px 8px;
@@ -56,6 +56,7 @@
     tbody tr:hover td
     {
       color: #009;
+      background: #eee;
     }
     td.S {
       color: #FB3;
@@ -68,6 +69,9 @@
     }
     td.C {
       color: #38F;
+    }
+    td.negative {
+      text-decoration: line-through;
     }
     div.facet {
       margin-left:10px;
@@ -130,9 +134,10 @@
     <div class='announcement'>
       Nikki's wardrobe. By Ivan's workshop<br/>
       服装数据来自jillhx@贴吧 20150701<br/>
-      Update 20150702:<br/>
+      Update 20150704:<br/>
       <ul>
-        <li>衣柜已经更新到jillhx的20150701版，共计：2104，占比97.5%</li>
+        <li>增加了购物篮模式，可以把选中的衣服加入来估算总分以及单项得分。新功能写得急了点可能有很多bug，请多多汇报。</li>
+        <li>自动选择饰品的功能已经被整合入购物篮，由之前的分数排序改成类型排序。</li>
       </ul>
       衣服信息纠错请去<a href="http://tieba.baidu.com/p/3860789814">jillhx的新衣柜楼</a>汇报<br/>
       功能错误或者有新需求请去<a href="http://tieba.baidu.com/p/3792563906">主贴</a>汇报<br/>
@@ -190,18 +195,19 @@
           </div>
         </div>
         <div>
-          <input type="checkbox" name="inventory" value="own" onClick="refreshTable()" checked />拥有
+          <input type="checkbox" name="inventory" value="own" onClick="onChangeUiFilter()" checked />拥有
           <span id='inventoryCount'> </span>
-          <input type="checkbox" name="inventory" value="missing" onClick="refreshTable()" checked /> 没有
+          <input type="checkbox" name="inventory" value="missing" onClick="onChangeUiFilter()" checked /> 没有
         </div>
       </form>
     </div>
     <hr>
-    <div id='topAccessories'>
-      [测试] 不要再去挑饰品了，直接用下面这些就可以了
-      <div id='topAccessoriesTable'>
+    <div id='shoppingCart'>
+      已选择的衣服 <input type="checkbox" id="accessoriesHelper" checked />自动选择饰品
+      <div id='shoppingCartTable'>
       </div>
     </div>
+    <hr>
     <div id='category_container'> 
     </div>
     <div id = "clothes"></div>
@@ -226,18 +232,6 @@
     <div id='div-gpt-ad-1433922605968-0' style='height:90px; width:728px;'>
       <script type='text/javascript'>
       googletag.cmd.push(function() { googletag.display('div-gpt-ad-1433922605968-0'); });
-      </script>
-    </div>
-    <div>
-      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-      <!-- traffic tracking -->
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-9395388490436466"
-           data-ad-slot="1321700838"
-           data-ad-format="auto"></ins>
-      <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
     </div>
   </body>

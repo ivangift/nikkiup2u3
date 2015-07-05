@@ -1,7 +1,5 @@
 // Ivan's Workshop
 
-var FEATURES = ["simple", "cute", "active", "pure", "cool"];
-
 var CATEGORY_HIERARCHY = function() {
   var ret = {};
   for (var i in category) {
@@ -15,9 +13,9 @@ var CATEGORY_HIERARCHY = function() {
 }();
 
 // for table use
-function thead(simple, score) {
+function thead(isShoppingCart, score) {
   var ret = "<thead><tr>";
-  if (!simple) {
+  if (!isShoppingCart) {
     ret += "<th>拥有</th>";
   }
   if (score) {
@@ -38,6 +36,7 @@ function thead(simple, score) {
   <th>保暖</th>\
   <th>特殊属性</th>\
   <th>来源</th>\
+  <th>&nbsp;</th>\
   </tr></thead>\n";
 }
 
@@ -63,52 +62,92 @@ function inventoryCheckbox(type, id, own) {
   return ret;
 }
 
+function shoppingCartButton(type, id) {
+  return "<button onClick='addShoppingCart(\"" + type + "\",\"" + id
+      + "\")'>加入购物车</button>";
+}
+
+function removeShoppingCartButton(detailedType) {
+  return "<button onClick='removeShoppingCart(\"" + detailedType + "\")'>删除</button>";
+}
+
+function addShoppingCart(type, id) {
+  shoppingCart.put(clothesSet[type][id]);
+  refreshShoppingCart();
+}
+
+function removeShoppingCart(type) {
+  shoppingCart.remove(type);
+  refreshShoppingCart();
+}
+
 function toggleInventory(type, id) {
   var checked = $('#' + type + id)[0].checked;
   clothesSet[type][id].own = checked;
   saveAndUpdate();
 }
 
-function row(piece, simple) {
-  var ret = simple ? "" : td(inventoryCheckbox(piece.type.mainType, piece.id, piece.own), "");
+function row(piece, isShoppingCart) {
+  var ret = isShoppingCart ? "" : td(inventoryCheckbox(piece.type.mainType, piece.id, piece.own), "");
   if (!isFilteringMode) {
     ret += td(piece.tmpScore);
   }
   var csv = piece.toCsv();
   for (var i in csv) {
-    ret += td(csv[i], getStyle(csv[i]));
+    ret += td(render(csv[i]), getStyle(csv[i]));
+  }
+  if (isShoppingCart) {
+    // use id to detect if it is a fake clothes
+    if (piece.id) {
+      ret += td(removeShoppingCartButton(piece.type.type), '');
+    }
+  } else {
+    ret += td(shoppingCartButton(piece.type.mainType, piece.id), '');
   }
   return tr(ret);
 }
 
+function render(rating) {
+  if (rating < 0) {
+    return -rating;
+  }
+  return rating;
+}
+
 function getStyle(rating) {
+  if (rating < 0) {
+    return 'negative';
+  }
   switch (rating) {
     case "SS": return 'S';
     case "S": return 'S';
     case "A": return 'A';
     case "B": return 'B';
     case "C": return 'C';
-    default: return ""
+    default: return "";
   }
 }
 
-function list(rows, simple) {
-  ret = thead(simple, !isFilteringMode);
+function list(rows, isShoppingCart) {
+  ret = thead(isShoppingCart, !isFilteringMode);
   ret += "<tbody>";
   for (var i in rows) {
-    ret += row(rows[i], simple);
+    ret += row(rows[i], isShoppingCart);
+  }
+  if (isShoppingCart) {
+    ret += row(shoppingCart.totalScore, isShoppingCart);
   }
   ret += "</tbody>";
   return table(ret);
 }
 
-function drawTable(data, div, simple) {
-  $('#' + div).html(list(data, simple));
+function drawTable(data, div, isShoppingCart) {
+  $('#' + div).html(list(data, isShoppingCart));
 }
 
-function refreshTable() {
-  var filters = {};
-  var accfilters = {}
+var criteria = {};
+function onChangeCriteria() {
+  criteria = {};
   for (var i in FEATURES) {
     var f = FEATURES[i];
     var weight = parseFloat($('#' + f + "Weight").val());
@@ -117,34 +156,55 @@ function refreshTable() {
     }
     var checked = $('input[name=' + f + ']:radio:checked');
     if (checked.length) {
-      filters[f] = parseInt(checked.val()) * weight;
-      accfilters[f] = parseInt(checked.val()) * weight;
+      criteria[f] = parseInt(checked.val()) * weight;
     }
   }
-  
+  if (!isFilteringMode){
+    if ($('#accessoriesHelper')[0].checked) {
+      chooseAccessories(criteria);
+    } else {
+      refreshShoppingCart();
+    }
+  }
+  drawLevelInfo();
+  refreshTable();
+}
+
+var uiFilter = {};
+function onChangeUiFilter() {
+  uiFilter = {};
   $('input[name=inventory]:checked').each(function() {
-    filters[$(this).val()] = true;
+    uiFilter[$(this).val()] = true;
   });
 
   if (currentCategory) {
     if (CATEGORY_HIERARCHY[currentCategory].length > 1) {
       $('input[name=category-' + currentCategory + ']:checked').each(function() {
-        filters[$(this).val()] = true;
+        uiFilter[$(this).val()] = true;
       });
     } else {
-      filters[currentCategory] = true;
+      uiFilter[currentCategory] = true;
     }
   }
-  if (!isFilteringMode) {
-    // show top accessories
-    $('#topAccessories').show();
-    drawTable(filterTopAccessories(accfilters), "topAccessoriesTable", true);
-  } else {
-    $('#topAccessories').hide();
-  }
+  refreshTable();
+}
 
-  drawLevelInfo();
-  drawTable(filtering(filters), "clothes", false);
+function refreshTable() {
+  drawTable(filtering(criteria, uiFilter), "clothes", false);
+}
+
+function chooseAccessories(accfilters) {
+  var accCate = CATEGORY_HIERARCHY['饰品'];
+  for (var i in accCate) {
+    shoppingCart.remove(accCate[i]);
+  }
+  shoppingCart.putAll(filterTopAccessories(accfilters));
+  refreshShoppingCart();
+}
+
+function refreshShoppingCart() {
+  shoppingCart.calc(criteria);
+  drawTable(shoppingCart.toList(byCategoryAndScore), "shoppingCartTable", true);
 }
 
 function drawLevelInfo() {
@@ -200,7 +260,7 @@ function filterTopAccessories(filters) {
   }
   var result = {};
   for (var i in clothes) {
-    if (matches(clothes[i], filters)) {
+    if (matches(clothes[i], {}, filters)) {
       if (!isFilteringMode) {
         clothes[i].calc(filters);
         if (!result[clothes[i].type.type]) {
@@ -229,19 +289,12 @@ function filterTopAccessories(filters) {
   return toSort.slice(0, i);
 }
 
-function accScore(total, items) {
-  if (items <= 3) {
-    return total;
-  }
-  return total * (1 - 0.06 * (items-3)); 
-}
-
-function filtering(filters) {
+function filtering(criteria, filters) {
   var result = [];
   for (var i in clothes) {
-    if (matches(clothes[i], filters)) {
+    if (matches(clothes[i], criteria, filters)) {
       if (!isFilteringMode) {
-        clothes[i].calc(filters);
+        clothes[i].calc(criteria);
       }
       result.push(clothes[i]);
     }
@@ -254,12 +307,12 @@ function filtering(filters) {
   return result;
 }
 
-function matches(c, filters) {
+function matches(c, criteria, filters) {
   // only filter by feature when filtering
   if (isFilteringMode) {
     for (var i in FEATURES) {
       var f = FEATURES[i];
-      if (filters[f] && filters[f] * c[f][2] < 0) {
+      if (criteria[f] && criteria[f] * c[f][2] < 0) {
         return false;
       }
     }
@@ -284,7 +337,7 @@ function toggleAll(c) {
   x.each(function() {
     this.checked = all;
   });
-  refreshTable();
+  onChangeUiFilter();
 }
 
 function drawFilter() {
@@ -302,7 +355,7 @@ function drawFilter() {
       // draw sub categories
       for (var i in CATEGORY_HIERARCHY[c]) {
         out += "<input type='checkbox' name='category-" + c + "' value='" + CATEGORY_HIERARCHY[c][i]
-            + "'' id='" + CATEGORY_HIERARCHY[c][i] + "' onClick='refreshTable()' checked /><label for='"
+            + "'' id='" + CATEGORY_HIERARCHY[c][i] + "' onClick='onChangeUiFilter()' checked /><label for='"
             + CATEGORY_HIERARCHY[c][i] + "'>" + CATEGORY_HIERARCHY[c][i] + "</label>\n";
       }
     }
@@ -318,7 +371,7 @@ function switchCate(c) {
   $("#category_container div").removeClass("active");
   $("#" + c).addClass("active");
   $("#category-" + c).addClass("active");
-  refreshTable();
+  onChangeUiFilter();
 }
 
 var isFilteringMode = true;
@@ -339,13 +392,13 @@ function changeMode(isFiltering) {
     $("#tagInfo").show();
   }
   isFilteringMode = isFiltering;
-  refreshTable();
+  onChangeCriteria();
 }
 
 function changeFilter() {
   $("#theme")[0].options[0].selected = true;
   currentLevel = null;
-  refreshTable();
+  onChangeCriteria();
 }
 
 function changeTheme() {
@@ -378,7 +431,7 @@ function setFilters(level) {
       }
     }
   }
-  refreshTable();
+  onChangeCriteria();
 }
 
 function drawTheme() {
@@ -470,14 +523,13 @@ function doImport() {
 
 function init() {
   var mine = loadFromStorage();
-  // do backfilling before rendering anything
-  backfillTag();
   drawFilter();
   drawTheme();
   drawImport();
   changeMode(true);
   switchCate(category[0]);
   updateSize(mine);
+  refreshShoppingCart();
 }
 $(document).ready(function() {
   init()
