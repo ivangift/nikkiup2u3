@@ -81,6 +81,11 @@ function removeShoppingCart(type) {
   refreshShoppingCart();
 }
 
+function clearShoppingCart() {
+  shoppingCart.clear();
+  refreshShoppingCart();
+}
+
 function toggleInventory(type, id) {
   var checked = $('#' + type + id)[0].checked;
   clothesSet[type][id].own = checked;
