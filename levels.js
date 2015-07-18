@@ -457,7 +457,7 @@ var levelBonus = {
   '7-4': [addScoreBonusFactory('S', 1, "中式古典")],
   '7-5': [],
   '7-6': [specialFactory76A(), specialFactory76B()],
-  '7-7': [replaceScoreBonusFactory('B', "中式古典"), replaceScoreBonusFactory('B', "晚礼服")],
+  '7-7': [replaceScoreBonusFactory('B', "欧式古典"), replaceScoreBonusFactory('B', "晚礼服")],
   '7-8': [replaceScoreBonusFactory('B', "中式古典"), replaceScoreBonusFactory('A', "侠客联盟")],
   '7-9': [addScoreBonusFactory('A', 1, "冬装")],
   '7-支1': [],
