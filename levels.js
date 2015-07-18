@@ -123,16 +123,16 @@ var levelsRaw = {
   '6-支2': [-3, 2, 1, 1, 2],
   '6-支3': [-2, -3, 1, -1, 2],
   '7-1': [2, -3, -3, -2, 1.5],
-  '7-2': [-3, -2, -3, 2, -2],
-  '7-3': [3, -3, 2, -3, 3],
+  '7-2': [-3, -2, -3, 3, -2],
+  '7-3': [3, -2, 2, -3, 3],
   '7-4': [-1, -2, -2, 1.5, -1],
-  '7-5': [1, 1, 1, 1, 1],
-  '7-6': [-1, -1, -1, 1, 1],
-  '7-7': [-1, -1, -1, -1, 1],
-  '7-8': [1, -1, 1, -1, 1],
-  '7-9': [1, -1, 1, 1, -1],
-  '7-支1': [1, -1, -1, 1, 1],
-  '7-支2': [1, 1, -1, 1, 1],
+  '7-5': [3, 2, 3, 2, 2],
+  '7-6': [-2, -1, -2, 1.5, 1.5],
+  '7-7': [-3, -3, -2, -2, 1],
+  '7-8': [3, -2, 3, -2, 1],
+  '7-9': [2, -3, 1.5, 2, -3],
+  '7-支1': [2, -3, -3, 2, 2],
+  '7-支2': [2, 3, -3, 2, 1.5],
   '7-支3': [1, -1, 1, -1, 1],
   '7-支4': [1, 1, -1, 1, 1],
   '7-支5': [1, 1, 1, 1, 1]
@@ -266,7 +266,21 @@ var levelFilters = {
   '6-11': normalFilter("中式古典/中式现代/旗袍/民国服饰"),
   '6-支1': noOp(), // Not tested yet, not eligible for this level yet
   '6-支2': noOp(), // Not tested yet, not eligible for this level yet
-  '6-支3': noOp // Not tested yet, not eligible for this level yet
+  '6-支3': noOp(), // Not tested yet, not eligible for this level yet
+  '7-1': noOp(),
+  '7-2': noOp(),
+  '7-3': noOp(),
+  '7-4': noOp(),
+  '7-5': noOp(),
+  '7-6': noOp(),
+  '7-7': noOp(),
+  '7-8': noOp(),
+  '7-9': noOp(),
+  '7-支1': noOp(),
+  '7-支2': noOp(),
+  '7-支3': noOp(),
+  '7-支4': noOp(),
+  '7-支5': noOp()
 };
 
 function abstractBonusFactory(note, replace, param, tagWhitelist, nameWhitelist, callback) {
@@ -324,6 +338,33 @@ function swimsuitFactory() {
         return total;
   });
 }
+
+function specialFactory76A() {
+  return abstractBonusFactory('华丽	成熟	优雅	清纯	清凉 分别按照权重增加', false, 'B, SS, B, C, C', "晚礼服",
+      null, function(criteria, clothes) {
+        var total = 0;
+        total += Math.abs(criteria['simple'] * clothes.type.score['B']);
+        total += Math.abs(criteria['cute'] * clothes.type.score['SS']);
+        total += Math.abs(criteria['active'] * clothes.type.score['B']);
+        total += Math.abs(criteria['pure'] * clothes.type.score['C']);
+        total += Math.abs(criteria['cool'] * clothes.type.score['C']);
+        return total;
+  });
+}
+
+function specialFactory76B() {
+  return abstractBonusFactory('华丽	成熟	优雅	清纯	清凉 分别按照权重增加', false, 'B, SS, B, C, C', "中式现代",
+      null, function(criteria, clothes) {
+        var total = 0;
+        total += Math.abs(criteria['simple'] * clothes.type.score['B']);
+        total += Math.abs(criteria['cute'] * clothes.type.score['SS']);
+        total += Math.abs(criteria['active'] * clothes.type.score['B']);
+        total += Math.abs(criteria['pure'] * clothes.type.score['C']);
+        total += Math.abs(criteria['cool'] * clothes.type.score['C']);
+        return total;
+  });
+}
+
 
 /*
  * There are three major types of bonus:
@@ -409,7 +450,21 @@ var levelBonus = {
   "6-11": [addScoreBonusFactory('B', 1, "中式古典")],
   "6-支1": [], // Not tested yet, not eligible for this level yet
   "6-支2": [], // Not tested yet, not eligible for this level yet
-  "6-支3": []  // Not tested yet, not eligible for this level yet
+  "6-支3": [],  // Not tested yet, not eligible for this level yet
+  '7-1': [],
+  '7-2': [],
+  '7-3': [],
+  '7-4': [addScoreBonusFactory('S', 1, "中式古典")],
+  '7-5': [],
+  '7-6': [specialFactory76A(), specialFactory76B()],
+  '7-7': [replaceScoreBonusFactory('B', "中式古典"), replaceScoreBonusFactory('B', "晚礼服")],
+  '7-8': [replaceScoreBonusFactory('B', "中式古典"), replaceScoreBonusFactory('A', "侠客联盟")],
+  '7-9': [addScoreBonusFactory('A', 1, "冬装")],
+  '7-支1': [],
+  '7-支2': [],
+  '7-支3': [],
+  '7-支4': [],
+  '7-支5': []
 };
 
 function parseCriteriaList(criteria) {
