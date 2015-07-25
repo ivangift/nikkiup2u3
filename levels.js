@@ -44,6 +44,11 @@ function parseCriteria(criteria) {
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
 // be careful when you copy it, levels in chapter 7 are stubs only
 var levelsRaw = {
+  '仲夏夜之梦1': [-0.75, 0.5, 0.5, 0.75, 0.5],
+  '仲夏夜之梦2': [-1, 1.5, -1.5, 1, 1],
+  '仲夏夜之梦3': [-1, 1.5, 1, -1.5, 1],
+  '仲夏夜之梦4': [-1, -1, 1.5, -1.5, -1],
+  '仲夏夜之梦5': [1, 1.5, 1, 1, -1.5],
   '1-1': [1, 2, 3, 2, 1],
   '1-2': [3, 1.5, -3, 3, -1],
   '1-3': [-2, -1, -3, 2, 1],
@@ -137,6 +142,7 @@ var levelsRaw = {
   '7-支4': [1, 1, -1, 1, 1],
   '7-支5': [1, 1, 1, 1, 1]
 };
+
 
 function tagMatcher(whitelist, clothes) {
   for (var i in clothes.tags) {
@@ -280,7 +286,12 @@ var levelFilters = {
   '7-支2': noOp(),
   '7-支3': noOp(),
   '7-支4': noOp(),
-  '7-支5': noOp()
+  '7-支5': noOp(),
+  '仲夏夜之梦1': noOp(),
+  '仲夏夜之梦2': noOp(),
+  '仲夏夜之梦3': noOp(),
+  '仲夏夜之梦4': noOp(),
+  '仲夏夜之梦5': noOp()
 };
 
 function abstractBonusFactory(note, replace, param, tagWhitelist, nameWhitelist, callback) {
@@ -464,7 +475,12 @@ var levelBonus = {
   '7-支2': [],
   '7-支3': [],
   '7-支4': [],
-  '7-支5': []
+  '7-支5': [],
+  '仲夏夜之梦1': [addScoreBonusFactory('S', 1, "童话系")],
+  '仲夏夜之梦2': [replaceScoreBonusFactory('SS', "和风")],
+  '仲夏夜之梦3': [],
+  '仲夏夜之梦4': [replaceScoreBonusFactory('S', "摇滚风")],
+  '仲夏夜之梦5': [replaceScoreBonusFactory('S', "睡衣"), addScoreBonusFactory('S', 1, null, "熊猫睡衣*上装")]
 };
 
 function parseCriteriaList(criteria) {
