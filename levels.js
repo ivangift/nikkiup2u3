@@ -480,7 +480,7 @@ var levelBonus = {
   '仲夏夜之梦2': [replaceScoreBonusFactory('SS', "和风")],
   '仲夏夜之梦3': [],
   '仲夏夜之梦4': [replaceScoreBonusFactory('S', "摇滚风")],
-  '仲夏夜之梦5': [replaceScoreBonusFactory('S', "睡衣"), addScoreBonusFactory('S', 1, null, "熊猫睡衣*上装")]
+  '仲夏夜之梦5': [replaceScoreBonusFactory('S', "睡衣"), replaceScoreBonusFactory('A', "小动物")]
 };
 
 function parseCriteriaList(criteria) {
