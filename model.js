@@ -74,7 +74,7 @@ Clothes = function(csv) {
               // result > 0 means match
               total += result;
               if (bonus.replace) {
-                this.tmpScore = 0;
+                this.tmpScore /= 10;
               }
             }
           }
