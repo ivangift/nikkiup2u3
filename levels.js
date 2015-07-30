@@ -44,11 +44,6 @@ function parseCriteria(criteria) {
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
 // be careful when you copy it, levels in chapter 7 are stubs only
 var levelsRaw = {
-  '仲夏夜之梦1': [-0.75, 0.5, 0.5, 0.75, 0.5],
-  '仲夏夜之梦2': [-1, 1.5, -1.5, 1, 1],
-  '仲夏夜之梦3': [-1, 1.5, 1, -1.5, 1],
-  '仲夏夜之梦4': [-1, -1, 1.5, -1.5, -1],
-  '仲夏夜之梦5': [1, 1.5, 1, 1, -1.5],
   '1-1': [1, 2, 3, 2, 1],
   '1-2': [3, 1.5, -3, 3, -1],
   '1-3': [-2, -1, -3, 2, 1],
@@ -127,10 +122,10 @@ var levelsRaw = {
   '6-支1': [-2, -1, -3, -2, 1],
   '6-支2': [-3, 2, 1, 1, 2],
   '6-支3': [-2, -3, 1, -1, 2],
-  '7-1': [2, -3, -3, -2, 1.5],
+  '7-1': [2, -2.5, -3, -2, 1.5],
   '7-2': [-3, -2, -3, 3, -2],
-  '7-3': [3, -2, 2, -3, 3],
-  '7-4': [-1, -2, -2, 1.5, -1],
+  '7-3': [3, -2.5, 2, -3, 3],
+  '7-4': [-1.25, -2, -2, 1.5, -1],
   '7-5': [3, 2, 3, 2, 2],
   '7-6': [-2, -1, -2, 1.5, 1.5],
   '7-7': [-3, -3, -2, -2, 1],
@@ -142,7 +137,6 @@ var levelsRaw = {
   '7-支4': [1, 1, -1, 1, 1],
   '7-支5': [1, 1, 1, 1, 1]
 };
-
 
 function tagMatcher(whitelist, clothes) {
   for (var i in clothes.tags) {
@@ -465,7 +459,7 @@ var levelBonus = {
   '7-1': [],
   '7-2': [],
   '7-3': [],
-  '7-4': [addScoreBonusFactory('S', 1, "中式古典")],
+  '7-4': [addScoreBonusFactory('B', 1, "中式古典")],
   '7-5': [],
   '7-6': [specialFactory76A(), specialFactory76B()],
   '7-7': [replaceScoreBonusFactory('B', "欧式古典"), replaceScoreBonusFactory('B', "晚礼服")],

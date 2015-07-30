@@ -284,8 +284,8 @@ function filterTopAccessories(filters) {
   var total = 0;
   var i;
   for (i = 0; i < toSort.length; i++) {
-    realScoreBefore = accScore(total, i-1);
-    realScore = accScore(total + toSort[i].tmpScore, i);
+    realScoreBefore = accScore(total, i);
+    realScore = accScore(total + toSort[i].tmpScore, i+1);
     if (realScore < realScoreBefore) {
       break;
     }
