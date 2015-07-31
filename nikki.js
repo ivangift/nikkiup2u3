@@ -14,7 +14,7 @@ var CATEGORY_HIERARCHY = function() {
 
 // for table use
 function thead(isShoppingCart, score) {
-  var ret = "<thead><tr>";
+  var ret = "<tr>";
   if (!isShoppingCart) {
     ret += "<th>拥有</th>";
   }
@@ -37,7 +37,7 @@ function thead(isShoppingCart, score) {
   <th>特殊属性</th>\
   <th>来源</th>\
   <th>&nbsp;</th>\
-  </tr></thead>\n";
+  </tr>\n";
 }
 
 function table(tdata) {
@@ -134,20 +134,28 @@ function getStyle(rating) {
 }
 
 function list(rows, isShoppingCart) {
-  ret = thead(isShoppingCart, !isFilteringMode);
-  ret += "<tbody>";
+  ret = "";
   for (var i in rows) {
     ret += row(rows[i], isShoppingCart);
   }
   if (isShoppingCart) {
     ret += row(shoppingCart.totalScore, isShoppingCart);
   }
-  ret += "</tbody>";
-  return table(ret);
+  return ret;
 }
 
 function drawTable(data, div, isShoppingCart) {
-  $('#' + div).html(list(data, isShoppingCart));
+  if ($('#' + div + ' table').length == 0) {
+    $('#' + div).html("<table><thead></thead><tbody></tbody></table>");
+    if (!isShoppingCart) {
+      $('#clothes table').floatThead({
+        useAbsolutePositioning: false
+      });
+    }
+  }
+  $('#' + div + ' table thead').html(thead(isShoppingCart, !isFilteringMode));
+  $('#' + div + ' table tbody').html(list(data, isShoppingCart));
+  $('#clothes table').floatThead('reflow');
 }
 
 var criteria = {};
@@ -209,7 +217,7 @@ function chooseAccessories(accfilters) {
 
 function refreshShoppingCart() {
   shoppingCart.calc(criteria);
-  drawTable(shoppingCart.toList(byCategoryAndScore), "shoppingCartTable", true);
+  drawTable(shoppingCart.toList(byCategoryAndScore), "shoppingCart", true);
 }
 
 function drawLevelInfo() {

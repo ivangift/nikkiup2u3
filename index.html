@@ -3,6 +3,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>奇迹暖暖在线配装器</title>
     <script type='text/javascript' charset="UTF-8" src='jquery.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='jquery.floatThead.min.js'></script>
     <script type='text/javascript' charset="UTF-8" src='wardrobe.js'></script>
     <script type='text/javascript' charset="UTF-8" src='scoring.js'></script>
     <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
@@ -140,7 +141,7 @@
         <li>略微调整了某类tag关卡的计分算法</li>
         <li>略微调整了第七章某些关卡的权重和tag算法</li>
         <li>修复了一个自动推荐饰品的bug</li>
-        <li>由于墨兰套还没做完，你们暂时别指望第八章的权重表了。为了方便他日测算权重方便，现征集第八章的属性表，有攻略推荐的请在主贴告知，拜谢！</li>
+        <li>加了一个小功能，还没好好测试过，如果上线以后发现不好用我就删掉整个功能以及这句话，就好像什么都没发生过一样。</li>
       </ul>
       <strong style="color:red">由于新关卡的开放，目前尚有大量新衣服没有数据，请去<a href="http://tieba.baidu.com/p/3860789814?pid=72304636572#72304636572">这一贴</a>看看有没有可以帮到jill的地方，尽快完善衣柜，让我们少更新几次。</strong><br/>
       衣服信息纠错请去<a href="http://tieba.baidu.com/p/3860789814">jillhx的新衣柜楼</a>汇报<br/>
@@ -206,9 +207,9 @@
       </form>
     </div>
     <hr>
-    <div id='shoppingCart'>
+    <div id='shoppingCartContainer'>
       已选择的衣服 <input type="checkbox" id="accessoriesHelper" checked />自动选择饰品 <button onclick="clearShoppingCart()">清空购物车</button>
-      <div id='shoppingCartTable'>
+      <div id='shoppingCart'>
       </div>
     </div>
     <hr>
