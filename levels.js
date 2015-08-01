@@ -307,28 +307,25 @@ function abstractBonusFactory(note, replace, param, tagWhitelist, nameWhitelist,
   };
 }
 
-function addScoreBonusFactory(bonus, multiplier, tagWhitelist, nameWhitelist) {
-  return abstractBonusFactory('各属性依权重加分', false, bonus + " * " + multiplier, tagWhitelist,
-      nameWhitelist, function(criteria, clothes) {
-        var total = 0;
-        for (var i in FEATURES) {
-          var f = FEATURES[i];
-          total += Math.abs(criteria[f] * clothes.type.score[bonus] * multiplier);
-        }
-        return total;
-  });
+function featureBasedScoringFactory(bonus, multiplier){
+  return function(criteria, clothes) {
+    var total = 0;
+    for (var i in FEATURES) {
+      var f = FEATURES[i];
+      total += Math.abs(criteria[f] * clothes.type.score[bonus] * multiplier);
+    }
+    return total;
+  }
 }
 
-function replaceScoreBonusFactory(bonus, tagWhitelist, nameWhitelist) {
-  return abstractBonusFactory('各属性均视为相符，且替换为', true, bonus, tagWhitelist,
-      nameWhitelist, function(criteria, clothes) {
-        var total = 0;
-        for (var i in FEATURES) {
-          var f = FEATURES[i];
-          total += Math.abs(criteria[f] * clothes.type.score[bonus]);
-        }
-        return total;
-  });
+function addScoreBonusFactory(bonus, multiplier, tagWhitelist, nameWhitelist) {
+  return abstractBonusFactory('各属性依权重加分', false, bonus + " * " + multiplier, tagWhitelist,
+      nameWhitelist, featureBasedScoringFactory(bonus, multiplier));
+}
+
+function replaceScoreBonusFactory(bonus, multiplier, tagWhitelist, nameWhitelist) {
+  return abstractBonusFactory('各属性均视为相符，且替换为', true, bonus + " * " + multiplier,
+      tagWhitelist, nameWhitelist, featureBasedScoringFactory(bonus, multiplier));
 }
 
 function swimsuitFactory() {
@@ -393,7 +390,7 @@ var levelBonus = {
   "2-4": [],
   "2-5": [],
   "2-6": [addScoreBonusFactory('B', 0.25, "和风")],
-  "2-7": [replaceScoreBonusFactory('SS', "睡衣")],
+  "2-7": [replaceScoreBonusFactory('SS', 1, "睡衣")],
   "2-8": [],
   "2-9": [addScoreBonusFactory('B', 0.25, "欧式古典")],
   "2-支1": [],
@@ -403,7 +400,7 @@ var levelBonus = {
   "3-3": [],
   "3-4": [addScoreBonusFactory('B', 0.25, "森女系列")],
   "3-5": [],
-  "3-6": [replaceScoreBonusFactory('SS', '沐浴'), replaceScoreBonusFactory('S', '和风')],
+  "3-6": [replaceScoreBonusFactory('SS', 1, '沐浴'), replaceScoreBonusFactory('S', 1, '和风')],
   "3-7": [],
   "3-8": [],
   "3-9": [addScoreBonusFactory('B', 0.25, "侠客联盟")],
@@ -411,7 +408,7 @@ var levelBonus = {
   "3-11": [addScoreBonusFactory('B', 1, "欧式古典")],
   "3-12": [addScoreBonusFactory('B', 1, "运动系")],
   "3-支1": [addScoreBonusFactory('B', 1, "欧式古典")],
-  "3-支2": [replaceScoreBonusFactory('SS', '婚纱')],
+  "3-支2": [replaceScoreBonusFactory('SS', 1, '婚纱')],
   "4-1": [],
   "4-2": [swimsuitFactory()],
   "4-3": [swimsuitFactory()],
@@ -419,11 +416,11 @@ var levelBonus = {
   "4-5": [addScoreBonusFactory('B', 0.25, "防晒")],
   "4-6": [],
   "4-7": [],
-  "4-8": [replaceScoreBonusFactory('S', "医务使者")],
+  "4-8": [replaceScoreBonusFactory('S', 1, "医务使者")],
   "4-9": [addScoreBonusFactory('B', 1, "中式古典")],
   "4-10": [],
   "4-11": [],
-  "4-12": [replaceScoreBonusFactory('SS', "兔女郎")],
+  "4-12": [replaceScoreBonusFactory('SS', 1, "兔女郎")],
   "4-支1": [],
   "4-支2": [addScoreBonusFactory('B', 0.25, "围裙")],
   "4-支3": [addScoreBonusFactory('B', 0.25, "围裙")],
@@ -433,15 +430,15 @@ var levelBonus = {
   "5-4": [addScoreBonusFactory('SS', 1, null, "鬼姬冥花/枫女忍")],
   "5-5": [addScoreBonusFactory('A', 1, "女仆装")],
   "5-6": [],
-  "5-7": [replaceScoreBonusFactory('SS', "波西米亚")],
+  "5-7": [replaceScoreBonusFactory('SS', 1, "波西米亚")],
   "5-8": [],
   "5-9": [],
   "5-10": [],
-  "5-11": [replaceScoreBonusFactory('SS', "侠客联盟")],
+  "5-11": [replaceScoreBonusFactory('SS', 1, "侠客联盟")],
   "5-12": [addScoreBonusFactory('SS', 1, "民国服饰")],
   "5-支1": [addScoreBonusFactory('B', 0.25, "冬装")],
   "5-支2": [],
-  "5-支3": [replaceScoreBonusFactory('SS', "医务使者")],
+  "5-支3": [replaceScoreBonusFactory('SS', 1, "医务使者")],
   "6-1": [addScoreBonusFactory('B', 0.25, "碎花")],
   "6-2": [addScoreBonusFactory('B', 0.25, "中式古典")],
   "6-3": [addScoreBonusFactory('B', 0.5, "和风")],
@@ -449,32 +446,32 @@ var levelBonus = {
   "6-5": [],
   "6-6": [],
   "6-7": [addScoreBonusFactory('S', 0.25, "中式现代")],
-  "6-8": [replaceScoreBonusFactory('SS', "泳装"), replaceScoreBonusFactory('B', "中式现代")], // TODO
+  "6-8": [replaceScoreBonusFactory('SS', 1, "泳装"), replaceScoreBonusFactory('B', 1, "中式现代")],
   "6-9": [addScoreBonusFactory('B', 1, "旗袍")],
   "6-10": [addScoreBonusFactory('SS', 1, "中式现代"), addScoreBonusFactory('S', 1, "冬装")],
   "6-11": [addScoreBonusFactory('B', 1, "中式古典")],
-  "6-支1": [], // Not tested yet, not eligible for this level yet
-  "6-支2": [], // Not tested yet, not eligible for this level yet
-  "6-支3": [],  // Not tested yet, not eligible for this level yet
+  "6-支1": [],
+  "6-支2": [],
+  "6-支3": [replaceScoreBonusFactory('A', 2, "舞者"), addScoreBonusFactory('A', 1, "印度服饰")], 
   '7-1': [],
   '7-2': [],
   '7-3': [],
   '7-4': [addScoreBonusFactory('B', 1, "中式古典")],
   '7-5': [],
   '7-6': [specialFactory76A(), specialFactory76B()],
-  '7-7': [replaceScoreBonusFactory('SS', "欧式古典"), replaceScoreBonusFactory('SS', "晚礼服")],
-  '7-8': [replaceScoreBonusFactory('S', "中式古典"), replaceScoreBonusFactory('SS', "侠客联盟")],
+  '7-7': [replaceScoreBonusFactory('SS', 1, "欧式古典"), replaceScoreBonusFactory('SS', 1, "晚礼服")],
+  '7-8': [replaceScoreBonusFactory('S', 1, "中式古典"), replaceScoreBonusFactory('SS', 1, "侠客联盟")],
   '7-9': [addScoreBonusFactory('A', 1, "冬装")],
   '7-支1': [],
   '7-支2': [],
-  '7-支3': [],
-  '7-支4': [],
-  '7-支5': [],
+  '7-支3': [], // Not tested yet, not eligible for this level yet
+  '7-支4': [], // Not tested yet, not eligible for this level yet
+  '7-支5': [], // Not tested yet, not eligible for this level yet
   '仲夏夜之梦1': [addScoreBonusFactory('S', 1, "童话系")],
-  '仲夏夜之梦2': [replaceScoreBonusFactory('SS', "和风")],
+  '仲夏夜之梦2': [replaceScoreBonusFactory('SS', 1, "和风")],
   '仲夏夜之梦3': [],
-  '仲夏夜之梦4': [replaceScoreBonusFactory('S', "摇滚风")],
-  '仲夏夜之梦5': [replaceScoreBonusFactory('S', "睡衣"), replaceScoreBonusFactory('A', "小动物")]
+  '仲夏夜之梦4': [replaceScoreBonusFactory('S', 1, "摇滚风")],
+  '仲夏夜之梦5': [replaceScoreBonusFactory('S', 1, "睡衣"), replaceScoreBonusFactory('A', 1, "小动物")]
 };
 
 function parseCriteriaList(criteria) {
