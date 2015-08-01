@@ -19,10 +19,10 @@ function thead(isShoppingCart, score) {
     ret += "<th>拥有</th>";
   }
   if (score) {
-    ret += "<th>分数</th>";
+    ret += "<th class='score'>分数</th>";
   }
-  return ret + "<th>名称</th>\
-  <th>类别</th>\
+  return ret + "<th class='name'>名称</th>\
+  <th class='category'>类别</th>\
   <th>编号</th>\
   <th>简约</th>\
   <th>华丽</th>\
