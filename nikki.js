@@ -21,6 +21,7 @@ function thead(isShoppingCart, score) {
   if (score) {
     ret += "<th class='score'>分数</th>";
   }
+  
   return ret + "<th class='name'>名称</th>\
   <th class='category'>类别</th>\
   <th>编号</th>\

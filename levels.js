@@ -133,9 +133,21 @@ var levelsRaw = {
   '7-9': [2, -3, 1.5, 2, -3],
   '7-支1': [2, -3, -3, 2, 2],
   '7-支2': [2, 3, -3, 2, 1.5],
-  '7-支3': [1, -1, 1, -1, 1],
-  '7-支4': [1, 1, -1, 1, 1],
-  '7-支5': [1, 1, 1, 1, 1]
+  '7-支3': [3, -3, 2, -2, 2],
+  '7-支4': [2, 2.5, -2, 2.5, 1.75],
+  '7-支5': [2.5, 2, 2.5, 2, 1.75],
+  '8-1': [2, 2.5, 2.5, 2, 1.5],
+  '8-2': [-2.5, -2, 2.5, -2, 1.5],
+  '8-3': [2.7, 2, -2, 2.7, -1.66],
+  '8-4': [2, -2.5, -2.5, 1.5, -2],
+  '8-5': [1.25, 1.25, -2, 1.25, 1.25],
+  '8-6': [-2, -1.25, -2, -1.25, 1.25],
+  '8-7': [2.5, 2, 2.5, 2, 1.75],
+  '8-8': [-3, -2.5, -2.5, -2.5, 3],
+  '8-9': [-2.5, 2.5, -2, 2, 1.5],
+  '8-支1': [2.5, -1.75, 2, -2.5, 2],
+  '8-支2': [2, 2, -2.5, 2.5, -1.5],
+  '8-支3': [-2.5, -2, -2.5, -2, 1.75]
 };
 
 function tagMatcher(whitelist, clothes) {
@@ -413,7 +425,7 @@ var levelBonus = {
   "4-2": [swimsuitFactory()],
   "4-3": [swimsuitFactory()],
   "4-4": [],
-  "4-5": [addScoreBonusFactory('B', 0.25, "防晒")],
+  "4-5": [addScoreBonusFactory('S', 0.25, "防晒")],
   "4-6": [],
   "4-7": [],
   "4-8": [replaceScoreBonusFactory('S', 1, "医务使者")],
@@ -464,9 +476,21 @@ var levelBonus = {
   '7-9': [addScoreBonusFactory('A', 1, "冬装")],
   '7-支1': [],
   '7-支2': [],
-  '7-支3': [], // Not tested yet, not eligible for this level yet
-  '7-支4': [], // Not tested yet, not eligible for this level yet
-  '7-支5': [], // Not tested yet, not eligible for this level yet
+  '7-支3': [replaceScoreBonusFactory('SS', 1, "军装")],
+  '7-支4': [addScoreBonusFactory('A', 0.5, "中式现代")],
+  '7-支5': [addScoreBonusFactory('S', 0.25, "运动系"), addScoreBonusFactory('S', 0.25, "海军风")], // Not tested yet, not eligible for this level yet
+  '8-1': [addScoreBonusFactory('A', 0.5, "小动物")],
+  '8-2': [addScoreBonusFactory('S', 0.5, "摇滚风")],
+  '8-3': [addScoreBonusFactory('A', 0.5, "中式古典")],
+  '8-4': [addScoreBonusFactory('A', 0.5, "中性风")],
+  '8-5': [addScoreBonusFactory('B', 1, "中式古典")],
+  '8-6': [addScoreBonusFactory('S', 1, "中式现代")],
+  '8-7': [addScoreBonusFactory('A', 0.5, "中性风")],
+  '8-8': [],
+  '8-9': [addScoreBonusFactory('A', 0.5, "童话系")],
+  '8-支1': [addScoreBonusFactory('A', 0.5, "侠客联盟")],
+  '8-支2': [],
+  '8-支3': [addScoreBonusFactory('A', 0.5, "欧式古典")],
   '仲夏夜之梦1': [addScoreBonusFactory('S', 1, "童话系")],
   '仲夏夜之梦2': [replaceScoreBonusFactory('SS', 1, "和风")],
   '仲夏夜之梦3': [],
