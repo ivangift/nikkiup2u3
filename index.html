@@ -40,6 +40,7 @@
       margin: 10px 20px;
       border-collapse: collapse;
       text-align: center;
+      table-layout: fixed;
     }
     th
     {
@@ -57,6 +58,9 @@
     }
     th.category {
       width: 110px;
+    }
+    th.top {
+      width: 75px;
     }
     td
     {
@@ -143,17 +147,17 @@
     <div class='announcement'>
       Nikki's wardrobe. By Ivan's workshop<br/>
       服装数据来自jillhx@贴吧 20150809<br/>
-      Update 20150811:<br/>
+      Update 20150813:<br/>
       <ul>
-        <li>衣柜数据更新到了jillhx的20150809版本，共计：2284，占比98%</li>
-        <li>补上了第七章支线以及第八章的权重和tag</li>
+        <li>考虑到兼容性的问题，提供了关闭浮动栏的功能</li>
+        <li>在浮动栏还浮动的时候，可以回到顶部了</li>
       </ul>
       衣服信息纠错请去<a href="http://tieba.baidu.com/p/3860789814">jillhx的新衣柜楼</a>汇报<br/>
       功能错误或者有新需求请去<a href="http://tieba.baidu.com/p/3792563906">主贴</a>汇报<br/>
       <strong style="color:red">友情提示：竞技场新关卡里镜中花水中月套装分数奇高，大家请小心对待不要被坑了</strong><br/>
     </div>
     <hr/>
-    <div>
+    <div id='filtersTop'>
       <form name="filter_form">
         <div>
           <input type="radio" name="mode" value="filtering" onClick="changeMode(true)" checked/> 筛选

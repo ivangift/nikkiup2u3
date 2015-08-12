@@ -2,6 +2,11 @@
 
 var FEATURES = ["simple", "cute", "active", "pure", "cool"];
 
+var global = {
+  float: null,
+  floating: true
+};
+
 // parses a csv row into object
 // Clothes: name, type, id, stars, gorgeous, simple, elegant, active, mature, cute, sexy, pure, cool, warm，extra
 //          0     1     2   3      4         5       6        7       8       9     10    11    12    13    14

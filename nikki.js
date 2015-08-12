@@ -22,7 +22,7 @@ function thead(isShoppingCart, score) {
     ret += "<th class='score'>分数</th>";
   }
   
-  return ret + "<th class='name'>名称</th>\
+  ret += "<th class='name'>名称</th>\
   <th class='category'>类别</th>\
   <th>编号</th>\
   <th>简约</th>\
@@ -36,13 +36,13 @@ function thead(isShoppingCart, score) {
   <th>清凉</th>\
   <th>保暖</th>\
   <th>特殊属性</th>\
-  <th>来源</th>\
-  <th>&nbsp;</th>\
-  </tr>\n";
-}
-
-function table(tdata) {
-  return "<table>" + tdata + "</table>";
+  <th>来源</th>";
+  if (!isShoppingCart) {
+    ret += "<th><span class='paging'></span></th><th class='top'></th>";
+  } else {
+    ret += "<th>&nbsp;</th>";
+  }
+  return ret + "</tr>\n";
 }
 
 function tr(tds) {
@@ -147,16 +147,41 @@ function list(rows, isShoppingCart) {
 
 function drawTable(data, div, isShoppingCart) {
   if ($('#' + div + ' table').length == 0) {
-    $('#' + div).html("<table><thead></thead><tbody></tbody></table>");
-    if (!isShoppingCart) {
-      $('#clothes table').floatThead({
-        useAbsolutePositioning: false
-      });
+    if (isShoppingCart) {
+      $('#' + div).html("<table><thead></thead><tbody></tbody></table>");
+    } else {
+      $('#' + div).html("<table class='mainTable'><thead></thead><tbody></tbody></table>");
     }
   }
   $('#' + div + ' table thead').html(thead(isShoppingCart, !isFilteringMode));
   $('#' + div + ' table tbody').html(list(data, isShoppingCart));
-  $('#clothes table').floatThead('reflow');
+  if (!isShoppingCart) {
+    $('span.paging').html("<button class='destoryFloat'></button>");
+    redrawThead();
+    $('button.destoryFloat').click(function() {
+      //var $label = $(this);
+      if (global.floating) {
+        //$label.text('打开浮动');
+        global.float.floatThead('destroy');
+        global.floating = false;
+      } else {
+        //$label.text('关闭浮动');
+        global.floating = true;
+        global.float.floatThead({
+          useAbsolutePositioning: false
+        });
+      }
+      redrawThead();
+    });
+  }
+  if (global.floating) {
+    $('#clothes table').floatThead('reflow');
+  }
+}
+
+function redrawThead() {
+  $('button.destoryFloat').text(global.floating ? '关闭浮动' : '打开浮动');
+  $('th.top').html(global.floating ? "<a href='#filtersTop'>回到顶部</a>" : "");
 }
 
 var criteria = {};
@@ -544,6 +569,11 @@ function init() {
   switchCate(category[0]);
   updateSize(mine);
   refreshShoppingCart();
+  
+  global.float = $('table.mainTable');
+  global.float.floatThead({
+    useAbsolutePositioning: false
+  });
 }
 $(document).ready(function() {
   init()
