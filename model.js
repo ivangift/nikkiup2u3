@@ -36,7 +36,7 @@ Clothes = function(csv) {
       cool = this.cool;
       extra = this.tags.join(',');
       source = this.source;
-      return [name, type.type, id, simple[0], simple[1], cute[0], cute[1],
+      return [type.type, id, simple[0], simple[1], cute[0], cute[1],
           active[0], active[1], pure[0], pure[1], cool[0],
           cool[1], extra, source];
     },

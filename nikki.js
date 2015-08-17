@@ -15,9 +15,10 @@ var CATEGORY_HIERARCHY = function() {
 // for table use
 function thead(isShoppingCart, score) {
   var ret = "<tr>";
+  /*
   if (!isShoppingCart) {
     ret += "<th>拥有</th>";
-  }
+  }*/
   if (score) {
     ret += "<th class='score'>分数</th>";
   }
@@ -88,15 +89,29 @@ function clearShoppingCart() {
 }
 
 function toggleInventory(type, id) {
-  var checked = $('#' + type + id)[0].checked;
+  var checked = !clothesSet[type][id].own;
   clothesSet[type][id].own = checked;
+  //$('#' + type + id)[0].checked = checked;
+  $('#clickable-' + type + id).toggleClass('own');
   saveAndUpdate();
 }
 
+function clickableTd(name, type, id, own) {
+  return "<td id='clickable-" + (type + id) + "' class='name " + (own ? 'own' : '')
+      + "'><span onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'>"
+      + name + "</span></td>";
+}
+
 function row(piece, isShoppingCart) {
-  var ret = isShoppingCart ? "" : td(inventoryCheckbox(piece.type.mainType, piece.id, piece.own), "");
+  //var ret = isShoppingCart ? "" : td(inventoryCheckbox(piece.type.mainType, piece.id, piece.own), "");
+  var ret = "";
   if (!isFilteringMode) {
     ret += td(piece.tmpScore);
+  }
+  if (isShoppingCart) {
+    ret += td(piece.name, '');
+  } else {
+    ret += clickableTd(piece.name, piece.type.mainType, piece.id, piece.own);
   }
   var csv = piece.toCsv();
   for (var i in csv) {
