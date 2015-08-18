@@ -9,6 +9,7 @@ writer = open('tmplevels.js', 'w');
 writer.write("var levelsRaw = {\n")
 reader = csv.reader(open(PATH + "/" + 'levels.csv'))
 
+reader.next()
 for header in reader:
   level = header[0]
   scores = reader.next()
