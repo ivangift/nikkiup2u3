@@ -65,7 +65,7 @@
     td
     {
       color: #669;
-      padding: 9px 8px 0px 8px;
+      padding: 4px 4px 4px 4px;
     }
     table.mainTable td.name span {
       cursor: pointer;
@@ -74,7 +74,7 @@
     table.mainTable td.own .button
     {
       padding-left:20px;
-      background-position: 5px 4px;
+      background-position: 5px 8px;
       background-repeat: no-repeat;
       background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAU0lEQVR42mNgoAHgZ2FjO8/MxjafaMUs7Oz/QZiQJhTFYAzkg2VAOqEcfgKK+SGKUQXlcSoGAQxJdIxqMw7r8ShmIOhmokKFCMVwTdCw5qdatAMAai8zEfxslWsAAAAASUVORK5CYII=);
     }
@@ -88,7 +88,6 @@
       text-decoration: none;
       text-align: center;
       text-shadow: 1px 1px 0 #fff;
-      font:11px/normal sans-serif;
       color: #333;
       white-space: nowrap;
       cursor: pointer;
@@ -179,23 +178,36 @@
     #category_container div.active {
     	display:block;
     }
+    [tooltip]:after {
+      margin-left: 5px;
+      position : absolute;
+      content : attr(tooltip);
+      opacity : 0;
+      z-index: 255;
+      white-space: pre;
+      text-align: left;
+    }
+    [tooltip]:hover:after {
+      opacity : 1;
+      background: pink;
+      padding: 10px;
+    }
     </style>
     
   </head>
   <body>
     <div class='announcement'>
       Nikki's wardrobe. By Ivan's workshop<br/>
-      服装数据来自jillhx@贴吧 20150817<br/>
-      Update 20150818:<br/>
+      服装数据来自jillhx@贴吧 20150818<br/>
+      Update 20150819:<br/>
       <ul>
-        <li>衣柜数据更新到了jillhx的20150817版本，共计：2331，占比95.5%</li>
-        <li>修正了5-10的权重</li>
-        <li>增加了云端七夕庙会的权重，然并卵，明天兴许就改题目了呢</li>
-        <li>为了给下一个功能腾出空间，把拥有栏拆掉放到名字上了，点名字可以直接加入衣柜</li>
+        <li>衣柜数据更新到了jillhx的20150818版本，共计：2359，占比96.6%</li>
+        <li>现在可以看到每件衣服的心级了</li>
+        <li>又加了个小功能(尚未彻底完成，等抱amy大腿中)，如果你不用电脑浏览器打开，多半是发现不了了...</li>
       </ul>
       衣服信息纠错请去<a href="http://tieba.baidu.com/p/3860789814">jillhx的新衣柜楼</a>汇报<br/>
       功能错误或者有新需求请去<a href="http://tieba.baidu.com/p/3792563906">主贴</a>汇报<br/>
-      <strong style="color:red">友情提示：竞技场新关卡里镜中花水中月套装分数奇高，大家请小心对待不要被坑了</strong><br/>
+      <strong style="color:red">友情提示：七夕每天的关卡都不一样，请密切关注贴吧流水喵(微博@流水空城)的攻略</strong><br/>
     </div>
     <hr/>
     <div id='filtersTop'>

@@ -25,10 +25,12 @@ Clothes = function(csv) {
     cool: realRating(csv[12], csv[13], theType),
     tags: csv[14].split(','),
     source: csv[15],
+    deps: {},
     toCsv: function() {
       name = this.name;
       type = this.type;
       id = this.id;
+      stars = this.stars;
       simple = this.simple;
       cute = this.cute;
       active = this.active;
@@ -36,9 +38,27 @@ Clothes = function(csv) {
       cool = this.cool;
       extra = this.tags.join(',');
       source = this.source;
-      return [type.type, id, simple[0], simple[1], cute[0], cute[1],
+      return [type.type, id, stars, simple[0], simple[1], cute[0], cute[1],
           active[0], active[1], pure[0], pure[1], cool[0],
           cool[1], extra, source];
+    },
+    addDep: function(sourceType, c) {
+      if (!this.deps[sourceType]) {
+        this.deps[sourceType] = [];
+      }
+      this.deps[sourceType].push(c);
+    },
+    getDeps: function(indent) {
+      var ret = "";
+      for (var sourceType in this.deps) {
+        for (var i in this.deps[sourceType]) {
+          var c = this.deps[sourceType][i];
+          ret += indent + '[' + sourceType + '][' + c.type.mainType + ']'
+              + c.name + (c.own ? '' : '(缺)')+ '&#xA;';
+          ret += c.getDeps(indent + "    ");
+        }
+      }
+      return ret;
     },
     calc: function(filters) {
       var s = 0;
@@ -276,7 +296,7 @@ function fakeClothes(cart) {
     name: '总分',
     tmpScore: Math.round(totalScore),
     toCsv: function() {
-      return ['', '', scores.simple[0], scores.simple[1], scores.cute[0], scores.cute[1],
+      return ['', '', '', scores.simple[0], scores.simple[1], scores.cute[0], scores.cute[1],
           scores.active[0], scores.active[1], scores.pure[0], scores.pure[1], scores.cool[0],
           scores.cool[1], '', ''];
     }
@@ -289,6 +309,29 @@ function realRating(a, b, type) {
   score = symbol * type.score[real];
   dev = type.deviation[real];
   return [a, b, score, dev];
+}
+
+function parseSource(source, key) {
+  var idx = source.indexOf(key);
+  if (idx >= 0) {
+    var id = source.substring(idx + 1, idx + 4);
+    return id;
+  }
+  return null;
+}
+
+function calcDependencies() {
+  for (var i in clothes) {
+    var c = clothes[i];
+    var evol = parseSource(c.source, '进');
+    if (evol && clothesSet[c.type.mainType][evol]) {
+      clothesSet[c.type.mainType][evol].addDep('进', c);
+    }
+    var remake = parseSource(c.source, '定');
+    if (remake && clothesSet[c.type.mainType][remake]) {
+      clothesSet[c.type.mainType][remake].addDep('定', c);
+    }
+  }
 }
 
 function load(myClothes) {

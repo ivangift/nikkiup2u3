@@ -26,6 +26,7 @@ function thead(isShoppingCart, score) {
   ret += "<th class='name'>名称</th>\
   <th class='category'>类别</th>\
   <th>编号</th>\
+  <th>心级</th>\
   <th>简约</th>\
   <th>华丽</th>\
   <th>可爱</th>\
@@ -96,9 +97,19 @@ function toggleInventory(type, id) {
   saveAndUpdate();
 }
 
-function clickableTd(name, type, id, own) {
+function clickableTd(piece) {
+  var name = piece.name;
+  var type = piece.type.mainType;
+  var id = piece.id;
+  var own = piece.own;
+  var deps = piece.getDeps('');
+  var tooltip = '';
+  if (deps && deps.length > 0) {
+    tooltip = "tooltip='" + deps + "'";
+  }
   return "<td id='clickable-" + (type + id) + "' class='name " + (own ? 'own' : '')
-      + "'><a href='#dummy' class='button' onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'>"
+      + "'><a href='#dummy' class='button' " + tooltip
+      + "onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'>"
       + name + "</a></td>";
 }
 
@@ -111,7 +122,7 @@ function row(piece, isShoppingCart) {
   if (isShoppingCart) {
     ret += td(piece.name, '');
   } else {
-    ret += clickableTd(piece.name, piece.type.mainType, piece.id, piece.own);
+    ret += clickableTd(piece);
   }
   var csv = piece.toCsv();
   for (var i in csv) {
@@ -577,6 +588,7 @@ function doImport() {
 
 function init() {
   var mine = loadFromStorage();
+  calcDependencies();
   drawFilter();
   drawTheme();
   drawImport();
@@ -584,7 +596,7 @@ function init() {
   switchCate(category[0]);
   updateSize(mine);
   refreshShoppingCart();
-  
+
   global.float = $('table.mainTable');
   global.float.floatThead({
     useAbsolutePositioning: false
