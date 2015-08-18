@@ -276,7 +276,7 @@ function fakeClothes(cart) {
     name: '总分',
     tmpScore: Math.round(totalScore),
     toCsv: function() {
-      return [this.name, '', '', scores.simple[0], scores.simple[1], scores.cute[0], scores.cute[1],
+      return ['', '', scores.simple[0], scores.simple[1], scores.cute[0], scores.cute[1],
           scores.active[0], scores.active[1], scores.pure[0], scores.pure[1], scores.cool[0],
           scores.cool[1], '', ''];
     }
