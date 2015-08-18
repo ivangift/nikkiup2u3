@@ -98,8 +98,8 @@ function toggleInventory(type, id) {
 
 function clickableTd(name, type, id, own) {
   return "<td id='clickable-" + (type + id) + "' class='name " + (own ? 'own' : '')
-      + "'><span onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'>"
-      + name + "</span></td>";
+      + "'><a href='#dummy' class='button' onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'>"
+      + name + "</a></td>";
 }
 
 function row(piece, isShoppingCart) {

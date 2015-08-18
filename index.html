@@ -71,11 +71,40 @@
       cursor: pointer;
       text-decoration: underline;
     }
-    table.mainTable td.own span
+    table.mainTable td.own .button
     {
-      padding-left: 16px;
+      padding-left:20px;
+      background-position: 5px 4px;
       background-repeat: no-repeat;
-      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAPCAYAAADtc08vAAAAy0lEQVR42p3TPwtBYRTH8ctllFFKkf9eAKMyYzVZbV6DjcJgY7IpeQcGWawyMCsTZcCEAfk+9QySq3vuqc/y9PzOfTqnaxjOKo4mStKgC0HUdQO/tEEMA/QQkoajmGOCiDScwg5rhKXhDDY4IysNJzHT4ao0HMAYT7RhWl3M/ThTl7u4YaH3blkNdOD7OKvhigMqcP9roFYywgpF/aI7Hhh+NbasNKa44IgXtijYHZh6Yh5LPTT19T68kql7UMYeJySc/GWm3nfLbuANokQkUSA1m0AAAAAASUVORK5CYII=);
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAU0lEQVR42mNgoAHgZ2FjO8/MxjafaMUs7Oz/QZiQJhTFYAzkg2VAOqEcfgKK+SGKUQXlcSoGAQxJdIxqMw7r8ShmIOhmokKFCMVwTdCw5qdatAMAai8zEfxslWsAAAAASUVORK5CYII=);
+    }
+    .button {
+      position: relative;
+      overflow: visible;
+      display: inline-block;
+      padding: 0.5em 1em;
+      border: 1px solid #d4d4d4;
+      margin: 0;
+      text-decoration: none;
+      text-align: center;
+      text-shadow: 1px 1px 0 #fff;
+      font:11px/normal sans-serif;
+      color: #333;
+      white-space: nowrap;
+      cursor: pointer;
+      outline: none;
+      background-color: #ececec;
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f4f4f4), to(#ececec));
+      background-image: -moz-linear-gradient(#f4f4f4, #ececec);
+      background-image: -ms-linear-gradient(#f4f4f4, #ececec);
+      background-image: -o-linear-gradient(#f4f4f4, #ececec);
+      background-image: linear-gradient(#f4f4f4, #ececec);
+      -moz-background-clip: padding; /* for Firefox 3.6 */
+      background-clip: padding-box;
+      border-radius: 0.2em;
+      /* IE hacks */
+      zoom: 1;
+      *display: inline;
     }
     tbody tr:hover td
     {
