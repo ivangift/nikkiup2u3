@@ -332,6 +332,11 @@ function calcDependencies() {
       clothesSet[c.type.mainType][remake].addDep('定', c);
     }
   }
+  for (var i in pattern) {
+    var target = clothesSet[pattern[i][0]][pattern[i][1]];
+    var source = clothesSet[pattern[i][2]][pattern[i][3]];
+    source.addDep('设计图', target);
+  }
 }
 
 function load(myClothes) {

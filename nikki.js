@@ -104,10 +104,15 @@ function clickableTd(piece) {
   var own = piece.own;
   var deps = piece.getDeps('');
   var tooltip = '';
+  var cls = 'name';
   if (deps && deps.length > 0) {
     tooltip = "tooltip='" + deps + "'";
+    if (deps.indexOf('(缺)') > 0) {
+      cls += ' deps';
+    }
   }
-  return "<td id='clickable-" + (type + id) + "' class='name " + (own ? 'own' : '')
+  cls += own ? ' own' : '';
+  return "<td id='clickable-" + (type + id) + "' class='" + cls
       + "'><a href='#dummy' class='button' " + tooltip
       + "onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'>"
       + name + "</a></td>";

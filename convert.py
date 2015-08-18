@@ -19,6 +19,8 @@ files = {
   '饰品': ('accessories.csv', 2),
 }
 
+pattern = 'pattern.csv'
+
 fileorder = ['发型', '连衣裙', '外套', '上装', '下装', '袜子', '鞋子', '饰品', '妆容']
 
 suborder = ['袜子-袜套','袜子-袜子','饰品-头饰','饰品-耳饰','饰品-颈饰',
@@ -39,6 +41,14 @@ mapping = {
   '5': 'S',
   '6': 'SS',
 }
+
+clothes = {}
+
+def add_clothes(key, name, id):
+  if name not in clothes:
+    clothes[name] = []
+  clothes[name].append((key, id))
+
 def process(name, file, skip = 2):
   reader = csv.reader(open(PATH + "/" + file))
   for i in xrange(skip):
@@ -50,6 +60,7 @@ def process(name, file, skip = 2):
     key = name
     if len(row[3]) > 0:
       key = key + "-" + row[3]
+    add_clothes(key, row[0], row[1])
     row.pop(3)
     if key not in out:
       out[key] = []
@@ -65,8 +76,22 @@ def process(name, file, skip = 2):
   for k in out:
     print k, len(out[k])
   return out
+  
+def find_name(name, hint):
+  if name not in clothes:
+    name = name.replace('·', '*')
+  if name not in clothes:
+    print 'Warning! name not found:', name
+    return None
+  if len(clothes[name]) > 1:
+    for item in clothes[name]:
+      if item[0].find(hint)>=0:
+        return item;
+    print 'Warning! two names matched:', name
+    return None
+  return clothes[name][0]
 
-writer = open('tmp.js', 'w');
+writer = open('wardrobe.js', 'w');
 category = []
 writer.write(header)
 writer.write("var wardrobe = [\n")
@@ -81,4 +106,24 @@ for f in fileorder:
       writer.write("  [%s],\n" % (','.join(["'" + i + "'" for i in newrow])))
 writer.write("];\n");
 writer.write("var category = [%s];\n" % (','.join(["'" + i + "'" for i in category])))
+writer.close()
+
+reader = csv.reader(open(PATH + "/" + pattern))
+reader.next()
+writer = open('pattern.js', 'w');
+writer.write("var pattern = [\n")
+for row in reader:
+  hint = row[2]
+  target = row[3]
+  source = row[5]
+  if row[5] == '/':
+    continue
+  x = find_name(target, hint)
+  if not x:
+    print 'Target missing: ', target
+  y = find_name(source, hint)
+  if not y:
+    print 'Source missing: ', source
+  writer.write("  ['%s', '%s', '%s', '%s'],\n" % (x[0].split('-')[0], x[1], y[0].split('-')[0], y[1]))
+writer.write("];")
 writer.close()
