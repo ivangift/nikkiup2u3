@@ -42,9 +42,9 @@ function parseCriteria(criteria) {
 }
 
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
-// be careful when you copy it, levels in chapter 7 are stubs only
 var levelsRaw = {
   '云端七夕庙会': [-1, -1, -1.5, 1.5, 1],
+  '校园歌会': [1, 1, -1, 1, 1],
   '1-1': [1, 2, 3, 2, 1],
   '1-2': [3, 1.5, -3, 3, -1],
   '1-3': [-2, -1, -3, 2, 1],
@@ -103,7 +103,7 @@ var levelsRaw = {
   '5-7': [-1, 1, 2, 2, 1],
   '5-8': [2, -1, -2, 1, -3],
   '5-9': [-3, -2, -2, -1, 1],
-  '5-10': [-3, 2, -2, 1, 1],
+  '5-10': [-3, 3, -4, 1.5, 1.5],
   '5-11': [2, -1, 3, -2, 1],
   '5-12': [2, 1, -3, 2, -1],
   '5-支1': [1, 2, -1, 2, -3],
@@ -149,6 +149,23 @@ var levelsRaw = {
   '8-支1': [2.5, -1.75, 2, -2.5, 2],
   '8-支2': [2, 2, -2.5, 2.5, -1.5],
   '8-支3': [-2.5, -2, -2.5, -2, 1.75]
+};
+
+var tasksRaw = {
+  '运动饮料推广': [1, 1, 1, 1, 1],
+  '裤装游行': [1, 1, 1, -1, -1],
+  '少女茶会': [-1, 1, 1, 1, -1],
+  '摇滚演唱会': [1, -1, 1, -1, 1],
+  '花田摄影会': [1, 1, 1, 1, 1],
+  '话剧甄选会': [-1, -1, -1, -1, -1],
+  '苹果联邦': [1, -1, -1, -1, -1],
+  '云端和风': [-1, -1, -1, 1, -1],
+  '牛仔布的逆袭': [1, -1, 1, 1, -1],
+  '保育员面试': [0.5, 0.5, 0.7, 0.7, -0.5],
+  '爱斯基摩旅游': [1, 1, 1, 1, -1],
+  '海边比基尼': [1, -1, -1, -1, 1],
+  '睡衣派对': [1, 1, 1, 1, -1],
+  '云端汉服': [-1, -1, -1, -1, -1],
 };
 
 function tagMatcher(whitelist, clothes) {
@@ -389,6 +406,7 @@ function specialFactory76B() {
  */
 var levelBonus = {
   '云端七夕庙会': [addScoreBonusFactory('B', 1, "中式古典")],
+  '校园歌会': [addScoreBonusFactory('A', 1, "学院系")],
   "1-1": [],
   "1-2": [],
   "1-3": [addScoreBonusFactory('B', 0.25, "中式古典")],
@@ -497,7 +515,8 @@ var levelBonus = {
   '仲夏夜之梦2': [replaceScoreBonusFactory('SS', 1, "和风")],
   '仲夏夜之梦3': [],
   '仲夏夜之梦4': [replaceScoreBonusFactory('S', 1, "摇滚风")],
-  '仲夏夜之梦5': [replaceScoreBonusFactory('S', 1, "睡衣"), replaceScoreBonusFactory('A', 1, "小动物")]
+  '仲夏夜之梦5': [replaceScoreBonusFactory('S', 1, "睡衣"), replaceScoreBonusFactory('A', 1, "小动物")],
+  '保育员面试': [addScoreBonusFactory('SS', 1, "小动物")]
 };
 
 function parseCriteriaList(criteria) {
@@ -534,6 +553,10 @@ allThemes = function() {
   for (var theme in competitionsRaw) {
     var criteria = competitionsRaw[theme];
     ret['评选赛: ' + theme] = level(theme, parseCriteria(criteria));
+  }
+  for (var theme in tasksRaw) {
+    var criteria = tasksRaw[theme];
+    ret['联盟委托: ' + theme] = level(theme, parseCriteriaList(criteria));
   }
   for (var theme in levelsRaw) {
     var criteria = levelsRaw[theme];
