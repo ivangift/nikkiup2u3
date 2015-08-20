@@ -545,6 +545,7 @@ function changeTheme() {
 var currentLevel; // used for post filtering.
 function setFilters(level) {
   currentLevel = level;
+  global.additionalBonus = currentLevel.additionalBonus;
   var weights = level.weight;
   for (var i in FEATURES) {
     var f = FEATURES[i];

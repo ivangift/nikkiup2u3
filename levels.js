@@ -561,7 +561,7 @@ function level(name, criteria) {
   }
   var additionalBonus = [];
   if (additionalLevelInfo[name]) {
-    for (var i in levelBonus[name]) {
+    for (var i in additionalLevelInfo[name]) {
       additionalBonus.push(additionalLevelInfo[name][i](criteria));
     }
   }
