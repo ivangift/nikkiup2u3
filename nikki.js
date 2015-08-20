@@ -229,6 +229,11 @@ function onChangeCriteria() {
       criteria[f] = parseInt(checked.val()) * weight;
     }
   }
+  tagToBonus(criteria, 'tag1');
+  tagToBonus(criteria, 'tag2');
+  if (global.additionalBonus) {
+    criteria.bonus = global.additionalBonus;
+  }
   if (!isFilteringMode){
     if ($('#accessoriesHelper')[0].checked) {
       chooseAccessories(criteria);
@@ -238,6 +243,42 @@ function onChangeCriteria() {
   }
   drawLevelInfo();
   refreshTable();
+}
+
+function tagToBonus(criteria, id) {
+  var tag = $('#' + id).val();
+  var bonus = null;
+  if (tag.length > 0) {
+    var base = $('#' + id + 'base :selected').text();
+    var weight = parseFloat($('#' + id + 'weight').val());
+    if ($('input[name=' + id + 'method]:radio:checked').val() == 'replace') {
+      bonus = replaceScoreBonusFactory(base, weight, tag)(criteria);
+    } else {
+      bonus = addScoreBonusFactory(base, weight, tag)(criteria);
+    }
+    if (!criteria.bonus) {
+      criteria.bonus = [];
+    }
+    criteria.bonus.push(bonus);
+  }
+}
+
+function clearTag(id) {
+  $('#' + id).val('');
+  $('#' + id + 'base').val('SS');
+  $('#' + id + 'weight').val('1');
+  $('input[name=' + id + 'method]:radio').get(0).checked = true;
+}
+
+function bonusToTag(idx, info) {
+  $('#tag' + idx).val(info.tag);
+  if (info.replace) {
+    $('input[name=tag' + idx + 'method]:radio').get(1).checked = true;
+  } else {
+    $('input[name=tag' + idx + 'method]:radio').get(0).checked = true;
+  }
+  $('#tag' + idx + 'base').val(info.base);
+  $('#tag' + idx + 'weight').val(info.weight);
 }
 
 var uiFilter = {};
@@ -289,9 +330,9 @@ function drawLevelInfo() {
         log.push("名字含有: [" + currentLevel.filter.nameWhitelist + "]");
       }
     }
-    if (currentLevel.bonus) {
-      for (var i in currentLevel.bonus) {
-        var bonus = currentLevel.bonus[i];
+    if (currentLevel.additionalBonus) {
+      for (var i in currentLevel.additionalBonus) {
+        var bonus = currentLevel.additionalBonus[i];
         var match = "(";
         if (bonus.tagWhitelist) {
           match += "tag符合: " + bonus.tagWhitelist + " ";
@@ -386,7 +427,19 @@ function matches(c, criteria, filters) {
         return false;
       }
     }
-  } 
+  }
+  if (isFilteringMode && criteria.bonus) {
+    var matchedTag = false;
+    for (var i in criteria.bonus) {
+      if (tagMatcher(criteria.bonus[i].tagWhitelist, c)) {
+        matchedTag = true;
+        break;
+      }
+    }
+    if (!matchedTag) {
+      return false;
+    }
+  }
   return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type.type];
 }
 
@@ -457,9 +510,11 @@ function changeMode(isFiltering) {
   if (isFiltering) {
     $("#theme").hide();
     $("#tagInfo").hide();
+    $(".tagContainer").hide();
   } else {
     $("#theme").show();
     $("#tagInfo").show();
+    $(".tagContainer").show();
   }
   isFilteringMode = isFiltering;
   onChangeCriteria();
@@ -473,6 +528,8 @@ function changeFilter() {
 
 function changeTheme() {
   var dropdown = $("#theme")[0];
+  currentLevel = null;
+  global.additionalBonus = null;
   for (var i in dropdown.options) {
     if (dropdown.options[i].selected) {
       var theme = dropdown.options[i].value;
@@ -482,6 +539,7 @@ function changeTheme() {
       }
     }
   }
+  onChangeCriteria();
 }
 
 var currentLevel; // used for post filtering.
@@ -501,7 +559,13 @@ function setFilters(level) {
       }
     }
   }
-  onChangeCriteria();
+  clearTag('tag1');
+  clearTag('tag2');
+  if (level.bonus) {
+    for (var i in level.bonus) {
+      bonusToTag(parseInt(i)+1, level.bonus[i]);
+    }
+  }
 }
 
 function drawTheme() {

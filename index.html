@@ -209,6 +209,7 @@
         <li>设计图数据使用了amy_翡翠的20150820版本</li>
         <li>微调了界面</li>
         <li>增加了联盟的部分委托，其中只有保育员面试的权重已经测完了</li>
+        <li>应广大群众的要求，连夜添加了tag，怀疑有tag的时候可以尝试加分B*1试试。大半夜的我这是要干嘛啊啊啊啊，所以可能会有很多bug请多包涵</li>
       </ul>
       衣服信息纠错请去<a href="http://tieba.baidu.com/p/3860789814">jillhx的新衣柜楼</a>汇报<br/>
       功能错误或者有新需求请去<a href="http://tieba.baidu.com/p/3792563906">主贴</a>汇报<br/>
@@ -262,6 +263,39 @@
             <input type="radio" name="cool" value="-1" onClick="changeFilter()" /> 保暖
             <div class='weightContainer' style="display: none" id = "coolWeightContainer">
               &nbsp;&nbsp;权重 <input type="text" id="coolWeight" name="coolWeight" value="1" onChange="changeFilter()" />
+            </div>
+          </div>
+          <div id='tagFilter'>
+            Tag1
+            <input type="text" id="tag1" name="tag1" onChange="changeFilter()" />
+            <div class='tagContainer weightContainer' style="display: none" id = "tag1Container">
+              <input type="radio" name="tag1method" value="add" onClick="changeFilter()" checked/> 加分
+              <input type="radio" name="tag1method" value="replace" onClick="changeFilter()" /> 替换
+              <select id="tag1base" onChange="changeFilter()">
+                <option>SS</option>
+                <option>S</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+              </select>
+              &times;
+              <input type="text" id="tag1weight" name="tag1weight" value="1" onChange="changeFilter()" />
+            </div>
+            <br/>
+            Tag2
+            <input type="text" id="tag2" name="tag2" onChange="changeFilter()" />
+            <div class='tagContainer weightContainer' style="display: none" id = "tag2Container">
+              <input type="radio" name="tag2method" value="add" onClick="changeFilter()" checked/> 加分
+              <input type="radio" name="tag2method" value="replace" onClick="changeFilter()" /> 替换
+              <select id="tag2base" onChange="changeFilter()">
+                <option>SS</option>
+                <option>S</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+              </select>
+              &times;
+              <input type="text" id="tag2weight" name="tag2weight" value="1" onChange="changeFilter()" />
             </div>
           </div>
         </div>

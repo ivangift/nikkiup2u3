@@ -4,7 +4,8 @@ var FEATURES = ["simple", "cute", "active", "pure", "cool"];
 
 var global = {
   float: null,
-  floating: true
+  floating: true,
+  additionalBonus: null
 };
 
 // parses a csv row into object
@@ -89,28 +90,25 @@ Clothes = function(csv) {
       }
 
       this.tmpScore = Math.round(s);
-      if (currentLevel != null) {
-        if (currentLevel.bonus) {
-          var total = 0;
-          for (var i in currentLevel.bonus) {
-            var bonus = currentLevel.bonus[i];
-            var result = bonus.filter(this);
-            if (result > 0) {
-              // result > 0 means match
-              total += result;
-              if (bonus.replace) {
-                this.tmpScore /= 10;
-              }
+      if (filters.bonus) {
+        var total = 0;
+        for (var i in filters.bonus) {
+          var bonus = filters.bonus[i];
+          var result = bonus.filter(this);
+          if (result > 0) {
+            // result > 0 means match
+            total += result;
+            if (bonus.replace) {
+              this.tmpScore /= 10;
             }
           }
-          this.tmpScore += total;
         }
-        
-        /* TODO: uncomment this when F mechanism is fully understood
-        if (this.type.needFilter() && currentLevel.filter) {
-          currentLevel.filter.filter(this);
-        }*/
-      } 
+        this.tmpScore += total;
+      }
+      /* TODO: uncomment this when F mechanism is fully understood
+      if (this.type.needFilter() && currentLevel.filter) {
+        currentLevel.filter.filter(this);
+      }*/
       this.tmpScore = Math.round(this.tmpScore);   
     }
   };
