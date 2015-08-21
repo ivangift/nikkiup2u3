@@ -231,7 +231,7 @@ function onChangeCriteria() {
   }
   tagToBonus(criteria, 'tag1');
   tagToBonus(criteria, 'tag2');
-  if (global.additionalBonus) {
+  if (global.additionalBonus && global.additionalBonus.length > 0) {
     criteria.bonus = global.additionalBonus;
   }
   if (!isFilteringMode){
