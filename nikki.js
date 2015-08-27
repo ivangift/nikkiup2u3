@@ -145,14 +145,14 @@ function row(piece, isShoppingCart) {
 }
 
 function render(rating) {
-  if (rating < 0) {
-    return -rating;
+  if (rating.charAt(0) == '-') {
+    return rating.substring(1);
   }
   return rating;
 }
 
 function getStyle(rating) {
-  if (rating < 0) {
+  if (rating.charAt(0) == '-') {
     return 'negative';
   }
   switch (rating) {

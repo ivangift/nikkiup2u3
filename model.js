@@ -65,6 +65,7 @@ Clothes = function(csv) {
       var s = 0;
       var self = this;
       this.tmpScoreByCategory = ScoreByCategory();
+      this.bonusByCategory = ScoreByCategory();
       for (var i in FEATURES) {
         var f = FEATURES[i]; 
         if (filters[f]) {
@@ -94,12 +95,15 @@ Clothes = function(csv) {
         var total = 0;
         for (var i in filters.bonus) {
           var bonus = filters.bonus[i];
-          var result = bonus.filter(this);
+          var resultlist = bonus.filter(this);
+          var result = resultlist[0];
           if (result > 0) {
             // result > 0 means match
+            this.bonusByCategory.addRaw(filters, resultlist[1]);
             total += result;
             if (bonus.replace) {
               this.tmpScore /= 10;
+              this.tmpScoreByCategory.f();
             }
           }
         }
@@ -135,6 +139,24 @@ function ScoreByCategory() {
       for (var c in this.scores) {
         this.scores[c][0] = Math.round(this.scores[c][0]);
         this.scores[c][1] = Math.round(this.scores[c][1]);
+      }
+    },
+    addRaw: function(filters, rawdata) {
+      for (var i in FEATURES) {
+        var f = FEATURES[i]; 
+        if (filters[f] && rawdata[f] > 0) {
+          if (filters[f] > 0) { // level requires major
+            this.scores[f][0] += rawdata[f];
+          } else { // level requires minor
+            this.scores[f][1] += rawdata[f];
+          }
+        }
+      }
+    },
+    f: function() {
+      for (var c in this.scores) {
+        this.scores[c][0] /= 10;
+        this.scores[c][1] /= 10;
       }
     }
   };
@@ -267,16 +289,20 @@ function fakeClothes(cart) {
   var totalScore = 0;
   var totalAccessories = 0;
   var totalScoreByCategory = ScoreByCategory();
+  var totalBonusByCategory = ScoreByCategory();
   var totalAccessoriesByCategory = ScoreByCategory();
+  var totalAccessoriesBonusByCategory = ScoreByCategory();
   var numAccessories = 0;
   for (var c in cart) {
     if (c.split('-')[0] == "饰品") {
       totalAccessories += cart[c].tmpScore;
       totalAccessoriesByCategory.add(cart[c].tmpScoreByCategory);
+      totalAccessoriesBonusByCategory.add(cart[c].bonusByCategory);
       numAccessories ++;
     } else {
       totalScore += cart[c].tmpScore;
       totalScoreByCategory.add(cart[c].tmpScoreByCategory);
+      totalBonusByCategory.add(cart[c].bonusByCategory);
     }
   }
   totalScore += accScore(totalAccessories, numAccessories);
@@ -285,20 +311,39 @@ function fakeClothes(cart) {
         numAccessories);
     totalAccessoriesByCategory.scores[c][1] = accScore(totalAccessoriesByCategory.scores[c][1],
         numAccessories);
+    totalAccessoriesBonusByCategory.scores[c][0] = accScore(totalAccessoriesBonusByCategory.scores[c][0],
+        numAccessories);
+    totalAccessoriesBonusByCategory.scores[c][1] = accScore(totalAccessoriesBonusByCategory.scores[c][1],
+        numAccessories);
   }
   totalScoreByCategory.add(totalAccessoriesByCategory);
+  totalBonusByCategory.add(totalAccessoriesBonusByCategory);
   totalScoreByCategory.round();
+  totalBonusByCategory.round();
   
   var scores = totalScoreByCategory.scores;
+  var bonus = totalBonusByCategory.scores;
   return {
     name: '总分',
     tmpScore: Math.round(totalScore),
     toCsv: function() {
-      return ['', '', '', scores.simple[0], scores.simple[1], scores.cute[0], scores.cute[1],
-          scores.active[0], scores.active[1], scores.pure[0], scores.pure[1], scores.cool[0],
-          scores.cool[1], '', ''];
+      return ['', '', '',
+          scoreWithBonusTd(scores.simple[0], bonus.simple[0]), 
+          scoreWithBonusTd(scores.simple[1], bonus.simple[1]),
+          scoreWithBonusTd(scores.cute[0], bonus.cute[0]),
+          scoreWithBonusTd(scores.cute[1], bonus.cute[1]),
+          scoreWithBonusTd(scores.active[0], bonus.active[0]),
+          scoreWithBonusTd(scores.active[1], bonus.active[1]),
+          scoreWithBonusTd(scores.pure[0], bonus.pure[0]),
+          scoreWithBonusTd(scores.pure[1], bonus.pure[1]),
+          scoreWithBonusTd(scores.cool[0], bonus.cool[0]),
+          scoreWithBonusTd(scores.cool[1], bonus.cool[1]), '', ''];
     }
   };
+}
+
+function scoreWithBonusTd(score, bonus) {
+  return score + '<div>+' + bonus + '</div';
 }
 
 function realRating(a, b, type) {

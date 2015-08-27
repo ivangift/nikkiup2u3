@@ -10,15 +10,16 @@ var competitionsRaw = {
   '金色音乐厅': [-1, -1, -1, -1, -1],
   '夏季游园会': [1, 1, 1, 1, 1],
   '有女初长成': [1, -1, -1, 1, -1],
-  '宫廷歌舞会': [-1, -1, -1, -1, -1],
+  '宫廷歌舞会': [-1.4, -1, -1.25, -1.4, -0.7],
   '运动进行时': [1, 1, 1.5, 1.5, 1],
-  '春天在哪里': [0.6, 1.25, 1.5, 1.25, 1],
-  '夏日物语': [1, 1, -1, 1, 1],
+  '春天在哪里': [0.6, 1.25, 1.4, 1.25, 1],
+  '夏日物语': [1.2, 0.75, -1.5, 1, 1.2],
   '穿越进行时': [1, -1, -1, 1, -1],
   '艳阳当空照': [1, 1, -1, 1, 1],
   '年轻的春游': [1, 1, 1, 1, 1],
   '清秀佳人': [1.4, 0.7, -1.4, 1.4, 1],
-  '绝色无双': [-1, -1, -1, 1, -1]
+  '绝色无双': [-1, -1, -1, 1, -1],
+  '运动饮料推广': [1, 1, 1, 1, 1]
 };
 
 var tasksRaw = {
@@ -29,7 +30,7 @@ var tasksRaw = {
   '话剧甄选会': [-1, -1, -1, -1, -1],
   '苹果联邦': [1, -1, -1, -1, -1],
   '云端和风': [-1, -1, -1, 1, -1],
-  '牛仔布的逆袭': [1, -1, 1, 1, -1],
+  '牛仔布的逆袭': [1.25, -1, 1.25, 1, -1],
   '保育员面试': [1, 1.5, 2, 1.5, -1],
   '爱斯基摩旅游': [1, 1.5, 1.2, 1, -1.5],
   '海边比基尼': [0.75, -0.75, -0.75, -1, 1],
@@ -39,8 +40,6 @@ var tasksRaw = {
 
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
 var levelsRaw = {
-  '云端七夕庙会': [-1, -1, -1.5, 1.5, 1],
-  '校园歌会': [1, 1, -1, 1, 1],
   '1-1': [1, 2, 3, 2, 1],
   '1-2': [3, 1.5, -3, 3, -1],
   '1-3': [-2, -1, -3, 2, 1],
@@ -310,7 +309,7 @@ function abstractBonusFactory(note, replace, param, tagWhitelist, nameWhitelist,
             || (nameWhitelist && nameMatcher(nameWhitelist, clothes))) {
           return callback(criteria, clothes);
         }
-        return 0;
+        return [0, {}];
       }
     }
   };
@@ -319,11 +318,14 @@ function abstractBonusFactory(note, replace, param, tagWhitelist, nameWhitelist,
 function featureBasedScoringFactory(bonus, multiplier){
   return function(criteria, clothes) {
     var total = 0;
+    var byFeature = {};
     for (var i in FEATURES) {
       var f = FEATURES[i];
-      total += Math.abs(criteria[f] * clothes.type.score[bonus] * multiplier);
+      var addon = Math.abs(criteria[f] * clothes.type.score[bonus] * multiplier);
+      byFeature[f] = addon;
+      total += addon;
     }
-    return total;
+    return [total, byFeature];
   }
 }
 
@@ -342,11 +344,14 @@ function swimsuitFactory() {
       null, function(criteria, clothes) {
         var total = 0;
         var onlyFeatures = ['cute', 'pure'];
+        var byFeature = {};
         for (var i in onlyFeatures) {
           var f = onlyFeatures[i];
-          total += Math.abs(criteria[f] * clothes.type.score['SS']);
+          var addon = Math.abs(criteria[f] * clothes.type.score['SS']);
+          byFeature[f] = addon;
+          total += addon;
         }
-        return total;
+        return [total, byFeature];
   });
 }
 
@@ -354,12 +359,19 @@ function specialFactory76A() {
   return abstractBonusFactory('华丽	成熟	优雅	清纯	清凉 分别按照权重增加', false, 'B, SS, B, C, C', "晚礼服",
       null, function(criteria, clothes) {
         var total = 0;
-        total += Math.abs(criteria['simple'] * clothes.type.score['B']);
-        total += Math.abs(criteria['cute'] * clothes.type.score['SS']);
-        total += Math.abs(criteria['active'] * clothes.type.score['B']);
-        total += Math.abs(criteria['pure'] * clothes.type.score['C']);
-        total += Math.abs(criteria['cool'] * clothes.type.score['C']);
-        return total;
+        var byFeature = {};
+        byFeature['simple'] = Math.abs(criteria['simple'] * clothes.type.score['B']);
+        byFeature['cute'] = Math.abs(criteria['cute'] * clothes.type.score['SS']);
+        byFeature['active'] = Math.abs(criteria['active'] * clothes.type.score['B']);
+        byFeature['pure'] = Math.abs(criteria['pure'] * clothes.type.score['C']);
+        byFeature['cool'] = Math.abs(criteria['cool'] * clothes.type.score['C']);
+        
+        total += byFeature['simple'];
+        total += byFeature['cute'];
+        total += byFeature['active'];
+        total += byFeature['pure'];
+        total += byFeature['cool'];
+        return [total, byFeature];
   });
 }
 
@@ -367,12 +379,19 @@ function specialFactory76B() {
   return abstractBonusFactory('华丽	成熟	优雅	清纯	清凉 分别按照权重增加', false, 'B, SS, B, C, C', "中式现代",
       null, function(criteria, clothes) {
         var total = 0;
-        total += Math.abs(criteria['simple'] * clothes.type.score['B']);
-        total += Math.abs(criteria['cute'] * clothes.type.score['SS']);
-        total += Math.abs(criteria['active'] * clothes.type.score['B']);
-        total += Math.abs(criteria['pure'] * clothes.type.score['C']);
-        total += Math.abs(criteria['cool'] * clothes.type.score['C']);
-        return total;
+        var byFeature = {};
+        byFeature['simple'] = Math.abs(criteria['simple'] * clothes.type.score['B']);
+        byFeature['cute'] = Math.abs(criteria['cute'] * clothes.type.score['SS']);
+        byFeature['active'] = Math.abs(criteria['active'] * clothes.type.score['B']);
+        byFeature['pure'] = Math.abs(criteria['pure'] * clothes.type.score['C']);
+        byFeature['cool'] = Math.abs(criteria['cool'] * clothes.type.score['C']);
+        
+        total += byFeature['simple'];
+        total += byFeature['cute'];
+        total += byFeature['active'];
+        total += byFeature['pure'];
+        total += byFeature['cool'];
+        return [total, byFeature];
   });
 }
 
@@ -400,8 +419,6 @@ function addBonusInfo(base, weight, tag) {
  *  - Special rules
  */
  var levelBonus = {
-   '云端七夕庙会': [addBonusInfo('B', 1, "中式古典")],
-   '校园歌会': [addBonusInfo('A', 1, "学院系")],
    "1-1": [],
    "1-2": [],
    "1-3": [addBonusInfo('B', 0.25, "中式古典")],
@@ -508,11 +525,13 @@ function addBonusInfo(base, weight, tag) {
    '仲夏夜之梦3': [],
    '仲夏夜之梦4': [replaceBonusInfo('S', 1, "摇滚风")],
    '仲夏夜之梦5': [replaceBonusInfo('S', 1, "睡衣"), replaceBonusInfo('A', 1, "小动物")],
+   '清秀佳人': [addBonusInfo('A', 1, "中式现代")],
    '保育员面试': [addBonusInfo('SS', 1, "小动物")],
    '海边比基尼': [addBonusInfo('A', 1, "泳装")],
    '少女的茶会': [addBonusInfo('SS', 1, "洛丽塔")],
    '摇滚演唱会': [addBonusInfo('SS', 1, "摇滚风")],
-   '花田摄影会': [addBonusInfo('A', 1, "碎花")]
+   '花田摄影会': [addBonusInfo('A', 1, "碎花")],
+   '牛仔布的逆袭': [addBonusInfo('B', 1, "牛仔布")]
  };
 
 var additionalLevelInfo = {
