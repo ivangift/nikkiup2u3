@@ -113,17 +113,19 @@ reader.next()
 writer = open('pattern.js', 'w');
 writer.write("var pattern = [\n")
 for row in reader:
-  hint = row[2]
-  target = row[3]
-  source = row[5]
-  if row[5] == '/':
+  hint = row[0]
+  target = row[1]
+  source = row[2]
+  if source == '/':
     continue
   x = find_name(target, hint)
   if not x:
     print 'Target missing: ', target
+    continue
   y = find_name(source, hint)
   if not y:
     print 'Source missing: ', source
+    continue
   writer.write("  ['%s', '%s', '%s', '%s'],\n" % (x[0].split('-')[0], x[1], y[0].split('-')[0], y[1]))
 writer.write("];")
 writer.close()
