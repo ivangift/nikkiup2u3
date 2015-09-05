@@ -83,7 +83,7 @@ function avg(score) {
 function sigma(score) {
   ret = {};
   for (s in score) {
-    ret[s] = (score[s][1] - score[s][1]) / 2;
+    ret[s] = (score[s][0] - score[s][1]) / 2;
   }
   return ret;
 }
