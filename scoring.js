@@ -72,6 +72,27 @@ var makeupScoring = {
   'C': [100, 100]  // no data, purely mocking
 };
 
+// a normalized model for all clothes
+var standardScoring = {
+  'SS': [240, 300], //est
+  'S': [180, 240],
+  'A': [150, 180],
+  'B': [113, 150],
+  'C': [75, 113] //est
+};
+
+var scoreWeight = {
+  '发型': 5,
+  '连衣裙': 20,
+  '外套': 2,
+  '上装': 10,
+  '下装': 10,
+  '袜子': 3,
+  '鞋子': 4,
+  '饰品': 2,
+  '妆容': 1
+};
+
 function avg(score) {
   ret = {};
   for (s in score) {
@@ -88,6 +109,15 @@ function sigma(score) {
   return ret;
 }
 
+function weighted(score, weight) {
+  ret = {};
+  for (s in score) {
+    ret[s] = score[s] * weight;
+  }
+  return ret;
+}
+
+/*
 var scoring = {
   '发型': avg(hairScoring),
   '连衣裙': avg(dressScoring),
@@ -98,6 +128,20 @@ var scoring = {
   '鞋子': avg(shoeScoring),
   '饰品': avg(accessoriesScoring),
   '妆容': avg(makeupScoring)
+}*/
+
+std = avg(standardScoring);
+
+var scoring = {
+  '发型': weighted(std, scoreWeight['发型']),
+  '连衣裙': weighted(std, scoreWeight['连衣裙']),
+  '外套': weighted(std, scoreWeight['外套']),
+  '上装': weighted(std, scoreWeight['上装']),
+  '下装': weighted(std, scoreWeight['下装']),
+  '袜子': weighted(std, scoreWeight['袜子']),
+  '鞋子': weighted(std, scoreWeight['鞋子']),
+  '饰品': weighted(std, scoreWeight['饰品']),
+  '妆容': weighted(std, scoreWeight['妆容'])
 }
 
 var deviation = {
