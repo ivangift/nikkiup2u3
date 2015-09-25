@@ -565,7 +565,6 @@ function addBonusInfo(base, weight, tag) {
   '运动饮料的推广会': [addBonusInfo('S', 1, "运动系")],
   '睡衣兜风派对': [addBonusInfo('SS', 1, "睡衣"), addBonusInfo('SS', 1, "居家服")],
   '云端汉服聚会': [addBonusInfo('SS', 1, "中式古典")],
-  '苹果联邦高级成衣展': [addBonusInfo('SS', 1, "中式古典")],
   '话剧甄选会': [addBonusInfo('SS', 1, "欧式古典")]
  };
 
