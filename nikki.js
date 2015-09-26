@@ -527,17 +527,11 @@ function changeFilter() {
 }
 
 function changeTheme() {
-  var dropdown = $("#theme")[0];
   currentLevel = null;
   global.additionalBonus = null;
-  for (var i in dropdown.options) {
-    if (dropdown.options[i].selected) {
-      var theme = dropdown.options[i].value;
-      if (allThemes[theme]) {
-        setFilters(allThemes[theme]);
-        break;
-      }
-    }
+  var theme = $("#theme").val();
+  if (allThemes[theme]) {
+    setFilters(allThemes[theme]);
   }
   onChangeCriteria();
 }
