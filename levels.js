@@ -36,6 +36,14 @@ var tasksRaw = {
   '裤装游行': [1.53, 1.27, 1.27, -1.27, -1.53]
 };
 
+var extraRaw = {
+  '月下舞会1': [-1.5, -1.2, -1.5, 1.2, -1.2],
+  '月下舞会2': [-1.1, -1.1, -1.5, -1.5, 1.1],
+  '月下舞会3': [-0.8, -0.8, -0.6, -0.6, 0.6],
+  '月下舞会4': [1.5, 1.2, 1.5, 1.2, 1.2],
+  '月下舞会5': [1.5, -1.2, -1.2, 1.5, 1.3]
+}
+
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
 var levelsRaw = {
   '1-1': [1, 2, 3, 2, 1],
@@ -163,7 +171,11 @@ var levelsRaw = {
   '10-4': [1.0, -1.33, -1.67, -1.33, -3.0],
   '10-5': [1.67, -1.33, -1.67, -1.33, 1.33],
   '10-6': [-1.6, 1.9, 1.9, -1.6, 1.6],
-  '10-7': [-1.5, 1.2, 1.2, 1.5, -1.5]
+  '10-7': [-1.5, 1.2, 1.2, 1.5, -1.5],
+  '10-8': [1.67, -1.33, -1.67, 1.6, -1.6],
+  '10-9-1': [-1.9, 2.5, 2.5, -1.9, 1.9],
+  '10-9-2': [1.2, -1.9, -1.9, 1.2, 1.2],
+  '10-支1': [1.7, 1.4, 1.7, 1.4, 1.4]
 };
 
 function tagMatcher(whitelist, clothes) {
@@ -562,6 +574,11 @@ function addBonusInfo(base, weight, tag) {
   '10-5': [addBonusInfo('B', 1, "晚礼服")],
   '10-6': [addBonusInfo('S', 1, "民族风")],
   '10-7': [addBonusInfo('B', 1, "洛丽塔")],
+  '10-8': [addBonusInfo('SS', 1, "学院系")],
+  '10-9-1': [addBonusInfo('A', 1, "原宿系")],
+  '10-9-2': [],
+  '10-支1': [addBonusInfo('A', 1, "运动系")],
+  '月下舞会3': [addBonusInfo('S', 1, "欧式古典")],
   '仲夏夜之梦1': [addBonusInfo('S', 1, "童话系")],
   '仲夏夜之梦2': [replaceBonusInfo('SS', 1, "和风")],
   '仲夏夜之梦3': [],
@@ -633,6 +650,11 @@ allThemes = function() {
   for (var theme in tasksRaw) {
     var criteria = tasksRaw[theme];
     ret['联盟委托: ' + theme] = level(theme, parseCriteriaList(criteria));
+  }
+  
+  for (var theme in extraRaw) {
+    var criteria = extraRaw[theme];
+    ret[theme] = level(theme, parseCriteriaList(criteria));
   }
   for (var theme in levelsRaw) {
     var criteria = levelsRaw[theme];
