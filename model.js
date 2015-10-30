@@ -47,6 +47,9 @@ Clothes = function(csv) {
       if (!this.deps[sourceType]) {
         this.deps[sourceType] = [];
       }
+      if (c == this) {
+        alert("Self reference: " + this.type.type + " " + this.id + " " + this.name);
+      }
       this.deps[sourceType].push(c);
     },
     getDeps: function(indent) {
@@ -343,7 +346,7 @@ function fakeClothes(cart) {
 }
 
 function scoreWithBonusTd(score, bonus) {
-  return score + '<div>+' + bonus + '</div';
+  return score + '<div>+' + bonus + '</div>';
 }
 
 function realRating(a, b, type) {
