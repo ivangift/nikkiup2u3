@@ -1,50 +1,46 @@
 // Ivan's Workshop
 var competitionsRaw = {
-  '冬天里的一把火': '华丽 活泼 保暖 可爱 性感',
-  '圣诞家庭聚会': '清纯 活泼 可爱 简约 保暖',
-  '海边派对的搭配': '性感 可爱 清凉 活泼 简约',
-  '大侦探福尔摩斯': '简约 优雅 保暖 清纯 成熟',
-  '办公室明星': '性感 优雅 简约 成熟 清凉',
-  '奇幻童话园': '华丽 优雅 可爱 清纯 清凉',
-  '女王大人': '华丽 优雅 清凉 成熟 性感',
-  '金色音乐厅': '华丽 优雅 性感 成熟 保暖',
-  '夏季游园会': '简约 活泼 可爱 清纯 清凉',
-  '有女初长成': '简约 优雅 保暖 成熟 清纯',
-  '宫廷歌舞会': '华丽 优雅 成熟 性感 保暖',
-  '运动进行时': '简约 清纯 活泼 可爱 清凉',
-  '春天在哪里': '简约 活泼 可爱 清凉 清纯',
-  '夏日物语': '简约 优雅 可爱 清纯 清凉',
-  '穿越进行时': '优雅 简约 清纯 保暖 成熟',
-  '艳阳当空照': '简约 优雅 清凉 可爱 清纯',
-  '年轻的春游': '简约 活泼 可爱 清纯 清凉',
-  '清秀佳人': '简约 优雅 可爱 清纯 清凉',
-  '绝色无双': '华丽 优雅 成熟 清纯 保暖'
+  '海边派对的搭配': [0.67, 1.33, 1.0, -1.33, 1.33],
+  '春天在哪里': [0.67, 1.33, 1.33, 1.33, 1.0],
+  '办公室明星': [1.33, -1.33, -1.33, -1.0, 0.67],
+  '夏日物语': [1.33, 0.67, -1.33, 1.0, 1.33],
+  '圣诞家庭聚会': [1.33, 1.0, 0.67, 1.33, -1.33],
+  '年轻的春游': [1.33, 1.33, 1.33, 1.0, 0.67],
+  '运动进行时': [1.0, 0.67, 1.33, 1.33, 1.33],
+  '金色音乐厅': [-1.33, -1.33, -1.33, -1.0, -0.67],
+  '夏季游园会': [1.33, 1.0, 0.67, 1.33, 1.33],
+  '女王大人': [-1.0, -1.33, -1.33, -1.33, 0.67],
+  '冬天里的一把火': [-0.67, 1.0, 1.33, -1.33, -1.33],
+  '大侦探福尔摩斯': [1.33, -1.33, -1.33, 0.67, -1.0],
+  '宫廷歌舞会': [-1.33, -1.0, -1.33, -1.33, -0.67],
+  '奇幻童话园': [-1.33, 1.33, -1.33, 1.0, 0.67],
+  '有女初长成': [0.67, -1.33, -1.33, 1.33, -1.0],
+  '绝色无双': [-1.33, -1.0, -1.33, 1.33, -0.67],
+  '清秀佳人': [1.33, 0.67, -1.33, 1.33, 1.0]
 };
 
-function parseCriteria(criteria) {
-  var cs = criteria.split(" ");
-  var ret = {};
-  for (var i in cs) {
-    switch (cs[i]) {
-      case '简约': ret['simple'] = 1; break;
-      case '华丽': ret['simple'] = -1; break;
-      case '可爱': ret['cute'] = 1; break;
-      case '成熟': ret['cute'] = -1; break;
-      case '活泼': ret['active'] = 1; break;
-      case '优雅': ret['active'] = -1; break;
-      case '清纯': ret['pure'] = 1; break;
-      case '性感': ret['pure'] = -1; break;
-      case '清凉': ret['cool'] = 1; break;
-      case '保暖': ret['cool'] = -1; break;
-    }
-  }
-  return ret;
-}
+var tasksRaw = {
+  '运动饮料的推广会': [0.87, 0.67, 0.87, 0.67, 0.67],
+  '牛仔布的逆袭': [1.2, -0.93, 1.2, 0.93, -0.93],
+  '海边的比基尼对决！': [0.8, -0.8, -0.8, -1.0, 1.0],
+  '睡衣兜风派对': [0.47, 0.67, 0.47, 0.67, -0.47],
+  '苹果联邦高级成衣展': [1.4, -1.4, -1.13, -1.13, -1.13],
+  '少女的茶会': [-0.67, 0.47, 0.67, 0.47, -0.47],
+  '云端汉服聚会': [-0.47, -0.47, -0.67, 0.67, -0.47],
+  '保育员面试': [0.53, 0.53, 0.73, 0.73, -0.53],
+  '花田摄影会': [0.73, 0.93, 0.73, 0.93, 0.73],
+  '云端和风茶室': [-0.53, -0.73, -0.73, 0.53, -0.53],
+  '摇滚演唱会': [0.53, -0.53, 0.53, -0.73, 0.73],
+  '话剧甄选会': [-0.73, -0.53, -0.73, -0.53, -0.53],
+  '爱斯基摩旅游节': [1.13, 1.4, 1.13, 1.13, -1.4],
+  '裤装游行': [1.53, 1.27, 1.27, -1.27, -1.53]
+};
+
+var extraRaw = {
+};
 
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
-// be careful when you copy it, levels in chapter 7 are stubs only
 var levelsRaw = {
-  '云端七夕庙会': [-1, -1, -1.5, 1.5, 1],
   '1-1': [1, 2, 3, 2, 1],
   '1-2': [3, 1.5, -3, 3, -1],
   '1-3': [-2, -1, -3, 2, 1],
@@ -52,7 +48,7 @@ var levelsRaw = {
   '1-5': [-1, 3, 2, -2, 1],
   '1-6': [2, 1, -2, 3, 1],
   '1-7': [3, -2, -2, 1, 1],
-  '1-8': [-1, -2, -2, -3, 1],
+  '1-8': [-1, -2, -2, -4, 1],
   '1-9': [-1, -2, 2, -3, 1],
   '2-1': [-2, 3, 1, 2, 1],
   '2-2': [3, 1, 2, 2, -1],
@@ -97,15 +93,15 @@ var levelsRaw = {
   '5-1': [2, 1, 3, 1, 2],
   '5-2': [3, -2, -2, 1, 1],
   '5-3': [-3, -2, -2, 1, 1],
-  '5-4': [-2, -1, -2, -3, 2],
+  '5-4': [-1.2, -0.75, -1.25, -2, 0.75],
   '5-5': [-3, 2, -2, 1, 1],
   '5-6': [3, 1, -2, 2, -1],
   '5-7': [-1, 1, 2, 2, 1],
   '5-8': [2, -1, -2, 1, -3],
   '5-9': [-3, -2, -2, -1, 1],
-  '5-10': [-3, 2, -2, 1, 1],
+  '5-10': [-3, 3, -4, 1.5, 1.5],
   '5-11': [2, -1, 3, -2, 1],
-  '5-12': [2, 1, -3, 2, -1],
+  '5-12': [2, 1.125, -3.375, 2, -1.35],
   '5-支1': [1, 2, -1, 2, -3],
   '5-支2': [2, 2, 1, 3, 1],
   '5-支3': [2, 1, -3, -2, 1],
@@ -148,7 +144,35 @@ var levelsRaw = {
   '8-9': [-2.5, 2.5, -2, 2, 1.5],
   '8-支1': [2.5, -1.75, 2, -2.5, 2],
   '8-支2': [2, 2, -2.5, 2.5, -1.5],
-  '8-支3': [-2.5, -2, -2.5, -2, 1.75]
+  '8-支3': [-2.5, -2, -2.5, -2, 1.75],
+  '9-1': [2.75, 2, 2.75, 2, 1.75],
+  '9-2': [-1.75, 1.33, -1.75, -1.33, 1.25],
+  '9-3': [1.5, -1.5, -2, 1.5, -2],
+  '9-4': [-1, -1.5, -1.5, -1, -1],
+  '9-5': [2, 2.25, 2.25, 2, 2.25],
+  '9-6-1': [2, -1.25, -2, 1.25, 1.25],
+  '9-6-2': [1.4, -2, -2.25, -1.4, 1.2],
+  '9-7': [1.6, 1.4, 1.4, -1.5, 1.25],
+  '9-8': [1.75, 1.5, 1.75, 1.5, -1.5],
+  '9-9-1': [-2, 1, 1.4, -1, 1],
+  '9-9-2': [-2.5, 2, 2, -2.4, 1.5],
+  '9-9-3': [-2.5, -2, -2.5, 1.75, 1.5],
+  '9-支1': [1.5, 1.5, 2, 1.5, 2],
+  '9-支2': [-1.5, 1.5, -1.8, 2, 1.6],
+  '9-支3': [2, -2.5, 2, -2.5, 1.75],
+  '10-1': [-1.33, 1.33, 1.67, 1.67, -1.67],
+  '10-2': [1.5, -1.1, -1.1, 1.5, -1.1],
+  '10-3': [1.33, 1.0, 1.33, 1.0, 1.0],
+  '10-4': [1.0, -1.33, -1.67, -1.33, -3.0],
+  '10-5': [1.67, -1.33, -1.67, -1.33, 1.33],
+  '10-6': [-1.6, 1.9, 1.9, -1.6, 1.6],
+  '10-7': [-1.5, 1.2, 1.2, 1.5, -1.5],
+  '10-8': [1.67, -1.33, -1.67, 1.6, -1.6],
+  '10-9-1': [-1.9, 2.5, 2.5, -1.9, 1.9],
+  '10-9-2': [1.2, -1.9, -1.9, 1.2, 1.2],
+  '10-支1': [1.7, 1.4, 1.7, 1.4, 1.4],
+  '10-支2': [1.4, 1.7, 1.4, 1.4, 1.7],
+  '10-支3': [-1.4, -1.1, -1.4, -1.1, -1.1]
 };
 
 function tagMatcher(whitelist, clothes) {
@@ -254,7 +278,7 @@ var levelFilters = {
   '5-1': normalFilter("运动系", "运动"),
   '5-2': noOp(),
   '5-3': noOp(),
-  '5-4': normalFilter(null, "鬼姬冥花/枫女忍"),
+  '5-4': noOp(),
   '5-5': noOp(),
   '5-6': normalFilter("民国服饰"),
   '5-7': normalFilter("波西米亚"),
@@ -314,7 +338,7 @@ function abstractBonusFactory(note, replace, param, tagWhitelist, nameWhitelist,
             || (nameWhitelist && nameMatcher(nameWhitelist, clothes))) {
           return callback(criteria, clothes);
         }
-        return 0;
+        return [0, {}];
       }
     }
   };
@@ -323,11 +347,14 @@ function abstractBonusFactory(note, replace, param, tagWhitelist, nameWhitelist,
 function featureBasedScoringFactory(bonus, multiplier){
   return function(criteria, clothes) {
     var total = 0;
+    var byFeature = {};
     for (var i in FEATURES) {
       var f = FEATURES[i];
-      total += Math.abs(criteria[f] * clothes.type.score[bonus] * multiplier);
+      var addon = Math.abs(criteria[f] * clothes.type.score[bonus] * multiplier);
+      byFeature[f] = addon;
+      total += addon;
     }
-    return total;
+    return [total, byFeature];
   }
 }
 
@@ -346,11 +373,14 @@ function swimsuitFactory() {
       null, function(criteria, clothes) {
         var total = 0;
         var onlyFeatures = ['cute', 'pure'];
+        var byFeature = {};
         for (var i in onlyFeatures) {
           var f = onlyFeatures[i];
-          total += Math.abs(criteria[f] * clothes.type.score['SS']);
+          var addon = Math.abs(criteria[f] * clothes.type.score['SS']);
+          byFeature[f] = addon;
+          total += addon;
         }
-        return total;
+        return [total, byFeature];
   });
 }
 
@@ -358,12 +388,19 @@ function specialFactory76A() {
   return abstractBonusFactory('华丽	成熟	优雅	清纯	清凉 分别按照权重增加', false, 'B, SS, B, C, C', "晚礼服",
       null, function(criteria, clothes) {
         var total = 0;
-        total += Math.abs(criteria['simple'] * clothes.type.score['B']);
-        total += Math.abs(criteria['cute'] * clothes.type.score['SS']);
-        total += Math.abs(criteria['active'] * clothes.type.score['B']);
-        total += Math.abs(criteria['pure'] * clothes.type.score['C']);
-        total += Math.abs(criteria['cool'] * clothes.type.score['C']);
-        return total;
+        var byFeature = {};
+        byFeature['simple'] = Math.abs(criteria['simple'] * clothes.type.score['B']);
+        byFeature['cute'] = Math.abs(criteria['cute'] * clothes.type.score['SS']);
+        byFeature['active'] = Math.abs(criteria['active'] * clothes.type.score['B']);
+        byFeature['pure'] = Math.abs(criteria['pure'] * clothes.type.score['C']);
+        byFeature['cool'] = Math.abs(criteria['cool'] * clothes.type.score['C']);
+        
+        total += byFeature['simple'];
+        total += byFeature['cute'];
+        total += byFeature['active'];
+        total += byFeature['pure'];
+        total += byFeature['cool'];
+        return [total, byFeature];
   });
 }
 
@@ -371,15 +408,38 @@ function specialFactory76B() {
   return abstractBonusFactory('华丽	成熟	优雅	清纯	清凉 分别按照权重增加', false, 'B, SS, B, C, C', "中式现代",
       null, function(criteria, clothes) {
         var total = 0;
-        total += Math.abs(criteria['simple'] * clothes.type.score['B']);
-        total += Math.abs(criteria['cute'] * clothes.type.score['SS']);
-        total += Math.abs(criteria['active'] * clothes.type.score['B']);
-        total += Math.abs(criteria['pure'] * clothes.type.score['C']);
-        total += Math.abs(criteria['cool'] * clothes.type.score['C']);
-        return total;
+        var byFeature = {};
+        byFeature['simple'] = Math.abs(criteria['simple'] * clothes.type.score['B']);
+        byFeature['cute'] = Math.abs(criteria['cute'] * clothes.type.score['SS']);
+        byFeature['active'] = Math.abs(criteria['active'] * clothes.type.score['B']);
+        byFeature['pure'] = Math.abs(criteria['pure'] * clothes.type.score['C']);
+        byFeature['cool'] = Math.abs(criteria['cool'] * clothes.type.score['C']);
+        
+        total += byFeature['simple'];
+        total += byFeature['cute'];
+        total += byFeature['active'];
+        total += byFeature['pure'];
+        total += byFeature['cool'];
+        return [total, byFeature];
   });
 }
 
+function bonusInfo(base, weight, tag, replace) {
+  return {
+    base: base,
+    weight: weight,
+    tag: tag,
+    replace: replace
+  }
+}
+
+function replaceBonusInfo(base, weight, tag) {
+  return bonusInfo(base, weight, tag, true);
+}
+
+function addBonusInfo(base, weight, tag) {
+  return bonusInfo(base, weight, tag, false);
+}
 
 /*
  * There are three major types of bonus:
@@ -387,15 +447,14 @@ function specialFactory76B() {
  *  - Replace current clothes features to another one
  *  - Special rules
  */
-var levelBonus = {
-  '云端七夕庙会': [addScoreBonusFactory('B', 1, "中式古典")],
+ var levelBonus = {
   "1-1": [],
   "1-2": [],
-  "1-3": [addScoreBonusFactory('B', 0.25, "中式古典")],
+  "1-3": [addBonusInfo('B', 0.25, "中式古典")],
   "1-4": [],
   "1-5": [],
   "1-6": [],
-  "1-7": [addScoreBonusFactory('B', 0.25, "中性风")],
+  "1-7": [addBonusInfo('B', 0.25, "中性风")],
   "1-8": [],
   "1-9": [],
   "2-1": [],
@@ -403,101 +462,146 @@ var levelBonus = {
   "2-3": [],
   "2-4": [],
   "2-5": [],
-  "2-6": [addScoreBonusFactory('B', 0.25, "和风")],
-  "2-7": [replaceScoreBonusFactory('SS', 1, "睡衣")],
+  "2-6": [addBonusInfo('B', 0.25, "和风")],
+  "2-7": [replaceBonusInfo('SS', 1, "睡衣")],
   "2-8": [],
-  "2-9": [addScoreBonusFactory('B', 0.25, "欧式古典")],
+  "2-9": [addBonusInfo('B', 0.25, "欧式古典")],
   "2-支1": [],
-  "2-支2": [addScoreBonusFactory('A', 1, "中性风")],
-  "3-1": [addScoreBonusFactory('B', 0.25, "英伦", "名媛连衣裙")],
-  "3-2": [addScoreBonusFactory('B', 1, "摇滚风")],
+  "2-支2": [addBonusInfo('A', 1, "中性风")],
+  "3-1": [addBonusInfo('B', 0.25, "英伦")],
+  "3-2": [addBonusInfo('B', 1, "摇滚风")],
   "3-3": [],
-  "3-4": [addScoreBonusFactory('B', 0.25, "森女系列")],
+  "3-4": [addBonusInfo('B', 0.25, "森女系列")],
   "3-5": [],
-  "3-6": [replaceScoreBonusFactory('SS', 1, '沐浴'), replaceScoreBonusFactory('S', 1, '和风')],
+  "3-6": [replaceBonusInfo('SS', 1, '沐浴'), replaceBonusInfo('S', 1, '和风')],
   "3-7": [],
   "3-8": [],
-  "3-9": [addScoreBonusFactory('B', 0.25, "侠客联盟")],
-  "3-10": [addScoreBonusFactory('B', 0.25, "小动物")],
-  "3-11": [addScoreBonusFactory('B', 1, "欧式古典")],
-  "3-12": [addScoreBonusFactory('B', 1, "运动系")],
-  "3-支1": [addScoreBonusFactory('B', 1, "欧式古典")],
-  "3-支2": [replaceScoreBonusFactory('SS', 1, '婚纱')],
+  "3-9": [addBonusInfo('B', 0.25, "侠客联盟")],
+  "3-10": [addBonusInfo('B', 0.25, "小动物")],
+  "3-11": [addBonusInfo('B', 1, "欧式古典")],
+  "3-12": [addBonusInfo('B', 1, "运动系")],
+  "3-支1": [addBonusInfo('B', 1, "欧式古典")],
+  "3-支2": [replaceBonusInfo('SS', 1, '婚纱')],
   "4-1": [],
-  "4-2": [swimsuitFactory()],
-  "4-3": [swimsuitFactory()],
   "4-4": [],
-  "4-5": [addScoreBonusFactory('S', 0.25, "防晒")],
+  "4-5": [addBonusInfo('S', 0.25, "防晒")],
   "4-6": [],
   "4-7": [],
-  "4-8": [replaceScoreBonusFactory('S', 1, "医务使者")],
-  "4-9": [addScoreBonusFactory('B', 1, "中式古典")],
+  "4-8": [replaceBonusInfo('S', 1, "医务使者")],
+  "4-9": [addBonusInfo('B', 1, "中式古典")],
   "4-10": [],
   "4-11": [],
-  "4-12": [replaceScoreBonusFactory('SS', 1, "兔女郎")],
+  "4-12": [replaceBonusInfo('SS', 1, "兔女郎")],
   "4-支1": [],
-  "4-支2": [addScoreBonusFactory('B', 0.25, "围裙")],
-  "4-支3": [addScoreBonusFactory('B', 0.25, "围裙")],
+  "4-支2": [addBonusInfo('B', 0.25, "围裙")],
+  "4-支3": [addBonusInfo('B', 0.25, "围裙")],
   "5-1": [],
   "5-2": [],
   "5-3": [],
-  "5-4": [addScoreBonusFactory('SS', 1, null, "鬼姬冥花/枫女忍")],
-  "5-5": [addScoreBonusFactory('A', 1, "女仆装")],
+  "5-4": [addBonusInfo('S', 2, "和风"), addBonusInfo('SS', 1, "舞者")],
+  "5-5": [addBonusInfo('A', 1, "女仆装")],
   "5-6": [],
-  "5-7": [replaceScoreBonusFactory('SS', 1, "波西米亚")],
+  "5-7": [replaceBonusInfo('SS', 1, "波西米亚")],
   "5-8": [],
   "5-9": [],
   "5-10": [],
-  "5-11": [replaceScoreBonusFactory('SS', 1, "侠客联盟")],
-  "5-12": [addScoreBonusFactory('SS', 1, "民国服饰")],
-  "5-支1": [addScoreBonusFactory('B', 0.25, "冬装")],
+  "5-11": [replaceBonusInfo('SS', 1, "侠客联盟")],
+  "5-12": [addBonusInfo('A', 1, "民国服饰"), addBonusInfo('A', 1, "中式现代")],
+  "5-支1": [addBonusInfo('B', 0.25, "冬装")],
   "5-支2": [],
-  "5-支3": [replaceScoreBonusFactory('SS', 1, "医务使者")],
-  "6-1": [addScoreBonusFactory('B', 0.25, "碎花")],
-  "6-2": [addScoreBonusFactory('B', 0.25, "中式古典")],
-  "6-3": [addScoreBonusFactory('B', 0.5, "和风")],
+  "5-支3": [replaceBonusInfo('SS', 1, "医务使者")],
+  "6-1": [addBonusInfo('B', 0.25, "碎花")],
+  "6-2": [addBonusInfo('B', 0.25, "中式古典")],
+  "6-3": [addBonusInfo('B', 0.5, "和风")],
   "6-4": [],
   "6-5": [],
   "6-6": [],
-  "6-7": [addScoreBonusFactory('S', 0.25, "中式现代")],
-  "6-8": [replaceScoreBonusFactory('SS', 1, "泳装"), replaceScoreBonusFactory('B', 1, "中式现代")],
-  "6-9": [addScoreBonusFactory('B', 1, "旗袍")],
-  "6-10": [addScoreBonusFactory('SS', 1, "中式现代"), addScoreBonusFactory('S', 1, "冬装")],
-  "6-11": [addScoreBonusFactory('B', 1, "中式古典")],
+  "6-7": [addBonusInfo('S', 0.25, "中式现代")],
+  "6-8": [replaceBonusInfo('SS', 1, "泳装"), replaceBonusInfo('B', 1, "中式现代")],
+  "6-9": [addBonusInfo('B', 1, "旗袍")],
+  "6-10": [addBonusInfo('SS', 1, "中式现代"), addBonusInfo('S', 1, "冬装")],
+  "6-11": [addBonusInfo('B', 1, "中式古典")],
   "6-支1": [],
   "6-支2": [],
-  "6-支3": [replaceScoreBonusFactory('A', 2, "舞者"), addScoreBonusFactory('A', 1, "印度服饰")], 
+  "6-支3": [replaceBonusInfo('A', 2, "舞者"), addBonusInfo('A', 1, "印度服饰")], 
   '7-1': [],
   '7-2': [],
   '7-3': [],
-  '7-4': [addScoreBonusFactory('B', 1, "中式古典")],
+  '7-4': [addBonusInfo('B', 1, "中式古典")],
   '7-5': [],
-  '7-6': [specialFactory76A(), specialFactory76B()],
-  '7-7': [replaceScoreBonusFactory('SS', 1, "欧式古典"), replaceScoreBonusFactory('SS', 1, "晚礼服")],
-  '7-8': [replaceScoreBonusFactory('S', 1, "中式古典"), replaceScoreBonusFactory('SS', 1, "侠客联盟")],
-  '7-9': [addScoreBonusFactory('A', 1, "冬装")],
+  '7-7': [replaceBonusInfo('SS', 1, "欧式古典"), replaceBonusInfo('SS', 1, "晚礼服")],
+  '7-8': [replaceBonusInfo('S', 1, "中式古典"), replaceBonusInfo('SS', 1, "侠客联盟")],
+  '7-9': [addBonusInfo('A', 1, "冬装")],
   '7-支1': [],
   '7-支2': [],
-  '7-支3': [replaceScoreBonusFactory('SS', 1, "军装")],
-  '7-支4': [addScoreBonusFactory('A', 0.5, "中式现代")],
-  '7-支5': [addScoreBonusFactory('S', 0.25, "运动系"), addScoreBonusFactory('S', 0.25, "海军风")], // Not tested yet, not eligible for this level yet
-  '8-1': [addScoreBonusFactory('A', 0.5, "小动物")],
-  '8-2': [addScoreBonusFactory('S', 0.5, "摇滚风")],
-  '8-3': [addScoreBonusFactory('A', 0.5, "中式古典")],
-  '8-4': [addScoreBonusFactory('A', 0.5, "中性风")],
-  '8-5': [addScoreBonusFactory('B', 1, "中式古典")],
-  '8-6': [addScoreBonusFactory('S', 1, "中式现代")],
-  '8-7': [addScoreBonusFactory('A', 0.5, "中性风")],
+  '7-支3': [replaceBonusInfo('SS', 1, "军装")],
+  '7-支4': [addBonusInfo('A', 0.5, "中式现代")],
+  '7-支5': [addBonusInfo('S', 0.25, "运动系"), addBonusInfo('S', 0.25, "海军风")],
+  '8-1': [addBonusInfo('A', 0.5, "小动物")],
+  '8-2': [addBonusInfo('S', 0.5, "摇滚风")],
+  '8-3': [addBonusInfo('A', 0.5, "中式古典")],
+  '8-4': [addBonusInfo('A', 0.5, "中性风")],
+  '8-5': [addBonusInfo('B', 1, "中式古典")],
+  '8-6': [addBonusInfo('S', 1, "中式现代")],
+  '8-7': [addBonusInfo('A', 0.5, "中性风")],
   '8-8': [],
-  '8-9': [addScoreBonusFactory('A', 0.5, "童话系")],
-  '8-支1': [addScoreBonusFactory('A', 0.5, "侠客联盟")],
+  '8-9': [addBonusInfo('A', 0.5, "童话系")],
+  '8-支1': [addBonusInfo('A', 0.5, "侠客联盟")],
   '8-支2': [],
-  '8-支3': [addScoreBonusFactory('A', 0.5, "欧式古典")],
-  '仲夏夜之梦1': [addScoreBonusFactory('S', 1, "童话系")],
-  '仲夏夜之梦2': [replaceScoreBonusFactory('SS', 1, "和风")],
+  '8-支3': [addBonusInfo('A', 0.5, "欧式古典")],
+  '9-1': [],
+  '9-2': [addBonusInfo('S', 1, "哥特风")],
+  '9-3': [addBonusInfo('C', 1, "冬装")],
+  '9-4': [addBonusInfo('A', 1, "中式古典")],
+  '9-5': [addBonusInfo('A', 1, "中式现代")],
+  '9-6-1': [],
+  '9-6-2': [],
+  '9-7': [addBonusInfo('S', 1, "未来系")],
+  '9-8': [addBonusInfo('B', 1, "森女系列")],
+  '9-9-1': [addBonusInfo('SS', 1, "侠客联盟")],
+  '9-9-2': [],
+  '9-9-3': [],
+  '9-支1': [addBonusInfo('A', 1, "泳装")],
+  '9-支2': [addBonusInfo('A', 1, "旗袍")],
+  '9-支3': [],
+  '10-1': [addBonusInfo('B', 1, "森女系列")],
+  '10-2': [addBonusInfo('A', 1, "中式古典")],
+  '10-3': [addBonusInfo('A', 2, "中式现代")],
+  '10-4': [addBonusInfo('A', 1, "军装")],
+  '10-5': [addBonusInfo('B', 1, "晚礼服")],
+  '10-6': [addBonusInfo('S', 1, "民族风")],
+  '10-7': [addBonusInfo('B', 1, "洛丽塔")],
+  '10-8': [addBonusInfo('SS', 1, "学院系")],
+  '10-9-1': [addBonusInfo('A', 1, "原宿系")],
+  '10-9-2': [],
+  '10-支1': [addBonusInfo('A', 1, "运动系")],
+  '10-支2': [addBonusInfo('A', 1, "碎花")],
+  '10-支3': [addBonusInfo('A', 1, "欧式古典")],
+  '月下舞会3': [addBonusInfo('S', 1, "欧式古典")],
+  '仲夏夜之梦1': [addBonusInfo('S', 1, "童话系")],
+  '仲夏夜之梦2': [replaceBonusInfo('SS', 1, "和风")],
   '仲夏夜之梦3': [],
-  '仲夏夜之梦4': [replaceScoreBonusFactory('S', 1, "摇滚风")],
-  '仲夏夜之梦5': [replaceScoreBonusFactory('S', 1, "睡衣"), replaceScoreBonusFactory('A', 1, "小动物")]
+  '仲夏夜之梦4': [replaceBonusInfo('S', 1, "摇滚风")],
+  '仲夏夜之梦5': [replaceBonusInfo('S', 1, "睡衣"), replaceBonusInfo('A', 1, "小动物")],
+  '清秀佳人': [addBonusInfo('A', 1, "中式现代")],
+  '绝色无双': [addBonusInfo('A', 1, "中式现代")],
+  '保育员面试': [addBonusInfo('S', 1, "小动物")],
+  '海边的比基尼对决！': [addBonusInfo('A', 1, "泳装")],
+  '少女的茶会': [addBonusInfo('SS', 1, "洛丽塔")],
+  '摇滚演唱会': [addBonusInfo('S', 1, "摇滚风")],
+  '花田摄影会': [addBonusInfo('A', 1, "碎花")],
+  '牛仔布的逆袭': [addBonusInfo('B', 1, "牛仔布")],
+  '云端和风茶室': [addBonusInfo('S', 1, "和风")],
+  '运动饮料的推广会': [addBonusInfo('S', 1, "运动系")],
+  '睡衣兜风派对': [addBonusInfo('SS', 1, "睡衣"), addBonusInfo('SS', 1, "居家服")],
+  '云端汉服聚会': [addBonusInfo('SS', 1, "中式古典")],
+  '话剧甄选会': [addBonusInfo('SS', 1, "欧式古典")]
+ };
+
+var additionalLevelInfo = {
+  "4-2": [swimsuitFactory()],
+  "4-3": [swimsuitFactory()],
+  '7-6': [specialFactory76A(), specialFactory76B()]
 };
 
 function parseCriteriaList(criteria) {
@@ -518,14 +622,21 @@ function level(name, criteria) {
   var bonusFilter = [];
   if (levelBonus[name]) {
     for (var i in levelBonus[name]) {
-      bonusFilter.push(levelBonus[name][i](criteria));
+      bonusFilter.push(levelBonus[name][i]);
+    }
+  }
+  var additionalBonus = [];
+  if (additionalLevelInfo[name]) {
+    for (var i in additionalLevelInfo[name]) {
+      additionalBonus.push(additionalLevelInfo[name][i](criteria));
     }
   }
   return {
     name: name, // useful?
     weight: criteria,
     filter: filter,
-    bonus: bonusFilter
+    bonus: bonusFilter,
+    additionalBonus: additionalBonus
   }
 }
 
@@ -533,7 +644,16 @@ allThemes = function() {
   var ret = {};
   for (var theme in competitionsRaw) {
     var criteria = competitionsRaw[theme];
-    ret['评选赛: ' + theme] = level(theme, parseCriteria(criteria));
+    ret['评选赛: ' + theme] = level(theme, parseCriteriaList(criteria));
+  }
+  for (var theme in tasksRaw) {
+    var criteria = tasksRaw[theme];
+    ret['联盟委托: ' + theme] = level(theme, parseCriteriaList(criteria));
+  }
+  
+  for (var theme in extraRaw) {
+    var criteria = extraRaw[theme];
+    ret[theme] = level(theme, parseCriteriaList(criteria));
   }
   for (var theme in levelsRaw) {
     var criteria = levelsRaw[theme];
