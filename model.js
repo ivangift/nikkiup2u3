@@ -384,6 +384,7 @@ function calcDependencies() {
   for (var i in pattern) {
     var target = clothesSet[pattern[i][0]][pattern[i][1]];
     var source = clothesSet[pattern[i][2]][pattern[i][3]];
+    if (!target) continue;
     source.addDep('设计图', target);
   }
 }
