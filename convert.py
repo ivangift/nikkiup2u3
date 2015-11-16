@@ -108,25 +108,22 @@ writer.write("];\n");
 writer.write("var category = [%s];\n" % (','.join(["'" + i + "'" for i in category])))
 writer.close()
 
+
+def compatibility(name):
+  if name == '上衣':
+    return '上装'
+  return name
+
 reader = csv.reader(open(PATH + "/" + pattern))
 reader.next()
 writer = open('pattern.js', 'w');
 writer.write("var pattern = [\n")
 for row in reader:
-  target = row[0]
+  target = compatibility(row[0])
   hint_target = row[1]
-  source = row[3]
-  hint_source = row[4]
-  if source == '/':
-    continue
-  x = find_name(target, hint_target)
-  if not x:
-    print 'Target missing: ', target
-    continue
-  y = find_name(source, hint_source)
-  if not y:
-    print 'Source missing: ', source
-    continue
-  writer.write("  ['%s', '%s', '%s', '%s'],\n" % (x[0].split('-')[0], x[1], y[0].split('-')[0], y[1]))
+  source = compatibility(row[2])
+  hint_source = row[3]
+  num = row[4]
+  writer.write("  ['%s', '%s', '%s', '%s', '%s'],\n" % (target, hint_target, source, hint_source, num))
 writer.write("];")
 writer.close()
