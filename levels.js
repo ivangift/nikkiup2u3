@@ -19,6 +19,7 @@ var competitionsRaw = {
   '清秀佳人': [1.33, 0.67, -1.33, 1.33, 1.0]
 };
 
+/*
 var tasksRaw = {
   '运动饮料的推广会': [0.87, 0.67, 0.87, 0.67, 0.67],
   '牛仔布的逆袭': [1.2, -0.93, 1.2, 0.93, -0.93],
@@ -34,7 +35,14 @@ var tasksRaw = {
   '话剧甄选会': [-0.73, -0.53, -0.73, -0.53, -0.53],
   '爱斯基摩旅游节': [1.13, 1.4, 1.13, 1.13, -1.4],
   '裤装游行': [1.53, 1.27, 1.27, -1.27, -1.53]
-};
+};*/
+
+var tasksRaw = {
+  'g1-1': [0.47, 0.67, 0.47, 0.67, -0.47],
+  'g1-2': [0.87, 0.67, 0.87, 0.67, 0.67],
+  'g1-3': [0.8, 0.8, -0.8, 1.0, 1.0],
+  'g1-4': [1.13, 1.33, 1.13, 1.13, -1.33],
+}
 
 var extraRaw = {
 };
@@ -385,7 +393,7 @@ function swimsuitFactory() {
 }
 
 function specialFactory76A() {
-  return abstractBonusFactory('华丽	成熟	优雅	清纯	清凉 分别按照权重增加', false, 'B, SS, B, C, C', "晚礼服",
+  return abstractBonusFactory('华丽 成熟  优雅  清纯  清凉 分别按照权重增加', false, 'B, SS, B, C, C', "晚礼服",
       null, function(criteria, clothes) {
         var total = 0;
         var byFeature = {};
@@ -405,7 +413,7 @@ function specialFactory76A() {
 }
 
 function specialFactory76B() {
-  return abstractBonusFactory('华丽	成熟	优雅	清纯	清凉 分别按照权重增加', false, 'B, SS, B, C, C', "中式现代",
+  return abstractBonusFactory('华丽 成熟  优雅  清纯  清凉 分别按照权重增加', false, 'B, SS, B, C, C', "中式现代",
       null, function(criteria, clothes) {
         var total = 0;
         var byFeature = {};
@@ -595,7 +603,11 @@ function addBonusInfo(base, weight, tag) {
   '运动饮料的推广会': [addBonusInfo('S', 1, "运动系")],
   '睡衣兜风派对': [addBonusInfo('SS', 1, "睡衣"), addBonusInfo('SS', 1, "居家服")],
   '云端汉服聚会': [addBonusInfo('SS', 1, "中式古典")],
-  '话剧甄选会': [addBonusInfo('SS', 1, "欧式古典")]
+  '话剧甄选会': [addBonusInfo('SS', 1, "欧式古典")],
+  'g1-1': [addBonusInfo('SS', 1, "睡衣"), addBonusInfo('SS', 1, "居家服")],
+  'g1-2': [addBonusInfo('S', 1, "运动系")],
+  'g1-3': [addBonusInfo('A', 1, "泳装")],
+  'g1-5': [addBonusInfo('A', 1, "哥特风")]
  };
 
 var additionalLevelInfo = {
