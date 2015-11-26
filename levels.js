@@ -43,6 +43,7 @@ var tasksRaw = {
   'g1-3': [0.8, 0.8, -0.8, 1.0, 1.0],
   'g1-4': [1.13, 1.33, 1.13, 1.13, -1.33],
   'g1-5': [-0.8, 0.8, -0.8, -0.73, 0.73],
+  'g1-6': [-1.13, -1.13, -0.93, -0.93, 0.93],
 }
 
 var extraRaw = {
@@ -608,7 +609,9 @@ function addBonusInfo(base, weight, tag) {
   'g1-1': [addBonusInfo('SS', 1, "睡衣"), addBonusInfo('SS', 1, "居家服")],
   'g1-2': [addBonusInfo('S', 1, "运动系")],
   'g1-3': [addBonusInfo('A', 1, "泳装")],
-  'g1-5': [addBonusInfo('A', 1, "哥特风")]
+  'g1-5': [addBonusInfo('A', 1, "哥特风")],
+  'g1-6': [addBonusInfo('B', 0.25, "欧式古典")],
+  'g1-7': [addBonusInfo('SS', 1, "洛丽塔")],
  };
 
 var additionalLevelInfo = {
