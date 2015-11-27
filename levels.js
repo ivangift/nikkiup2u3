@@ -48,6 +48,8 @@ var tasksRaw = {
   'g2-1': [-0.47, -0.47, -0.67, 0.67, -0.47],
   'g2-2': [-1.0, -1.0, -1.0, -1.27, 1.27],
   'g2-3': [-1.4, 1.0, 1.4, 1.0, 1.0],
+  'g2-4': [-1.2, -1.2, -1.2, 0.87, 0.87],
+  'g2-5': [-0.87, 0.87, -0.6, 0.6, 0.6],
 }
 
 var extraRaw = {
@@ -616,7 +618,9 @@ function addBonusInfo(base, weight, tag) {
   'g1-5': [addBonusInfo('A', 1, "哥特风")],
   'g1-6': [addBonusInfo('B', 0.25, "欧式古典")],
   'g1-7': [addBonusInfo('SS', 1, "洛丽塔")],
-  'g2-1': [addBonusInfo('S', 1, "中式古典")]
+  'g2-1': [addBonusInfo('S', 1, "中式古典")],
+  'g2-4': [addBonusInfo('B', 0.25, "哥特风")],
+  'g2-5': [addBonusInfo('S', 1, "女仆装")],
  };
 
 var additionalLevelInfo = {
