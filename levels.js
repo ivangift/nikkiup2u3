@@ -38,6 +38,7 @@ var tasksRaw = {
 
 var extraRaw = {
   '满天繁星: 观星之夜': [1.33, 1.0, 0.67, 1.33, -1.33],
+  '满天繁星: 射手座少女': [1.33, 1.33, 1.33, 1.0, 0.67],
 };
 
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
