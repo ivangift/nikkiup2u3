@@ -40,6 +40,7 @@ var extraRaw = {
   '满天繁星: 观星之夜': [1.33, 1.0, 0.67, 1.33, -1.33],
   '满天繁星: 射手座少女': [1.33, 1.33, 1.33, 1.0, 0.67],
   '满天繁星: 玄武女土蝠': [-1.0, -1.33, -1.33, -1.33, 0.67],
+  '满天繁星: 喝茶听课': [1.33, 0.67, -1.33, 1.33, 1.0],
 };
 
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
@@ -610,6 +611,7 @@ function addBonusInfo(base, weight, tag) {
   'g2-5': [addBonusInfo('S', 1, "女仆装")],
   'g2-6': [addBonusInfo('B', 0.25, "海军风")],
   'g2-7': [addBonusInfo('S', 1, "中式现代")],
+  '满天繁星: 喝茶听课': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
  };
 
 var additionalLevelInfo = {
