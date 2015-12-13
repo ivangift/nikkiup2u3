@@ -43,6 +43,7 @@ var extraRaw = {
   '满天繁星: 喝茶听课': [1.33, 0.67, -1.33, 1.33, 1.0],
   '满天繁星: 星宿侠女': [-1.33, -1.0, 1.33, -1.33, 0.67],
   '满天繁星: 玄武虚日鼠': [0.67, -1.33, -1.33, 1.33, -1.0],
+  '满天繁星: 朱雀翼火蛇': [-1.33, -1.0, -1.33, 1.33, -0.67]
 };
 
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
@@ -615,6 +616,7 @@ function addBonusInfo(base, weight, tag) {
   'g2-7': [addBonusInfo('S', 1, "中式现代")],
   '满天繁星: 喝茶听课': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
   '满天繁星: 星宿侠女': [addBonusInfo('A', 1, "侠客联盟")],
+  '满天繁星: 朱雀翼火蛇': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")]
  };
 
 var additionalLevelInfo = {
