@@ -19,24 +19,6 @@ var competitionsRaw = {
   '清秀佳人': [1.33, 0.67, -1.33, 1.33, 1.0]
 };
 
-/*
-var tasksRaw = {
-  '运动饮料的推广会': [0.87, 0.67, 0.87, 0.67, 0.67],
-  '牛仔布的逆袭': [1.2, -0.93, 1.2, 0.93, -0.93],
-  '海边的比基尼对决！': [0.8, -0.8, -0.8, -1.0, 1.0],
-  '睡衣兜风派对': [0.47, 0.67, 0.47, 0.67, -0.47],
-  '苹果联邦高级成衣展': [1.4, -1.4, -1.13, -1.13, -1.13],
-  '少女的茶会': [-0.67, 0.47, 0.67, 0.47, -0.47],
-  '云端汉服聚会': [-0.47, -0.47, -0.67, 0.67, -0.47],
-  '保育员面试': [0.53, 0.53, 0.73, 0.73, -0.53],
-  '花田摄影会': [0.73, 0.93, 0.73, 0.93, 0.73],
-  '云端和风茶室': [-0.53, -0.73, -0.73, 0.53, -0.53],
-  '摇滚演唱会': [0.53, -0.53, 0.53, -0.73, 0.73],
-  '话剧甄选会': [-0.73, -0.53, -0.73, -0.53, -0.53],
-  '爱斯基摩旅游节': [1.13, 1.4, 1.13, 1.13, -1.4],
-  '裤装游行': [1.53, 1.27, 1.27, -1.27, -1.53]
-};*/
-
 var tasksRaw = {
   'g1-1': [0.47, 0.67, 0.47, 0.67, -0.47],
   'g1-2': [0.87, 0.67, 0.87, 0.67, 0.67],
@@ -55,6 +37,13 @@ var tasksRaw = {
 }
 
 var extraRaw = {
+  '满天繁星: 观星之夜': [1.33, 1.0, 0.67, 1.33, -1.33],
+  '满天繁星: 射手座少女': [1.33, 1.33, 1.33, 1.0, 0.67],
+  '满天繁星: 玄武女土蝠': [-1.0, -1.33, -1.33, -1.33, 0.67],
+  '满天繁星: 喝茶听课': [1.33, 0.67, -1.33, 1.33, 1.0],
+  '满天繁星: 星宿侠女': [-1.33, -1.0, 1.33, -1.33, 0.67],
+  '满天繁星: 玄武虚日鼠': [0.67, -1.33, -1.33, 1.33, -1.0],
+  '满天繁星: 朱雀翼火蛇': [-1.33, -1.0, -1.33, 1.33, -0.67]
 };
 
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
@@ -625,6 +614,9 @@ function addBonusInfo(base, weight, tag) {
   'g2-5': [addBonusInfo('S', 1, "女仆装")],
   'g2-6': [addBonusInfo('B', 0.25, "海军风")],
   'g2-7': [addBonusInfo('S', 1, "中式现代")],
+  '满天繁星: 喝茶听课': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
+  '满天繁星: 星宿侠女': [addBonusInfo('A', 1, "侠客联盟")],
+  '满天繁星: 朱雀翼火蛇': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")]
  };
 
 var additionalLevelInfo = {
@@ -671,18 +663,17 @@ function level(name, criteria) {
 
 allThemes = function() {
   var ret = {};
+  for (var theme in extraRaw) {
+    var criteria = extraRaw[theme];
+    ret[theme] = level(theme, parseCriteriaList(criteria));
+  }
   for (var theme in competitionsRaw) {
     var criteria = competitionsRaw[theme];
-    ret['评选赛: ' + theme] = level(theme, parseCriteriaList(criteria));
+    ret['竞技场: ' + theme] = level(theme, parseCriteriaList(criteria));
   }
   for (var theme in tasksRaw) {
     var criteria = tasksRaw[theme];
     ret['联盟委托: ' + theme] = level(theme, parseCriteriaList(criteria));
-  }
-  
-  for (var theme in extraRaw) {
-    var criteria = extraRaw[theme];
-    ret[theme] = level(theme, parseCriteriaList(criteria));
   }
   for (var theme in levelsRaw) {
     var criteria = levelsRaw[theme];
