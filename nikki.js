@@ -15,10 +15,6 @@ var CATEGORY_HIERARCHY = function() {
 // for table use
 function thead(isShoppingCart, score) {
   var ret = "<tr>";
-  /*
-  if (!isShoppingCart) {
-    ret += "<th>拥有</th>";
-  }*/
   if (score) {
     ret += "<th class='score'>分数</th>";
   }
@@ -92,7 +88,6 @@ function clearShoppingCart() {
 function toggleInventory(type, id) {
   var checked = !clothesSet[type][id].own;
   clothesSet[type][id].own = checked;
-  //$('#' + type + id)[0].checked = checked;
   $('#clickable-' + type + id).toggleClass('own');
   saveAndUpdate();
 }
@@ -119,7 +114,6 @@ function clickableTd(piece) {
 }
 
 function row(piece, isShoppingCart) {
-  //var ret = isShoppingCart ? "" : td(inventoryCheckbox(piece.type.mainType, piece.id, piece.own), "");
   var ret = "";
   if (!isFilteringMode) {
     ret += td(piece.tmpScore);
@@ -190,13 +184,10 @@ function drawTable(data, div, isShoppingCart) {
     $('span.paging').html("<button class='destoryFloat'></button>");
     redrawThead();
     $('button.destoryFloat').click(function() {
-      //var $label = $(this);
       if (global.floating) {
-        //$label.text('打开浮动');
         global.float.floatThead('destroy');
         global.floating = false;
       } else {
-        //$label.text('关闭浮动');
         global.floating = true;
         global.float.floatThead({
           useAbsolutePositioning: false
@@ -234,7 +225,9 @@ function onChangeCriteria() {
   if (global.additionalBonus && global.additionalBonus.length > 0) {
     criteria.bonus = global.additionalBonus;
   }
-  if (!isFilteringMode){
+
+  if (!isFilteringMode) {
+    calcClothes(criteria);
     if ($('#accessoriesHelper')[0].checked) {
       chooseAccessories(criteria);
     } else {
@@ -243,6 +236,16 @@ function onChangeCriteria() {
   }
   drawLevelInfo();
   refreshTable();
+  refreshRanking();
+}
+
+function calcClothes(criteria) {
+  for (var i in clothes) {
+    clothes[i].calc(criteria);
+  }
+  for (var i in clothesRanking) {
+    clothesRanking[i].sort(byScore);
+  }
 }
 
 function tagToBonus(criteria, id) {
@@ -314,7 +317,7 @@ function chooseAccessories(accfilters) {
 }
 
 function refreshShoppingCart() {
-  shoppingCart.calc(criteria);
+  shoppingCart.calc();
   drawTable(shoppingCart.toList(byCategoryAndScore), "shoppingCart", true);
 }
 
@@ -366,6 +369,7 @@ function byId(a, b) {
 function filterTopAccessories(filters) {
   filters['own'] = true;
   var accCate = CATEGORY_HIERARCHY['饰品'];
+  /*
   for (var i in accCate) {
     filters[accCate[i]] = true;
   }
@@ -373,7 +377,7 @@ function filterTopAccessories(filters) {
   for (var i in clothes) {
     if (matches(clothes[i], {}, filters)) {
       if (!isFilteringMode) {
-        clothes[i].calc(filters);
+        //clothes[i].calc(filters);
         if (!result[clothes[i].type.type]) {
           result[clothes[i].type.type] = clothes[i];
         } else if (clothes[i].tmpScore > result[clothes[i].type.type].tmpScore) {
@@ -381,32 +385,43 @@ function filterTopAccessories(filters) {
         }
       }
     }
-  }
+  }*/
   var toSort = [];
+  for (var i in accCate) {
+    var cate = accCate[i]
+    for (var j in clothesRanking[cate]) {
+      if (clothesRanking[cate][j].own) {
+        toSort.push(clothesRanking[cate][j]);
+        break;
+      }
+    }
+  }
+  /*
   for (var c in result) {
     toSort.push(result[c]);
-  }
+  }*/
   toSort.sort(byScore);
   var total = 0;
-  var i;
-  for (i = 0; i < toSort.length; i++) {
-    realScoreBefore = accScore(total, i);
-    realScore = accScore(total + toSort[i].tmpScore, i+1);
-    if (realScore < realScoreBefore) {
-      break;
-    }
+  var maxTotal = 0;
+  var maxIdx = 0;
+  for (var i = 0; i < toSort.length; i++) {
     total += toSort[i].tmpScore;
+    realScore = accScore(total, i+1);
+    if (maxTotal  < realScore) {
+      maxTotal = realScore;
+      maxIdx = i;
+    }
   }
-  return toSort.slice(0, i);
+  return toSort.slice(0, maxIdx+1);
 }
 
 function filtering(criteria, filters) {
   var result = [];
   for (var i in clothes) {
     if (matches(clothes[i], criteria, filters)) {
-      if (!isFilteringMode) {
-        clothes[i].calc(criteria);
-      }
+      // if (!isFilteringMode) {
+      //   clothes[i].calc(criteria);
+      // }
       result.push(clothes[i]);
     }
   }
@@ -511,10 +526,12 @@ function changeMode(isFiltering) {
     $("#theme").hide();
     $("#tagInfo").hide();
     $(".tagContainer").hide();
+    $("#summary").hide();
   } else {
     $("#theme").show();
     $("#tagInfo").show();
     $(".tagContainer").show();
+    $("#summary").show();
   }
   isFilteringMode = isFiltering;
   onChangeCriteria();
@@ -650,6 +667,82 @@ function doImport() {
   }
 }
 
+function refreshRanking() {
+  $("#ranking").empty();
+  if (!isFilteringMode) {
+    $("#ranking").html("<table id='rankingTableMain' class='ranking'><tbody></tbody></table>");
+    $("#ranking").append("<hr style='border-top:dashed 1px #999'>");
+    $("#ranking").append("<table id='rankingTableAcc' class='ranking'><tbody></tbody></table>");
+    for (var i in category) {
+      var cate = category[i];
+      var cateName = cate;
+      if (cate.indexOf('-') >= 0) {
+        cateName = cate.split('-')[1];
+      }
+      var tr = $("<tr>");
+      tr.append("<td class='category'>【" + cateName + "】</td>");
+      var ranking = $("<td>");
+      for (var i = 0; i < 5; i++) {
+        var x = renderRanking(cate, i);
+        if (x) {
+          ranking.append(x);
+        } else {
+          break;
+        }
+      }
+      if (clothesRanking[cate].length > 5) {
+        ranking.append(moreLink(cate));
+      }
+      tr.append(ranking);
+      if (cate.indexOf("饰品")>=0) {
+        $("#rankingTableAcc tbody").append(tr);
+      } else {
+        $("#rankingTableMain tbody").append(tr);
+      }
+    }
+    $("#ranking").append("<div style='text-align:right'>for 玉人</span>");
+  }
+}
+
+function renderRanking(cate, ranking) {
+  if (clothesRanking[cate].length > ranking) {
+    var c = clothesRanking[cate][ranking];
+    var ret = "<span " + (ranking > 0 ? "" : "class='red'") + ">" + c.name + "(" + c.source.compact() + c.tmpScore + ")" + "</span>";
+    if (ranking > 0) {
+      if (clothesRanking[cate][ranking].tmpScore < clothesRanking[cate][ranking-1].tmpScore) {
+        ret = "<span>&gt;<span>" + ret;
+      } else {
+        ret = "<span>=<span>" + ret;
+      }
+    }
+    return $(ret);
+  } else {
+    return null;
+  }
+}
+
+function moreLink(cate) {
+  var link = $("<span class='more'>&nbsp;| More...</a>");
+  link.attr("num", 5);
+  link.click(function() {
+    var num = parseInt($(this).attr("num"));
+    for (var i = 0; i < 5; i++) {
+      var x = renderRanking(cate, num+i);
+      if (x) {
+        x.insertBefore($(this));
+      } else {
+        break;
+      }
+    }
+    if (clothesRanking[cate].length > num + 5) {
+      link.attr("num", num + 5);
+    } else {
+      $(this).remove();
+    }
+  });
+  return link;
+}
+
 function init() {
   var mine = loadFromStorage();
   calcDependencies();
@@ -665,6 +758,7 @@ function init() {
   global.float.floatThead({
     useAbsolutePositioning: false
   });
+  $("#summary").collapse({});
 }
 $(document).ready(function() {
   init()
