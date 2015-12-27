@@ -700,7 +700,6 @@ function refreshRanking() {
         $("#rankingTableMain tbody").append(tr);
       }
     }
-    $("#ranking").append("<div style='text-align:right'>for 玉人</span>");
   }
 }
 
