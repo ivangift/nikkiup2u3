@@ -1,6 +1,7 @@
 // Ivan's Workshop
 
 var FEATURES = ["simple", "cute", "active", "pure", "cool"];
+var ACCRATIO = [1, 1, 1, 1, 0.95, 0.9, 0.825, 0.75, 0.7, 0.65, 0.6, 0.55, 0.51, 0.47, 0.45, 0.425, 0.4];
 
 var global = {
   float: null,
@@ -25,7 +26,7 @@ Clothes = function(csv) {
     pure: realRating(csv[11], csv[10], theType),
     cool: realRating(csv[12], csv[13], theType),
     tags: csv[14].split(','),
-    source: csv[15],
+    source: Source(csv[15]),
     deps: {},
     toCsv: function() {
       name = this.name;
@@ -38,7 +39,7 @@ Clothes = function(csv) {
       pure = this.pure;
       cool = this.cool;
       extra = this.tags.join(',');
-      source = this.source;
+      source = this.source.rawSource;
       return [type.type, id, stars, simple[0], simple[1], cute[0], cute[1],
           active[0], active[1], pure[0], pure[1], cool[0],
           cool[1], extra, source];
@@ -225,6 +226,38 @@ function MyClothes() {
   };
 }
 
+function Source(source) {
+  var sources = source.split("/");
+  var compact = [];
+  for (var i in sources) {
+    compact.push(compactSource(sources[i]));
+  }
+  return {
+    rawSource: source,
+    sources: sources,
+    compacts: compact,
+    compact: function() {
+      return this.compacts.join("/");
+    }
+  };
+}
+
+function compactSource(source) {
+  if (source.indexOf('进') >= 0) {
+    return '进';
+  }
+  if (source.indexOf('定') >= 0) {
+    return '染';
+  }
+  if (source.indexOf('设计图') >= 0) {
+    return '图';
+  }
+  if (source.indexOf('活动') >= 0) {
+    return source.substring(3);
+  }
+  return source;
+}
+
 var clothes = function() {
   var ret = [];
   for (var i in wardrobe) {
@@ -241,6 +274,18 @@ var clothesSet = function() {
       ret[t] = {};
     }
     ret[t][clothes[i].id] = clothes[i];
+  }
+  return ret;
+}();
+
+var clothesRanking = function() {
+  var ret = {};
+  for (var i in clothes) {
+    var t = clothes[i].type.type;
+    if (!ret[t]) {
+      ret[t] = [];
+    }
+    ret[t].push(clothes[i]);
   }
   return ret;
 }();
@@ -272,20 +317,22 @@ var shoppingCart = {
     }
     return ret.sort(sortBy);
   },
-  calc: function(criteria) {
+  calc: function() {
+    /*
     for (var c in this.cart) {
       this.cart[c].calc(criteria);
     }
+    */
     // fake a clothes
     this.totalScore = fakeClothes(this.cart);
   }
 };
 
 function accScore(total, items) {
-  if (items <= 3) {
-    return total;
+  if (items < ACCRATIO.length) {
+    return total * ACCRATIO[items];
   }
-  return total * (1 - 0.06 * (items-3)); 
+  return total * 0.4;
 }
 
 function fakeClothes(cart) {
@@ -372,11 +419,11 @@ function parseSource(source, key) {
 function calcDependencies() {
   for (var i in clothes) {
     var c = clothes[i];
-    var evol = parseSource(c.source, '进');
+    var evol = parseSource(c.source.rawSource, '进');
     if (evol && clothesSet[c.type.mainType][evol]) {
       clothesSet[c.type.mainType][evol].addDep('进', c);
     }
-    var remake = parseSource(c.source, '定');
+    var remake = parseSource(c.source.rawSource, '定');
     if (remake && clothesSet[c.type.mainType][remake]) {
       clothesSet[c.type.mainType][remake].addDep('定', c);
     }
