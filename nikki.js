@@ -403,7 +403,7 @@ function filterTopAccessories(filters) {
   toSort.sort(byScore);
   var total = 0;
   var maxTotal = 0;
-  var maxIdx = 0;
+  var maxIdx = -1;
   for (var i = 0; i < toSort.length; i++) {
     total += toSort[i].tmpScore;
     realScore = accScore(total, i+1);
@@ -742,15 +742,42 @@ function moreLink(cate) {
   return link;
 }
 
+function setupSearch() {
+  $('#searchitem').autoComplete({
+    minChars: 1,
+    cache: false,
+    source: function(term, suggest){
+      var matches = [];
+      for (var i in clothes) {
+        if (clothes[i].name.indexOf(term) >= 0 || clothes[i].id.indexOf(term) >= 0) {
+          matches.push(clothes[i]);
+        }
+        if (matches.length > 10) {
+          break;
+        }
+      }
+      suggest(matches);
+    },
+    renderItem: function (item, search) {
+      return "<div class='autocomplete-suggestion' data-type='" + item.type.mainType + "' data-id='" + item.id + "'>"
+          + item.type.type + " " + item.id + " " + item.name + "</div>";
+    },
+    onSelect: function(e, term, item){
+      addShoppingCart(item.data('type'), item.data('id'));
+    }
+  });
+}
+
 function init() {
   var mine = loadFromStorage();
   calcDependencies();
   drawFilter();
   drawTheme();
   drawImport();
-  changeMode(true);
+  changeMode(false);
   switchCate(category[0]);
   updateSize(mine);
+  setupSearch();
   refreshShoppingCart();
 
   global.float = $('table.mainTable');

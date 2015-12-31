@@ -5,12 +5,14 @@
     <script type='text/javascript' charset="UTF-8" src='jquery.js'></script>
     <script type='text/javascript' charset="UTF-8" src='jquery.floatThead.min.js'></script>
     <script type='text/javascript' charset="UTF-8" src='jquery.collapse.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='jquery.auto-complete.min.js'></script>
     <script type='text/javascript' charset="UTF-8" src='wardrobe.js'></script>
     <script type='text/javascript' charset="UTF-8" src='scoring.js'></script>
     <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
     <script type='text/javascript' charset="UTF-8" src='model.js'></script>
     <script type='text/javascript' charset="UTF-8" src='pattern.js'></script>
     <script type='text/javascript' charset="UTF-8" src='nikki.js'></script>
+    <link rel="stylesheet" href="jquery.auto-complete.css">
     <style>
       table
       {
@@ -221,6 +223,43 @@
       .red {
         color: red;
       }
+      select
+      {
+        width: 200px;
+        height: 29px;
+        margin-top: 0.5em;
+        border-radius: 3px;
+        border: 1px solid #CCC;
+        font-weight: 200;
+        font-size: 1em;
+        font-family: Verdana;
+        box-shadow: 1px 1px 5px #CCC;
+      }
+      select: hover
+      {
+        width: 200px;
+        height: 29px;
+        border-radius: 3px;
+        border: 1px solid #CCC;
+        font-weight: 200;
+        font-size: 1em;
+        font-family: Verdana;
+        box-shadow: 1px 1px 5px #CCC;
+      }
+      input[type=text] {
+        height: 1.5em;
+        border-radius: 3px;
+        border: 1px solid #CCC;
+        padding-left: 8px;
+        margin: 1px;
+        font-weight: 200;
+        font-size: 1em;
+        font-family: Verdana;
+        box-shadow: 1px 1px 5px #CCC;
+      }
+      input.suggest {
+        width: 30em;
+      }
     </style>
   </head>
   <body>
@@ -228,9 +267,10 @@
       Nikki's wardrobe. By Ivan's workshop<br/>
       服装数据来自jillhx@贴吧 20151223<br/>
       设计图数据来自amy_翡翠@贴吧 1.5.2<br/>
-      Update 20151227:<br/>
+      Update 20151229:<br/>
       <ul>
-        <li>修改了一些业务逻辑，详见<a href="http://tieba.baidu.com/p/4236753793">这贴</a></li>
+        <li>思考再三，为了元旦二选一活动还是增加了搜索功能，你们这群不肯用ctrl+f的懒人！</li>
+        <li>思考再三，把默认选项切到计分模式了，估计筛选除了我就没人用了吧。。。</li>
       </ul>
       衣服信息纠错请去<a href="http://tieba.baidu.com/p/3860789814">jillhx的新衣柜楼</a>汇报<br/>
       功能错误或者有新需求请去<a href="http://tieba.baidu.com/p/3792563906">主贴</a>汇报<br/>
@@ -241,8 +281,8 @@
     <div id='filtersTop'>
       <form name="filter_form">
         <div>
-          <input type="radio" name="mode" value="filtering" onClick="changeMode(true)" checked/> 筛选
-          <input type="radio" name="mode" value="ranking" onClick="changeMode(false)" /> 计分
+          <input type="radio" name="mode" value="filtering" onClick="changeMode(true)" /> 筛选
+          <input type="radio" name="mode" value="ranking" onClick="changeMode(false)" checked/> 计分
           <select id="theme" onChange="changeTheme()" style="display: none"></select>
           <span id="tagInfo"></span>
         </div>
@@ -336,6 +376,7 @@
     </div>
     <div id='shoppingCartContainer'>
       已选择的衣服 <input type="checkbox" id="accessoriesHelper" checked />自动选择饰品 <button onclick="clearShoppingCart()">清空购物车</button>
+      <input type="text" id="searchitem" placeholder="输入衣服名称或编号" class='suggest'/>
       <div id='shoppingCart'>
       </div>
     </div>

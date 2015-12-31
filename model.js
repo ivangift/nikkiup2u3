@@ -134,9 +134,11 @@ function ScoreByCategory() {
       this.scores[category] = [major, minor];
     },
     add: function(other) {
-      for (var c in other.scores) {
-        this.scores[c][0] += other.scores[c][0];
-        this.scores[c][1] += other.scores[c][1];
+      if (other) {
+        for (var c in other.scores) {
+          this.scores[c][0] += other.scores[c][0];
+          this.scores[c][1] += other.scores[c][1];
+        }
       }
     },
     round: function() {
