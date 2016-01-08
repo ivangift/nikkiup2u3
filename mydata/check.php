@@ -19,7 +19,7 @@ foreach($sections as $section) {
 	if(empty($section)) continue;
 	list($title, $data) = explode(':', $section);
 	$keys = explode(',', $data);
-	sort($keys, SORT_STRING);
+	sort($keys, SORT_NUMERIC);
 	$filename = array_search($title, $category);
 	echo $title.' - '.$filename.' ('.count($keys).')'.PHP_EOL;
 	if($filename == EXTRACT_CATEGORY) {
