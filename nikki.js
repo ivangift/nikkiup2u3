@@ -706,8 +706,13 @@ function refreshRanking() {
 function renderRanking(cate, ranking) {
   if (clothesRanking[cate].length > ranking) {
     var c = clothesRanking[cate][ranking];
-    var ret = "<span " + ((ranking == 0 || c.tmpScore == clothesRanking[cate][0].tmpScore) ? "class='red'" : "")
-        + ">" + c.name + "(" + c.source.compact() + c.tmpScore + ")" + "</span>";
+    var cls = "";
+    if (shoppingCart.contains(c)) {
+      cls = "class='blue'";
+    } else if (ranking == 0 || c.tmpScore == clothesRanking[cate][0].tmpScore)  {
+      cls = "class='red'";
+    }
+    var ret = "<span " + cls + ">" + c.name + "(" + c.source.compact() + c.tmpScore + ")" + "</span>";
     if (ranking > 0) {
       if (clothesRanking[cate][ranking].tmpScore < clothesRanking[cate][ranking-1].tmpScore) {
         ret = "<span>&gt;<span>" + ret;
