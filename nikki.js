@@ -319,6 +319,7 @@ function chooseAccessories(accfilters) {
 function refreshShoppingCart() {
   shoppingCart.calc();
   drawTable(shoppingCart.toList(byCategoryAndScore), "shoppingCart", true);
+  refreshRanking();
 }
 
 function drawLevelInfo() {
