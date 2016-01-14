@@ -216,26 +216,6 @@ function nameMatcher(whitelist, clothes) {
   return false;
 }
 
-function weightedFilter(tagWhitelist, nameWhitelist, weight) {
-  return {
-    tagWhitelist: tagWhitelist,
-    nameWhitelist: nameWhitelist,
-    filter: function(clothes) {
-      if (tagWhitelist && tagMatcher(tagWhitelist, clothes)) {
-        return;
-      }
-      if (nameWhitelist && nameMatcher(nameWhitelist, clothes)) {
-        return;
-      }
-      clothes.tmpScore /= weight;
-    }
-  }
-}
-
-function normalFilter(tagWhitelist, nameWhitelist) {
-  return weightedFilter(tagWhitelist, nameWhitelist, 10);
-}
-
 function noOp() {
   return {
     filter: function() {
@@ -247,103 +227,7 @@ function noOp() {
 // Note: filters decides which clothes will be penalized (usually 1/10 of the score)
 // Only applicable to dresses, coats, tops and bottoms
 var levelFilters = {
-  '1-1': noOp(),
-  '1-2': noOp(),
-  '1-3': normalFilter("中式古典/中式现代/旗袍/民国服饰"),
-  '1-4': noOp(),
-  '1-5': noOp(),
-  '1-6': noOp(),
-  '1-7': normalFilter("中性风"),
-  '1-8': noOp(),
-  '1-9': noOp(),
-  '2-1': noOp(),
-  '2-2': noOp(),
-  '2-3': noOp(),
-  '2-4': noOp(),
-  '2-5': noOp(),
-  '2-6': normalFilter("和风"),
-  '2-7': normalFilter("睡衣"),
-  '2-8': noOp(),
-  '2-9': normalFilter("欧式古典/晚礼服/女神系/波西米亚"),
-  '2-支1': normalFilter(""), // TODO: check
-  '2-支2': normalFilter("中性风"),
-  '3-1': normalFilter("英伦", "名媛连衣裙"),
-  '3-2': normalFilter("摇滚风"),
-  '3-3': noOp(),
-  '3-4': normalFilter("森女系列"),
-  '3-5': normalFilter("运动系", "运动"),
-  '3-6': weightedFilter("沐浴/和风", null, 160),
-  '3-7': normalFilter("运动系"), // TODO: double check
-  '3-8': noOp(),
-  '3-9': normalFilter("侠客联盟/摇滚风"),
-  '3-10': noOp(),
-  '3-11': normalFilter("欧式古典/晚礼服/女神系/波西米亚"),
-  '3-12': noOp(),
-  '3-支1': normalFilter("欧式古典/晚礼服/女神系/波西米亚"),
-  '3-支2': normalFilter("婚纱"),
-  '4-1': noOp(),
-  '4-2': weightedFilter("泳装", null, 32),
-  '4-3': weightedFilter("泳装", null, 32),
-  '4-4': noOp(),
-  '4-5': noOp(),
-  '4-6': normalFilter("OL"),
-  '4-7': normalFilter("欧式古典/晚礼服/女神系/波西米亚"),
-  '4-8': normalFilter("医务使者"),
-  '4-9': normalFilter("中式古典/中式现代/旗袍/民国服饰"),
-  '4-10': noOp(),
-  '4-11': noOp(),
-  '4-12': normalFilter("兔女郎"),
-  '4-支1': noOp(),
-  '4-支2': normalFilter("围裙"),
-  '4-支3': normalFilter("围裙"),
-  '5-1': normalFilter("运动系", "运动"),
-  '5-2': noOp(),
-  '5-3': noOp(),
-  '5-4': noOp(),
-  '5-5': noOp(),
-  '5-6': normalFilter("民国服饰"),
-  '5-7': normalFilter("波西米亚"),
-  '5-8': noOp(),
-  '5-9': noOp(),
-  '5-10': noOp(),
-  '5-11': normalFilter("侠客联盟"),
-  '5-12': normalFilter("中式古典/中式现代/旗袍/民国服饰"),
-  '5-支1': noOp(),
-  '5-支2': normalFilter("运动系"), // TODO: double check,
-  '5-支3': normalFilter("医务使者"),
-  '6-1': noOp(),
-  '6-2': normalFilter("中式古典/中式现代/旗袍/民国服饰"),
-  '6-3': normalFilter("和风"),
-  '6-4': noOp(),
-  '6-5': noOp(),
-  '6-6': normalFilter("中性风"),
-  '6-7': noOp(),
-  '6-8': normalFilter("中式现代/泳装"),
-  '6-9': normalFilter("旗袍"),
-  '6-10': normalFilter("中式现代/冬装"),
-  '6-11': normalFilter("中式古典/中式现代/旗袍/民国服饰"),
-  '6-支1': noOp(), // Not tested yet, not eligible for this level yet
-  '6-支2': noOp(), // Not tested yet, not eligible for this level yet
-  '6-支3': noOp(), // Not tested yet, not eligible for this level yet
-  '7-1': noOp(),
-  '7-2': noOp(),
-  '7-3': noOp(),
-  '7-4': noOp(),
-  '7-5': noOp(),
-  '7-6': noOp(),
-  '7-7': noOp(),
-  '7-8': noOp(),
-  '7-9': noOp(),
-  '7-支1': noOp(),
-  '7-支2': noOp(),
-  '7-支3': noOp(),
-  '7-支4': noOp(),
-  '7-支5': noOp(),
-  '仲夏夜之梦1': noOp(),
-  '仲夏夜之梦2': noOp(),
-  '仲夏夜之梦3': noOp(),
-  '仲夏夜之梦4': noOp(),
-  '仲夏夜之梦5': noOp()
+  
 };
 
 function abstractBonusFactory(note, replace, param, tagWhitelist, nameWhitelist, callback) {
