@@ -16,6 +16,8 @@ var global = {
   float: null,
   floating: true,
   additionalBonus: null, // TODO: replace by UTS
+  isFilteringMode: true,
+  boostType: 1,
 };
 
 // for table use
@@ -121,7 +123,7 @@ function clickableTd(piece) {
 
 function row(piece, isShoppingCart) {
   var ret = "";
-  if (!isFilteringMode) {
+  if (!global.isFilteringMode) {
     ret += td(piece.tmpScore);
   }
   if (isShoppingCart) {
@@ -184,7 +186,7 @@ function drawTable(data, div, isShoppingCart) {
       $('#' + div).html("<table class='mainTable'><thead></thead><tbody></tbody></table>");
     }
   }
-  $('#' + div + ' table thead').html(thead(isShoppingCart, !isFilteringMode));
+  $('#' + div + ' table thead').html(thead(isShoppingCart, !global.isFilteringMode));
   $('#' + div + ' table tbody').html(list(data, isShoppingCart));
   if (!isShoppingCart) {
     $('span.paging').html("<button class='destoryFloat'></button>");
@@ -232,7 +234,7 @@ function onChangeCriteria() {
     criteria.bonus = global.additionalBonus;
   }
 
-  if (!isFilteringMode) {
+  if (!global.isFilteringMode) {
     calcClothes(criteria);
     if ($('#accessoriesHelper')[0].checked) {
       chooseAccessories(criteria);
@@ -242,6 +244,7 @@ function onChangeCriteria() {
   }
   refreshTable();
   refreshRanking();
+  refreshBoost();
 }
 
 function calcClothes(criteria) {
@@ -377,7 +380,7 @@ function filtering(criteria, filters) {
       result.push(clothes[i]);
     }
   }
-  if (isFilteringMode) {
+  if (global.isFilteringMode) {
     result.sort(byId);
   } else {
     result.sort(byCategoryAndScore);
@@ -387,7 +390,7 @@ function filtering(criteria, filters) {
 
 function matches(c, criteria, filters) {
   // only filter by feature when filtering
-  if (isFilteringMode) {
+  if (global.isFilteringMode) {
     for (var i in FEATURES) {
       var f = FEATURES[i];
       if (criteria[f] && criteria[f] * c[f][2] < 0) {
@@ -395,7 +398,7 @@ function matches(c, criteria, filters) {
       }
     }
   }
-  if (isFilteringMode && criteria.bonus) {
+  if (global.isFilteringMode && criteria.bonus) {
     var matchedTag = false;
     for (var i in criteria.bonus) {
       if (tagMatcher(criteria.bonus[i].tagWhitelist, c)) {
@@ -464,28 +467,27 @@ function switchCate(c) {
   onChangeUiFilter();
 }
 
-var isFilteringMode = true;
 function changeMode(isFiltering) {
   for (var i in FEATURES) {
     var f = FEATURES[i];
     if (isFiltering) {
       $('#' + f + 'WeightContainer').hide();
+      $('#' + f + 'Boost').hide();
     } else {
       $('#' + f + 'WeightContainer').show();
+      $('#' + f + 'Boost').show();
     }
   }
   if (isFiltering) {
     $("#theme").hide();
-    $("#tagInfo").hide();
     $(".tagContainer").hide();
     $("#summary").hide();
   } else {
     $("#theme").show();
-    $("#tagInfo").show();
     $(".tagContainer").show();
     $("#summary").show();
   }
-  isFilteringMode = isFiltering;
+  global.isFilteringMode = isFiltering;
   onChangeCriteria();
 }
 
@@ -621,7 +623,7 @@ function doImport() {
 
 function refreshRanking() {
   $("#ranking").empty();
-  if (!isFilteringMode) {
+  if (!global.isFilteringMode) {
     $("#ranking").html("<table id='rankingTableMain' class='ranking'><tbody></tbody></table>");
     $("#ranking").append("<hr style='border-top:dashed 1px #999'>");
     $("#ranking").append("<table id='rankingTableAcc' class='ranking'><tbody></tbody></table>");
@@ -653,6 +655,10 @@ function refreshRanking() {
       }
     }
   }
+}
+
+function refreshBoost() {
+  
 }
 
 function renderRanking(cate, ranking) {
