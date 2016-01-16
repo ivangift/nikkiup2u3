@@ -224,11 +224,39 @@ function noOp() {
   };
 }
 
+function blacklistFilter() {
+  return {
+    blacklist: {},
+    add: function(category, id) {
+      if (!blacklist[category]) {
+        blacklist[category] = {};
+      }
+      blacklist[category][id] = 1;
+    },
+    matches: function(c) {
+      return blacklist[c.type.mainType] && blacklist[c.type.mainType][c.id];
+    },
+    filter: function(c) {
+      if (this.matches(c)) {
+        c.tmpScore /= 10;
+      }
+    }
+  }
+}
+
 // Note: filters decides which clothes will be penalized (usually 1/10 of the score)
 // Only applicable to dresses, coats, tops and bottoms
-var levelFilters = {
-  
-};
+var levelFilters = function() {
+  var ret = {};
+  for (var i in blacklist) {
+    var black = blacklist[i];
+    if (!ret[black[0]]) {
+      ret[black[0]] = blacklistFilter();
+    }
+    ret[black[0]].add(black[1], black[2]);
+  }
+  return ret;
+}();
 
 function abstractBonusFactory(note, replace, param, tagWhitelist, nameWhitelist, callback) {
   return function(criteria) {
@@ -517,7 +545,8 @@ function addBonusInfo(base, weight, tag) {
   'g2-7': [addBonusInfo('S', 1, "中式现代")],
   '满天繁星: 喝茶听课': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
   '满天繁星: 星宿侠女': [addBonusInfo('A', 1, "侠客联盟")],
-  '满天繁星: 朱雀翼火蛇': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")]
+  '满天繁星: 朱雀翼火蛇': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
+
  };
 
 var additionalLevelInfo = {

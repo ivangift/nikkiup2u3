@@ -234,7 +234,6 @@ function onChangeCriteria() {
       refreshShoppingCart();
     }
   }
-  drawLevelInfo();
   refreshTable();
   refreshRanking();
 }
@@ -322,37 +321,6 @@ function refreshShoppingCart() {
   refreshRanking();
 }
 
-function drawLevelInfo() {
-  var info = "";
-  if (currentLevel) {
-    var log = [];
-    if (currentLevel.filter) {
-      if (currentLevel.filter.tagWhitelist) {
-        log.push("tag允许: [" + currentLevel.filter.tagWhitelist + "]");
-      }
-      if (currentLevel.filter.nameWhitelist) {
-        log.push("名字含有: [" + currentLevel.filter.nameWhitelist + "]");
-      }
-    }
-    if (currentLevel.additionalBonus) {
-      for (var i in currentLevel.additionalBonus) {
-        var bonus = currentLevel.additionalBonus[i];
-        var match = "(";
-        if (bonus.tagWhitelist) {
-          match += "tag符合: " + bonus.tagWhitelist + " ";
-        }
-        if (bonus.nameWhitelist) {
-          match += "名字含有: " + bonus.nameWhitelist;
-        }
-        match += ")";
-        log.push(match + ": [" + bonus.note + " " + bonus.param + "]");
-      }
-    }
-    info = log.join(" ");
-  }
-  $("#tagInfo").text(info);
-}
-
 function byCategoryAndScore(a, b) {
   var cata = category.indexOf(a.type.type);
   var catb = category.indexOf(b.type.type);
@@ -370,23 +338,6 @@ function byId(a, b) {
 function filterTopAccessories(filters) {
   filters['own'] = true;
   var accCate = CATEGORY_HIERARCHY['饰品'];
-  /*
-  for (var i in accCate) {
-    filters[accCate[i]] = true;
-  }
-  var result = {};
-  for (var i in clothes) {
-    if (matches(clothes[i], {}, filters)) {
-      if (!isFilteringMode) {
-        //clothes[i].calc(filters);
-        if (!result[clothes[i].type.type]) {
-          result[clothes[i].type.type] = clothes[i];
-        } else if (clothes[i].tmpScore > result[clothes[i].type.type].tmpScore) {
-          result[clothes[i].type.type] = clothes[i];
-        }
-      }
-    }
-  }*/
   var toSort = [];
   for (var i in accCate) {
     var cate = accCate[i]
@@ -397,10 +348,7 @@ function filterTopAccessories(filters) {
       }
     }
   }
-  /*
-  for (var c in result) {
-    toSort.push(result[c]);
-  }*/
+
   toSort.sort(byScore);
   var total = 0;
   var maxTotal = 0;
@@ -420,9 +368,6 @@ function filtering(criteria, filters) {
   var result = [];
   for (var i in clothes) {
     if (matches(clothes[i], criteria, filters)) {
-      // if (!isFilteringMode) {
-      //   clothes[i].calc(criteria);
-      // }
       result.push(clothes[i]);
     }
   }
