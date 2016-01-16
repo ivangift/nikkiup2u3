@@ -231,7 +231,6 @@
       {
         width: 200px;
         height: 29px;
-        margin-top: 0.5em;
         border-radius: 3px;
         border: 1px solid #CCC;
         font-weight: 200;
@@ -264,6 +263,49 @@
       input.suggest {
         width: 30em;
       }
+      div.control {
+        height: 1.8em;
+      }
+      input[type=radio].nice, input[type=checkbox].nice {
+        display:none;
+      }
+      input[type=radio].nice + label, input[type=checkbox].nice + label {
+        display:inline-block;
+        margin:-2px;
+        padding: 4px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: #333;
+        text-align: center;
+        text-shadow: 0 1px 1px rgba(255,255,255,0.75);
+        vertical-align: middle;
+        cursor: pointer;
+        background-color: #f5f5f5;
+        background-image: -moz-linear-gradient(top,#fff,#e6e6e6);
+        background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6));
+        background-image: -webkit-linear-gradient(top,#fff,#e6e6e6);
+        background-image: -o-linear-gradient(top,#fff,#e6e6e6);
+        background-image: linear-gradient(to bottom,#fff,#e6e6e6);
+        background-repeat: repeat-x;
+        border: 1px solid #ccc;
+        border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+        border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+        border-bottom-color: #b3b3b3;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+        -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+        -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+      }
+      input[type=radio].nice:checked + label, input[type=checkbox].nice:checked + label{
+        background-image: none;
+        outline: 0;
+        -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+        -moz-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+        box-shadow: inset 0 2px 4px rgba(1,0,0,0.15),0 1px 2px rgba(1,0,0,0.05);
+          background-color:#e0ffff;
+      }
     </style>
   </head>
   <body>
@@ -283,14 +325,20 @@
     <hr/>
     <div id='filtersTop'>
       <form name="filter_form">
-        <div>
+        <div class='control'>
           <input type="radio" name="mode" value="filtering" onClick="changeMode(true)" /> 筛选
           <input type="radio" name="mode" value="ranking" onClick="changeMode(false)" checked/> 计分
           <select id="theme" onChange="changeTheme()" style="display: none"></select>
-          <span id="tagInfo"></span>
+          <!--
+          <input class="nice" type="radio" name="boost" id="boostStandard" value="standard" onClick="changeBoost()" />
+          <label for="boostStandard">标准</label>
+          <input class="nice" type="radio" name="boost" id="boostExtreme" value="standard" onClick="changeBoost()" />
+          <label for="boostExtreme">极限-顶配</label>
+          <input class="nice" type="radio" name="boost" id="boostExtremeMine" value="standard" onClick="changeBoost()" />
+          <label for="boostExtremeMine">极限-我的衣柜</label>-->
         </div>
         <div class='facet'>
-          <div>
+          <div class='control'>
             <input type="radio" name="simple" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="simple" value="1" onClick="changeFilter()" /> 简约
             <input type="radio" name="simple" value="-1" onClick="changeFilter()" /> 华丽
@@ -298,7 +346,7 @@
             	&nbsp;&nbsp;权重 <input type="text" id="simpleWeight" name="simpleWeight" value="1" onChange="changeFilter()" />
           	</div>
           </div>
-          <div>
+          <div class='control'>
             <input type="radio" name="cute" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="cute" value="1" onClick="changeFilter()" /> 可爱
             <input type="radio" name="cute" value="-1" onClick="changeFilter()" /> 成熟
@@ -306,7 +354,7 @@
             	&nbsp;&nbsp;权重 <input type="text" id="cuteWeight" name="cuteWeight" value="1" onChange="changeFilter()" />
             </div>
           </div>
-          <div>
+          <div class='control'>
             <input type="radio" name="active" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="active" value="1" onClick="changeFilter()" /> 活泼
             <input type="radio" name="active" value="-1" onClick="changeFilter()" /> 优雅
@@ -314,7 +362,7 @@
               &nbsp;&nbsp;权重 <input type="text" id="activeWeight" name="activeWeight" value="1" onChange="changeFilter()" />
             </div>
           </div>
-          <div>
+          <div class='control'>
             <input type="radio" name="pure" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="pure" value="1" onClick="changeFilter()" /> 清纯
             <input type="radio" name="pure" value="-1" onClick="changeFilter()" /> 性感
@@ -322,7 +370,7 @@
               &nbsp;&nbsp;权重 <input type="text" id="pureWeight" name="pureWeight" value="1" onChange="changeFilter()" />
             </div>
           </div>
-          <div>
+          <div class='control'>
             <input type="radio" name="cool" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="cool" value="1" onClick="changeFilter()" /> 清凉
             <input type="radio" name="cool" value="-1" onClick="changeFilter()" /> 保暖
@@ -331,36 +379,39 @@
             </div>
           </div>
           <div id='tagFilter'>
-            Tag1
-            <input type="text" id="tag1" name="tag1" onChange="changeFilter()" />
-            <div class='tagContainer weightContainer' style="display: none" id = "tag1Container">
-              <input type="radio" name="tag1method" value="add" onClick="changeFilter()" checked/> 加分
-              <input type="radio" name="tag1method" value="replace" onClick="changeFilter()" /> 替换
-              <select id="tag1base" onChange="changeFilter()">
-                <option>SS</option>
-                <option>S</option>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-              </select>
-              &times;
-              <input type="text" id="tag1weight" name="tag1weight" value="1" onChange="changeFilter()" />
+            <div class='control'>
+              Tag1
+              <input type="text" id="tag1" name="tag1" onChange="changeFilter()" />
+              <div class='tagContainer weightContainer' style="display: none" id = "tag1Container">
+                <input type="radio" name="tag1method" value="add" onClick="changeFilter()" checked/> 加分
+                <input type="radio" name="tag1method" value="replace" onClick="changeFilter()" /> 替换
+                <select id="tag1base" onChange="changeFilter()">
+                  <option>SS</option>
+                  <option>S</option>
+                  <option>A</option>
+                  <option>B</option>
+                  <option>C</option>
+                </select>
+                &times;
+                <input type="text" id="tag1weight" name="tag1weight" value="1" onChange="changeFilter()" />
+              </div>
             </div>
-            <br/>
-            Tag2
-            <input type="text" id="tag2" name="tag2" onChange="changeFilter()" />
-            <div class='tagContainer weightContainer' style="display: none" id = "tag2Container">
-              <input type="radio" name="tag2method" value="add" onClick="changeFilter()" checked/> 加分
-              <input type="radio" name="tag2method" value="replace" onClick="changeFilter()" /> 替换
-              <select id="tag2base" onChange="changeFilter()">
-                <option>SS</option>
-                <option>S</option>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-              </select>
-              &times;
-              <input type="text" id="tag2weight" name="tag2weight" value="1" onChange="changeFilter()" />
+            <div class='control'>
+              Tag2
+              <input type="text" id="tag2" name="tag2" onChange="changeFilter()" />
+              <div class='tagContainer weightContainer' style="display: none" id = "tag2Container">
+                <input type="radio" name="tag2method" value="add" onClick="changeFilter()" checked/> 加分
+                <input type="radio" name="tag2method" value="replace" onClick="changeFilter()" /> 替换
+                <select id="tag2base" onChange="changeFilter()">
+                  <option>SS</option>
+                  <option>S</option>
+                  <option>A</option>
+                  <option>B</option>
+                  <option>C</option>
+                </select>
+                &times;
+                <input type="text" id="tag2weight" name="tag2weight" value="1" onChange="changeFilter()" />
+              </div>
             </div>
           </div>
         </div>

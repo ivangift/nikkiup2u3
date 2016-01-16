@@ -12,6 +12,12 @@ var CATEGORY_HIERARCHY = function() {
   return ret;
 }();
 
+var global = {
+  float: null,
+  floating: true,
+  additionalBonus: null, // TODO: replace by UTS
+};
+
 // for table use
 function thead(isShoppingCart, score) {
   var ret = "<tr>";
