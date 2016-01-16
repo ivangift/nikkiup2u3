@@ -329,13 +329,12 @@
           <input type="radio" name="mode" value="filtering" onClick="changeMode(true)" /> 筛选
           <input type="radio" name="mode" value="ranking" onClick="changeMode(false)" checked/> 计分
           <select id="theme" onChange="changeTheme()" style="display: none"></select>
-          <!--
-          <input class="nice" type="radio" name="boost" id="boostStandard" value="standard" onClick="changeBoost()" />
+          <input class="nice" type="radio" name="boost" id="boostStandard" value="standard" onClick="changeBoost(1)" checked/>
           <label for="boostStandard">标准</label>
-          <input class="nice" type="radio" name="boost" id="boostExtreme" value="standard" onClick="changeBoost()" />
+          <input class="nice" type="radio" name="boost" id="boostExtreme" value="boostExtreme" onClick="changeBoost(2)" />
           <label for="boostExtreme">极限-顶配</label>
-          <input class="nice" type="radio" name="boost" id="boostExtremeMine" value="standard" onClick="changeBoost()" />
-          <label for="boostExtremeMine">极限-我的衣柜</label>-->
+          <input class="nice" type="radio" name="boost" id="boostExtremeMine" value="boostExtremeMine" onClick="changeBoost(3)" />
+          <label for="boostExtremeMine">极限-我的衣柜</label>
         </div>
         <div class='facet'>
           <div class='control'>

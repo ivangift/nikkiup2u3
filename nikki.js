@@ -214,8 +214,8 @@ function redrawThead() {
   $('th.top').html(global.floating ? "<a href='#filtersTop'>回到顶部</a>" : "");
 }
 
-var criteria = {};
 function onChangeCriteria() {
+  var criteria = {};
   criteria = {};
   for (var i in FEATURES) {
     var f = FEATURES[i];
@@ -233,18 +233,128 @@ function onChangeCriteria() {
   if (global.additionalBonus && global.additionalBonus.length > 0) {
     criteria.bonus = global.additionalBonus;
   }
+  refreshBoost(criteria);
+  setBoost(criteria, global.boostType);
+}
 
+function changeBoost(boostType) {
+  var criteria = {};
+  criteria = {};
+  for (var i in FEATURES) {
+    var f = FEATURES[i];
+    var weight = parseFloat($('#' + f + "Weight").val());
+    if (!weight) {
+      weight = 1;
+    }
+    var checked = $('input[name=' + f + ']:radio:checked');
+    if (checked.length) {
+      criteria[f] = parseInt(checked.val()) * weight;
+    }
+  }
+  tagToBonus(criteria, 'tag1');
+  tagToBonus(criteria, 'tag2');
+  if (global.additionalBonus && global.additionalBonus.length > 0) {
+    criteria.bonus = global.additionalBonus;
+  }
+  setBoost(criteria, boostType);
+}
+
+function setBoost(criteria, boostType) {
+  global.boostType = boostType;
+  $(".boost").text("");
+  switch(global.boostType) {
+    case 2: // global
+      criteria.boost1 = global.extreme.boost1;
+      criteria.boost2 = global.extreme.boost2;
+      $("#" + criteria.boost1 + "Boost").text("<-暖暖的微笑");
+      $("#" + criteria.boost2 + "Boost").text("<-迷人飞吻+暖暖的微笑");
+      break;
+    case 3: // own
+      criteria.boost1 = global.extremeOwn.boost1;
+      criteria.boost2 = global.extremeOwn.boost2;
+      $("#" + criteria.boost1 + "Boost").text("<-暖暖的微笑");
+      $("#" + criteria.boost2 + "Boost").text("<-迷人飞吻+暖暖的微笑");
+      break;
+    default:
+      criteria.boost1 = null;
+      criteria.boost2 = null;
+  }
+  calculateScore(criteria);
+}
+
+function refreshBoost(criteria) {
+  var totalMax = 0;
+  var totalOwnMax = 0;
+  var totalConfig = {};
+  var totalOwnConfig = {};
+  for (var i in FEATURES) {
+    for (var j in FEATURES) {
+      if (i == j) {
+        continue;
+      }
+      var b1 = FEATURES[i];
+      var b2 = FEATURES[j];
+      criteria.boost1 = b1;
+      criteria.boost2 = b2;
+      calcClothes(criteria);
+      var total = ShoppingCart();
+      var totalOwn = ShoppingCart();
+      total.putAll(filterTopAccessories(false));
+      totalOwn.putAll(filterTopAccessories(true));
+      for (var c in clothesRanking) {
+        if (c.split('-')[0] != "饰品") {
+          var totalChoice = total.put(clothesRanking[c][0]);
+          var ownChoice = null;
+          for (var x = 0; x < clothesRanking[c].length; x++) {
+            if (clothesRanking[c][x].own) {
+              ownChoice = totalOwn.put(clothesRanking[c][x]);
+              break;
+            }
+          }
+        }
+      }
+      decide(total);
+      decide(totalOwn);
+      total.calc();
+      totalOwn.calc();
+      if (total.totalScore.tmpScore > totalMax) {
+        totalMax = total.totalScore.tmpScore;
+        totalConfig.boost1 = b1;
+        totalConfig.boost2 = b2;
+      }
+      if (totalOwn.totalScore.tmpScore > totalOwnMax) {
+        totalOwnMax = totalOwn.totalScore.tmpScore;
+        totalOwnConfig.boost1 = b1;
+        totalOwnConfig.boost2 = b2;
+      }
+    }
+  }
+  global.extreme = totalConfig;
+  global.extremeOwn = totalOwnConfig;
+  criteria.boost1 = null;
+  criteria.boost2 = null;
+}
+
+function decide(cart) {
+  if (cart.getScore('连衣裙') > cart.getScore('上衣') + cart.getScore('下装')) {
+    delete cart.cart['上衣'];
+    delete cart.cart['下装'];
+  } else {
+    delete cart.cart['连衣裙'];
+  }
+}
+
+function calculateScore(criteria) {
   if (!global.isFilteringMode) {
     calcClothes(criteria);
     if ($('#accessoriesHelper')[0].checked) {
-      chooseAccessories(criteria);
+      chooseAccessories();
     } else {
       refreshShoppingCart();
     }
   }
-  refreshTable();
+  refreshTable(criteria);
   refreshRanking();
-  refreshBoost();
 }
 
 function calcClothes(criteria) {
@@ -311,16 +421,16 @@ function onChangeUiFilter() {
   refreshTable();
 }
 
-function refreshTable() {
+function refreshTable(criteria) {
   drawTable(filtering(criteria, uiFilter), "clothes", false);
 }
 
-function chooseAccessories(accfilters) {
+function chooseAccessories() {
   var accCate = CATEGORY_HIERARCHY['饰品'];
   for (var i in accCate) {
     shoppingCart.remove(accCate[i]);
   }
-  shoppingCart.putAll(filterTopAccessories(accfilters));
+  shoppingCart.putAll(filterTopAccessories(true));
   refreshShoppingCart();
 }
 
@@ -344,14 +454,13 @@ function byId(a, b) {
   return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0);
 }
 
-function filterTopAccessories(filters) {
-  filters['own'] = true;
+function filterTopAccessories(own) {
   var accCate = CATEGORY_HIERARCHY['饰品'];
   var toSort = [];
   for (var i in accCate) {
     var cate = accCate[i]
     for (var j in clothesRanking[cate]) {
-      if (clothesRanking[cate][j].own) {
+      if ((own && clothesRanking[cate][j].own) || !own) {
         toSort.push(clothesRanking[cate][j]);
         break;
       }
@@ -655,10 +764,6 @@ function refreshRanking() {
       }
     }
   }
-}
-
-function refreshBoost() {
-  
 }
 
 function renderRanking(cate, ranking) {

@@ -46,6 +46,7 @@ var extraRaw = {
   '满天繁星: 玄武虚日鼠': [0.67, -1.33, -1.33, 1.33, -1.0],
   '满天繁星: 朱雀翼火蛇': [-1.33, -1.0, -1.33, 1.33, -0.67]
   */
+
 };
 
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
@@ -284,6 +285,12 @@ function featureBasedScoringFactory(bonus, multiplier){
     for (var i in FEATURES) {
       var f = FEATURES[i];
       var addon = Math.abs(criteria[f] * clothes.type.score[bonus] * multiplier);
+      if (criteria.boost1 && criteria.boost1 == f) {
+        addon *= 1.27;
+      }
+      if (criteria.boost2 && criteria.boost2 == f) {
+        addon *= 1.27 * 1.4;
+      }
       byFeature[f] = addon;
       total += addon;
     }
@@ -546,7 +553,6 @@ function addBonusInfo(base, weight, tag) {
   '满天繁星: 喝茶听课': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
   '满天繁星: 星宿侠女': [addBonusInfo('A', 1, "侠客联盟")],
   '满天繁星: 朱雀翼火蛇': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
-
  };
 
 var additionalLevelInfo = {
