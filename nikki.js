@@ -167,18 +167,18 @@ function getStyle(rating) {
   }
 }
 
-function list(rows, isShoppingCart, totalScore) {
+function list(rows, isShoppingCart) {
   ret = "";
   for (var i in rows) {
     ret += row(rows[i], isShoppingCart);
   }
   if (isShoppingCart) {
-    ret += row(totalScore, isShoppingCart);
+    ret += row(shoppingCart.totalScore, isShoppingCart);
   }
   return ret;
 }
 
-function drawTable(data, div, isShoppingCart, extraClothes) {
+function drawTable(data, div, isShoppingCart) {
   if ($('#' + div + ' table').length == 0) {
     if (isShoppingCart) {
       $('#' + div).html("<table id='cartTable'><thead></thead><tbody></tbody></table>");
@@ -187,7 +187,7 @@ function drawTable(data, div, isShoppingCart, extraClothes) {
     }
   }
   $('#' + div + ' table thead').html(thead(isShoppingCart, !global.isFilteringMode));
-  $('#' + div + ' table tbody').html(list(data, isShoppingCart, extraClothes));
+  $('#' + div + ' table tbody').html(list(data, isShoppingCart));
   if (isShoppingCart) {
     if (global.boostType == 1) {
       $("#cartTable").removeClass("warning");
@@ -282,12 +282,20 @@ function setBoost(criteria, boostType) {
       criteria.boost2 = global.extreme.boost2;
       $("#" + criteria.boost1 + "Boost").text("<-暖暖的微笑");
       $("#" + criteria.boost2 + "Boost").text("<-迷人飞吻+暖暖的微笑");
+      shoppingCart.clear();
+      if (global.extreme.shoppingCart) {
+        shoppingCart.putAll(global.extreme.shoppingCart.cart);
+      }
       break;
     case 3: // own
       criteria.boost1 = global.extremeOwn.boost1;
       criteria.boost2 = global.extremeOwn.boost2;
       $("#" + criteria.boost1 + "Boost").text("<-暖暖的微笑");
       $("#" + criteria.boost2 + "Boost").text("<-迷人飞吻+暖暖的微笑");
+      shoppingCart.clear();
+      if (global.extreme.shoppingCart) {
+        shoppingCart.putAll(global.extremeOwn.shoppingCart.cart);
+      }
       break;
     default:
       criteria.boost1 = null;
@@ -451,19 +459,8 @@ function chooseAccessories() {
 }
 
 function refreshShoppingCart() {
-  var cart;
-  switch (global.boostType) {
-    case 2:
-      cart = global.extreme.shoppingCart;
-      break;
-    case 3:
-      cart = global.extremeOwn.shoppingCart;
-      break;
-    default:
-      cart = shoppingCart;
-  }
-  cart.calc();
-  drawTable(cart.toList(byCategoryAndScore), "shoppingCart", true, cart.totalScore);
+  shoppingCart.calc();
+  drawTable(shoppingCart.toList(byCategoryAndScore), "shoppingCart", true);
   refreshRanking();
 }
 
