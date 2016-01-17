@@ -167,28 +167,34 @@ function getStyle(rating) {
   }
 }
 
-function list(rows, isShoppingCart) {
+function list(rows, isShoppingCart, totalScore) {
   ret = "";
   for (var i in rows) {
     ret += row(rows[i], isShoppingCart);
   }
   if (isShoppingCart) {
-    ret += row(shoppingCart.totalScore, isShoppingCart);
+    ret += row(totalScore, isShoppingCart);
   }
   return ret;
 }
 
-function drawTable(data, div, isShoppingCart) {
+function drawTable(data, div, isShoppingCart, extraClothes) {
   if ($('#' + div + ' table').length == 0) {
     if (isShoppingCart) {
-      $('#' + div).html("<table><thead></thead><tbody></tbody></table>");
+      $('#' + div).html("<table id='cartTable'><thead></thead><tbody></tbody></table>");
     } else {
       $('#' + div).html("<table class='mainTable'><thead></thead><tbody></tbody></table>");
     }
   }
   $('#' + div + ' table thead').html(thead(isShoppingCart, !global.isFilteringMode));
-  $('#' + div + ' table tbody').html(list(data, isShoppingCart));
-  if (!isShoppingCart) {
+  $('#' + div + ' table tbody').html(list(data, isShoppingCart, extraClothes));
+  if (isShoppingCart) {
+    if (global.boostType == 1) {
+      $("#cartTable").removeClass("warning");
+    } else {
+      $("#cartTable").addClass("warning");
+    }
+  } else {
     $('span.paging').html("<button class='destoryFloat'></button>");
     redrawThead();
     $('button.destoryFloat').click(function() {
@@ -256,6 +262,14 @@ function changeBoost(boostType) {
   if (global.additionalBonus && global.additionalBonus.length > 0) {
     criteria.bonus = global.additionalBonus;
   }
+  if (boostType == 1) {
+    $("#accessoriesPanel").show();
+    $("#accessoriesWarning").hide();
+  } else {
+    $("#accessoriesPanel").hide();
+    $("#accessoriesWarning").show();
+  }
+  
   setBoost(criteria, boostType);
 }
 
@@ -321,11 +335,13 @@ function refreshBoost(criteria) {
         totalMax = total.totalScore.tmpScore;
         totalConfig.boost1 = b1;
         totalConfig.boost2 = b2;
+        totalConfig.shoppingCart = total;
       }
       if (totalOwn.totalScore.tmpScore > totalOwnMax) {
         totalOwnMax = totalOwn.totalScore.tmpScore;
         totalOwnConfig.boost1 = b1;
         totalOwnConfig.boost2 = b2;
+        totalOwnConfig.shoppingCart = totalOwn;
       }
     }
   }
@@ -347,7 +363,7 @@ function decide(cart) {
 function calculateScore(criteria) {
   if (!global.isFilteringMode) {
     calcClothes(criteria);
-    if ($('#accessoriesHelper')[0].checked) {
+    if ($('#accessoriesHelper')[0].checked && global.boostType == 1) {
       chooseAccessories();
     } else {
       refreshShoppingCart();
@@ -422,7 +438,7 @@ function onChangeUiFilter() {
 }
 
 function refreshTable(criteria) {
-  drawTable(filtering(criteria, uiFilter), "clothes", false);
+  drawTable(filtering(criteria, uiFilter), "clothes", false, null);
 }
 
 function chooseAccessories() {
@@ -435,8 +451,19 @@ function chooseAccessories() {
 }
 
 function refreshShoppingCart() {
-  shoppingCart.calc();
-  drawTable(shoppingCart.toList(byCategoryAndScore), "shoppingCart", true);
+  var cart;
+  switch (global.boostType) {
+    case 2:
+      cart = global.extreme.shoppingCart;
+      break;
+    case 3:
+      cart = global.extremeOwn.shoppingCart;
+      break;
+    default:
+      cart = shoppingCart;
+  }
+  cart.calc();
+  drawTable(cart.toList(byCategoryAndScore), "shoppingCart", true, cart.totalScore);
   refreshRanking();
 }
 

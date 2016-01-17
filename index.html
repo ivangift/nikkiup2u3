@@ -50,6 +50,11 @@
         color: #669;
         padding: 4px 4px 4px 4px;
       }
+      table.warning td
+      {
+        color: #c33;
+        padding: 4px 4px 4px 4px;
+      }
       table.mainTable td.own.deps .button {
         background-color: #fdd;
       }
@@ -316,8 +321,11 @@
       Update 20160116:<br/>
       <ul>
         <li>玉人费了好大的功夫做了个<a href="http://weibo.com/5662509221/DdoP0upMG">商店钻石货购买攻略</a>，我实在是看不下去了，做了个<a href="guide.jpg">简易版</a>的。</li>
-        <li>为了配合冰雪舞会活动把极限权重做进来了，可以参考<a href="http://tieba.baidu.com/p/4306388792" target="_blank">这篇说明</a>来刷高分。建议有衣柜的选择"极限-我的衣柜"（不过我没测过=v=）。</li>
-        <li>冰雪舞会的权重已测。刷分注意，分数每5000一档，105000以上21个雪晶片，1000000以上20个，以此类推，发现和最高分在一个区间里就不用费力刷了，反正也多拿不了。</li>
+        <li>为了配合冰雪舞会活动把极限权重做进来了，可以参考<a href="http://tieba.baidu.com/p/4306388792" target="_blank">这篇说明</a>来刷高分。建议有衣柜的选择"极限-我的衣柜"。</li>
+        <li>注意选完极限模式以后可以直接按照购物车里的衣服来穿。</li>
+        <li>冰雪舞会的权重已测。刷分注意，分数每5000一档，105000以上21个雪晶片，100000以上20个，以此类推，发现和最高分在一个区间里就不用费力刷了，反正也多拿不了。</li>
+        <li>由于玉人还在契而不舍地刷分来超过我，至今也没有收到她收集的F列表，心塞。。。</li>
+        <li>(今天的通知好多)添加了极限模式之后配装器就更卡了，先忍忍。。。</li>
       </ul>
       衣服信息纠错请去<a href="http://tieba.baidu.com/p/3860789814">jillhx的新衣柜楼</a>汇报<br/>
       功能错误或者有新需求请去<a href="http://tieba.baidu.com/p/3792563906">主贴</a>汇报<br/>
@@ -435,7 +443,10 @@
       </div>
     </div>
     <div id='shoppingCartContainer'>
-      已选择的衣服 <input type="checkbox" id="accessoriesHelper" checked />自动选择饰品 <button onclick="clearShoppingCart()">清空购物车</button>
+      已选择的衣服
+      <span id="accessoriesPanel"><input type="checkbox" id="accessoriesHelper" checked />自动选择饰品</span>
+      <span id="accessoriesWarning" class="red" style="display:none">极限模式下所有衣服均为自动推荐</span>
+      <button onclick="clearShoppingCart()">清空购物车</button>
       <input type="text" id="searchitem" placeholder="输入衣服名称或编号" class='suggest'/>
       <div id='shoppingCart'>
       </div>
