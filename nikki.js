@@ -478,6 +478,13 @@ function byId(a, b) {
   return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0);
 }
 
+function byBonusScore(a, b) {
+  if (a.tmpBonus != b.tmpBonus) {
+    return b.tmpBonus - a.tmpBonus;
+  }
+  return b.tmpScore - a.tmpScore;
+}
+
 function filterTopAccessories(own) {
   var accCate = CATEGORY_HIERARCHY['饰品'];
   var toSort = [];
@@ -491,13 +498,15 @@ function filterTopAccessories(own) {
     }
   }
 
-  toSort.sort(byScore);
+  toSort.sort(byBonusScore);
   var total = 0;
+  var totalBonus = 0;
   var maxTotal = 0;
   var maxIdx = -1;
   for (var i = 0; i < toSort.length; i++) {
     total += toSort[i].tmpScore;
-    realScore = accScore(total, i+1);
+    totalBonus += toSort[i].tmpBonus;
+    realScore = accScore(total, totalBonus, i+1);
     if (maxTotal  < realScore) {
       maxTotal = realScore;
       maxIdx = i;
