@@ -220,8 +220,8 @@ function redrawThead() {
   $('th.top').html(global.floating ? "<a href='#filtersTop'>回到顶部</a>" : "");
 }
 
+var criteria = {};
 function onChangeCriteria() {
-  var criteria = {};
   criteria = {};
   for (var i in FEATURES) {
     var f = FEATURES[i];
@@ -442,7 +442,7 @@ function onChangeUiFilter() {
       uiFilter[currentCategory] = true;
     }
   }
-  refreshTable();
+  refreshTable(criteria);
 }
 
 function refreshTable(criteria) {
@@ -554,7 +554,7 @@ function loadCustomInventory() {
     load(myClothes);
   } 
   saveAndUpdate();
-  refreshTable();
+  refreshTable(criteria);
 }
 
 function toggleAll(c) {
@@ -749,7 +749,7 @@ function doImport() {
     }
     myClothes.update(clothes);
     saveAndUpdate();
-    refreshTable();
+    refreshTable(criteria);
     clearImport();
   }
 }
