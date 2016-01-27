@@ -300,6 +300,7 @@ function setBoost(criteria, boostType) {
     default:
       criteria.boost1 = null;
       criteria.boost2 = null;
+      shoppingCart.clear();
   }
   calculateScore(criteria);
 }
