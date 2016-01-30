@@ -231,15 +231,15 @@ function noOp() {
 
 function blacklistFilter() {
   return {
-    blacklist: {},
+    lvlList: {},
     add: function(category, id) {
-      if (!blacklist[category]) {
-        blacklist[category] = {};
+      if (!this.lvlList[category]) {
+        this.lvlList[category] = {};
       }
-      blacklist[category][id] = 1;
+      this.lvlList[category][id] = 1;
     },
     matches: function(c) {
-      return blacklist[c.type.mainType] && blacklist[c.type.mainType][c.id];
+      return this.lvlList[c.type.mainType] && this.lvlList[c.type.mainType][c.id];
     },
     filter: function(c) {
       if (this.matches(c)) {
