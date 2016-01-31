@@ -239,8 +239,11 @@ function onChangeCriteria() {
   if (global.additionalBonus && global.additionalBonus.length > 0) {
     criteria.bonus = global.additionalBonus;
   }
-  refreshBoost(criteria);
-  setBoost(criteria, global.boostType);
+  if (!global.isFilteringMode) {
+    refreshBoost(criteria);
+    setBoost(criteria, global.boostType);
+  }
+  calculateScore(criteria);
 }
 
 function changeBoost(boostType) {
@@ -271,6 +274,7 @@ function changeBoost(boostType) {
   }
   
   setBoost(criteria, boostType);
+  calculateScore(criteria);
 }
 
 function setBoost(criteria, boostType) {
@@ -302,7 +306,6 @@ function setBoost(criteria, boostType) {
       criteria.boost2 = null;
       shoppingCart.clear();
   }
-  calculateScore(criteria);
 }
 
 function refreshBoost(criteria) {
