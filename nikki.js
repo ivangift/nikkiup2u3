@@ -272,7 +272,7 @@ function changeBoost(boostType) {
     $("#accessoriesPanel").hide();
     $("#accessoriesWarning").show();
   }
-  
+  shoppingCart.clear();
   setBoost(criteria, boostType);
   calculateScore(criteria);
 }
@@ -286,7 +286,6 @@ function setBoost(criteria, boostType) {
       criteria.boost2 = global.extreme.boost2;
       $("#" + criteria.boost1 + "Boost").text("<-暖暖的微笑");
       $("#" + criteria.boost2 + "Boost").text("<-迷人飞吻+暖暖的微笑");
-      shoppingCart.clear();
       if (global.extreme.shoppingCart) {
         shoppingCart.putAll(global.extreme.shoppingCart.cart);
       }
@@ -296,7 +295,6 @@ function setBoost(criteria, boostType) {
       criteria.boost2 = global.extremeOwn.boost2;
       $("#" + criteria.boost1 + "Boost").text("<-暖暖的微笑");
       $("#" + criteria.boost2 + "Boost").text("<-迷人飞吻+暖暖的微笑");
-      shoppingCart.clear();
       if (global.extreme.shoppingCart) {
         shoppingCart.putAll(global.extremeOwn.shoppingCart.cart);
       }
@@ -304,7 +302,6 @@ function setBoost(criteria, boostType) {
     default:
       criteria.boost1 = null;
       criteria.boost2 = null;
-      shoppingCart.clear();
   }
 }
 
