@@ -319,6 +319,8 @@ function refreshBoost(criteria) {
   var totalOwnMax = 0;
   var totalConfig = {};
   var totalOwnConfig = {};
+  criteria.boost1 = null;
+  criteria.boost2 = null;
   calcClothes(criteria);
   for (var i in FEATURES) {
     for (var j in FEATURES) {
@@ -526,7 +528,7 @@ function refreshShoppingCart(boost1, boost2) {
 function byCategoryAndScore(a, b) {
   var cata = category.indexOf(a.type.type);
   var catb = category.indexOf(b.type.type);
-  return (cata - catb == 0) ? b.tmpScore - a.tmpScore : cata - catb;
+  return (cata - catb == 0) ? b.totalScore - a.totalScore : cata - catb;
 }
 
 function byScore(a, b) {
@@ -864,12 +866,12 @@ function renderRanking(cate, ranking) {
     var cls = "";
     if (shoppingCart.contains(c)) {
       cls = "class='blue'";
-    } else if (ranking == 0 || c.tmpScore == clothesRanking[cate][0].tmpScore)  {
+    } else if (ranking == 0 || c.totalScore == clothesRanking[cate][0].totalScore)  {
       cls = "class='red'";
     }
-    var ret = "<span " + cls + ">" + c.name + "(" + c.source.compact() + c.tmpScore + ")" + "</span>";
+    var ret = "<span " + cls + ">" + c.name + "(" + c.source.compact() + c.totalScore + ")" + "</span>";
     if (ranking > 0) {
-      if (clothesRanking[cate][ranking].tmpScore < clothesRanking[cate][ranking-1].tmpScore) {
+      if (clothesRanking[cate][ranking].totalScore < clothesRanking[cate][ranking-1].totalScore) {
         ret = "<span>&gt;<span>" + ret;
       } else {
         ret = "<span>=<span>" + ret;
