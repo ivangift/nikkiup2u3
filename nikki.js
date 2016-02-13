@@ -381,13 +381,17 @@ function MaxTable() {
       if (score == 0) {
         return 0;
       }
+      var total = baseScore + bonusScore;
       if (!this.cart[category]) {
-        this.cart[category] = [baseScore + bonusScore, bonusScore, c];
-      } else if (this.cart[category][1] < bonusScore ||
-          (this.cart[category][1] == bonusScore && this.cart[category][0] < baseScore + bonusScore)) {
-        this.cart[category][0] = baseScore + bonusScore;
-        this.cart[category][1] = bonusScore;
-        this.cart[category][2] = c;
+        this.cart[category] = [total, bonusScore, c];
+      } else {
+        var otherTotal = this.cart[category][0] + this.cart[category][1];
+        if ((c.type.mainType == "饰品" && accScore(total, bonusScore, 20) > accScore(otherTotal, 20))
+            || (c.type.mainType != "饰品" && total > otherTotal)) {
+          this.cart[category][0] = baseScore + bonusScore;
+          this.cart[category][1] = bonusScore;
+          this.cart[category][2] = c;
+        }
       }
       return this.cart[category][0];
     },
@@ -540,10 +544,7 @@ function byId(a, b) {
 }
 
 function byBonusScore(a, b) {
-  if (a.tmpBonus != b.tmpBonus) {
-    return b.tmpBonus - a.tmpBonus;
-  }
-  return b.totalScore - a.totalScore;
+  return accScore(b.totalScore, b.totalBonus, 20) - accScore(a.totalScore, a.totalBonus, 20);
 }
 
 function filterTopAccessories(own) {
