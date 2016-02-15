@@ -385,10 +385,10 @@ function MaxTable() {
       if (!this.cart[category]) {
         this.cart[category] = [total, bonusScore, c];
       } else {
-        var otherTotal = this.cart[category][0] + this.cart[category][1];
-        if ((c.type.mainType == "饰品" && accScore(total, bonusScore, 20) > accScore(otherTotal, 20))
+        var otherTotal = this.cart[category][0];
+        if ((c.type.mainType == "饰品" && accScore(total, bonusScore, 20) > accScore(otherTotal, this.cart[category][1], 20))
             || (c.type.mainType != "饰品" && total > otherTotal)) {
-          this.cart[category][0] = baseScore + bonusScore;
+          this.cart[category][0] = total;
           this.cart[category][1] = bonusScore;
           this.cart[category][2] = c;
         }

@@ -252,6 +252,8 @@ function blacklistFilter() {
     filter: function(c) {
       if (this.matches(c)) {
         c.tmpScore /= 10;
+        c.tmpScoreByCategory.f();
+        c.bonusByCategory.f();
       }
     }
   }
