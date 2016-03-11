@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>scoring</title>
+    <script type='text/javascript' charset="UTF-8" src='jquery.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='../nikkistats/wardrobe.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='../nikkistats/scoring.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='../nikkistats/blacklist.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='../nikkistats/model.js'></script>
+    <script>
+      $(document).ready(function() {
+        currentLevel = null;
+        var types = ['连衣裙', '上衣', '下装'];
+        for (var i in types) {
+          var type = types[i];
+          document.write("<p>" + type + "<br/>");
+          document.write("name,id")
+          bonus = {};
+          for (var theme in competitionsRaw) {
+            var criteria = parseCriteriaList(competitionsRaw[theme]);
+            document.write("," + theme)
+            if (levelBonus[theme]) {
+              bonus[theme] = [];
+              for (var i in levelBonus[theme]) {
+                bonus[theme].push(
+                  addScoreBonusFactory(levelBonus[theme][i].base,
+                  levelBonus[theme][i].weight, levelBonus[theme][i].tag)(criteria));
+              }
+            }
+          }
+          document.write("<br/>");
+          for (var j in clothesSet[type]) {
+            var c = clothesSet[type][j];
+            document.write(c.name + "," + c.id);
+            for (var theme in competitionsRaw) {
+              var criteria = parseCriteriaList(competitionsRaw[theme]);
+              criteria.bonus = bonus[theme];
+              c.calc(criteria);
+              document.write("," + c.tmpScore);
+            }
+            document.write("<br/>");
+          }
+          document.write("</p>");
+        }
+      });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

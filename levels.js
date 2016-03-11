@@ -34,6 +34,13 @@ var tasksRaw = {
   'g2-5': [-0.87, 0.87, -0.6, 0.6, 0.6],
   'g2-6': [1.0, 1.2, 1.0, 1.2, 0.93],
   'g2-7': [0.8, 0.6, -0.8, 0.6, -0.6],
+  'g3-1': [-1.07, 1.33, 1.07, -1.33, 1.07],
+  'g3-2': [0.6, 0.8, 0.6, -0.6, 0.8],
+  'g3-3': [0.8, -1.0, 0.8, -1.0, 0.8],
+  'g3-4': [-0.53, 0.73, -0.53, 0.73, 0.53],
+  'g3-5': [-1.27, -1.0, -1.27, 1.0, 1.0],
+  'g3-6': [1.07, -0.93, -1.07, 0.93, 0.93],
+  'g3-7': [-0.87, 0.6, 0.87, -0.6, 0.6],
 }
 
 var extraRaw = {
@@ -45,12 +52,13 @@ var extraRaw = {
   '满天繁星: 星宿侠女': [-1.33, -1.0, 1.33, -1.33, 0.67],
   '满天繁星: 玄武虚日鼠': [0.67, -1.33, -1.33, 1.33, -1.0],
   '满天繁星: 朱雀翼火蛇': [-1.33, -1.0, -1.33, 1.33, -0.67]
-  */
+  
   '冰雪舞会1': [0.1, 0.2, 0.2, 0.1, -0.3],
   '冰雪舞会2': [1.4, 0.67, -1.4, 2.2, 0.67],
   '冰雪舞会3': [0.8, 1.5, -1.5, 2.33, 0.8],
   '冰雪舞会4': [-0.8, 0.67, 0.67, 0.8, 0.6],
   '冰雪舞会5': [-0.8, -0.8, -0.67, -0.67, 0.67]
+  */
 };
 
 // all data are presented in order "simple", "cute", "active", "pure", "cool"
@@ -231,15 +239,15 @@ function noOp() {
 
 function blacklistFilter() {
   return {
-    blacklist: {},
+    lvlList: {},
     add: function(category, id) {
-      if (!blacklist[category]) {
-        blacklist[category] = {};
+      if (!this.lvlList[category]) {
+        this.lvlList[category] = {};
       }
-      blacklist[category][id] = 1;
+      this.lvlList[category][id] = 1;
     },
     matches: function(c) {
-      return blacklist[c.type.mainType] && blacklist[c.type.mainType][c.id];
+      return this.lvlList[c.type.mainType] && this.lvlList[c.type.mainType][c.id];
     },
     filter: function(c) {
       if (this.matches(c)) {
@@ -554,6 +562,11 @@ function addBonusInfo(base, weight, tag) {
   'g2-5': [addBonusInfo('S', 1, "女仆装")],
   'g2-6': [addBonusInfo('B', 0.25, "海军风")],
   'g2-7': [addBonusInfo('S', 1, "中式现代")],
+  'g3-2': [addBonusInfo('A', 2, "沐浴")],
+  'g3-3': [addBonusInfo('S', 1, "泳装")],
+  'g3-4': [addBonusInfo('SS', 1, "和风")],
+  'g3-6': [addBonusInfo('A', 0.5, "中性风")],
+  'g3-7': [addBonusInfo('A', 1, "侠客联盟"), addBonusInfo('S', 0.25, "欧式古典")],
   '满天繁星: 喝茶听课': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
   '满天繁星: 星宿侠女': [addBonusInfo('A', 1, "侠客联盟")],
   '满天繁星: 朱雀翼火蛇': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
