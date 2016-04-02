@@ -80,17 +80,20 @@ function removeShoppingCartButton(detailedType) {
 
 function addShoppingCart(type, id) {
   shoppingCart.put(clothesSet[type][id]);
-  refreshShoppingCart();
+  refreshShoppingCart(null, null);
+  refreshRanking();
 }
 
 function removeShoppingCart(type) {
   shoppingCart.remove(type);
-  refreshShoppingCart();
+  refreshShoppingCart(null, null);
+  refreshRanking();
 }
 
 function clearShoppingCart() {
   shoppingCart.clear();
-  refreshShoppingCart();
+  refreshShoppingCart(null, null);
+  refreshRanking();
 }
 
 function toggleInventory(type, id) {
@@ -124,7 +127,7 @@ function clickableTd(piece) {
 function row(piece, isShoppingCart) {
   var ret = "";
   if (!global.isFilteringMode) {
-    ret += td(piece.tmpScore);
+    ret += td(/*piece.tmpScore*/piece.totalScore);
   }
   if (isShoppingCart) {
     ret += td(piece.name, '');
@@ -286,8 +289,11 @@ function setBoost(criteria, boostType) {
       criteria.boost2 = global.extreme.boost2;
       $("#" + criteria.boost1 + "Boost").text("<-暖暖的微笑");
       $("#" + criteria.boost2 + "Boost").text("<-迷人飞吻+暖暖的微笑");
+      shoppingCart.clear();
       if (global.extreme.shoppingCart) {
-        shoppingCart.putAll(global.extreme.shoppingCart.cart);
+        for (var i in global.extreme.shoppingCart.cart) {
+          shoppingCart.put(global.extreme.shoppingCart.cart[i][2]);
+        }
       }
       break;
     case 3: // own
@@ -295,8 +301,11 @@ function setBoost(criteria, boostType) {
       criteria.boost2 = global.extremeOwn.boost2;
       $("#" + criteria.boost1 + "Boost").text("<-暖暖的微笑");
       $("#" + criteria.boost2 + "Boost").text("<-迷人飞吻+暖暖的微笑");
-      if (global.extreme.shoppingCart) {
-        shoppingCart.putAll(global.extremeOwn.shoppingCart.cart);
+      shoppingCart.clear();
+      if (global.extremeOwn.shoppingCart) {
+        for (var i in global.extremeOwn.shoppingCart.cart) {
+          shoppingCart.put(global.extremeOwn.shoppingCart.cart[i][2]);
+        }
       }
       break;
     default:
@@ -310,6 +319,9 @@ function refreshBoost(criteria) {
   var totalOwnMax = 0;
   var totalConfig = {};
   var totalOwnConfig = {};
+  criteria.boost1 = null;
+  criteria.boost2 = null;
+  calcClothes(criteria);
   for (var i in FEATURES) {
     for (var j in FEATURES) {
       if (i == j) {
@@ -317,37 +329,36 @@ function refreshBoost(criteria) {
       }
       var b1 = FEATURES[i];
       var b2 = FEATURES[j];
-      criteria.boost1 = b1;
-      criteria.boost2 = b2;
-      calcClothes(criteria);
-      var total = ShoppingCart();
-      var totalOwn = ShoppingCart();
-      total.putAll(filterTopAccessories(false));
-      totalOwn.putAll(filterTopAccessories(true));
-      for (var c in clothesRanking) {
-        if (c.split('-')[0] != "饰品") {
-          var totalChoice = total.put(clothesRanking[c][0]);
-          var ownChoice = null;
-          for (var x = 0; x < clothesRanking[c].length; x++) {
-            if (clothesRanking[c][x].own) {
-              ownChoice = totalOwn.put(clothesRanking[c][x]);
-              break;
-            }
+      var total = MaxTable();
+      var totalOwn = MaxTable();
+      for (var cate in clothesRanking) {
+        var currentTop = 0;
+        var currentTopOwn = 0;
+        for (var k in clothesRanking[cate]) {
+          var c = clothesRanking[cate][k];
+          if (c.tmpScore * 1.778 < currentTopOwn) {
+            // short cut, no hope to become the new winner
+            break;
+          }
+          var score = c.boost(b1, b2);
+          currentTop = total.put(c, cate, score[0], score[1]);
+          if (c.own) {
+            currentTopOwn = totalOwn.put(c, cate, score[0], score[1]);
           }
         }
       }
-      decide(total);
-      decide(totalOwn);
-      total.calc();
-      totalOwn.calc();
-      if (total.totalScore.tmpScore > totalMax) {
-        totalMax = total.totalScore.tmpScore;
+
+      total.decide();
+      totalOwn.decide();
+
+      if (total.total() > totalMax) {
+        totalMax = total.total();
         totalConfig.boost1 = b1;
         totalConfig.boost2 = b2;
         totalConfig.shoppingCart = total;
       }
-      if (totalOwn.totalScore.tmpScore > totalOwnMax) {
-        totalOwnMax = totalOwn.totalScore.tmpScore;
+      if (totalOwn.total() > totalOwnMax) {
+        totalOwnMax = totalOwn.total();
         totalOwnConfig.boost1 = b1;
         totalOwnConfig.boost2 = b2;
         totalOwnConfig.shoppingCart = totalOwn;
@@ -356,8 +367,62 @@ function refreshBoost(criteria) {
   }
   global.extreme = totalConfig;
   global.extremeOwn = totalOwnConfig;
-  criteria.boost1 = null;
-  criteria.boost2 = null;
+}
+
+
+function byFirst(a, b) {
+  return b[0] - a[0];
+}
+
+function MaxTable() {
+  return {
+    cart: {},
+    put: function(c, category, baseScore, bonusScore) {
+      if (score == 0) {
+        return 0;
+      }
+      var total = baseScore + bonusScore;
+      if (!this.cart[category]) {
+        this.cart[category] = [total, bonusScore, c];
+      } else {
+        var otherTotal = this.cart[category][0];
+        if ((c.type.mainType == "饰品" && accScore(total, bonusScore, 20) > accScore(otherTotal, this.cart[category][1], 20))
+            || (c.type.mainType != "饰品" && total > otherTotal)) {
+          this.cart[category][0] = total;
+          this.cart[category][1] = bonusScore;
+          this.cart[category][2] = c;
+        }
+      }
+      return this.cart[category][0];
+    },
+    decide: function() {
+      if (this.cart['连衣裙'] && this.cart['上衣'] && this.cart['下装']) {
+        if (this.cart['连衣裙'][0] > this.cart['上衣'][0] + this.cart['下装'][0]) {
+          delete this.cart['上衣'];
+          delete this.cart['下装'];
+        } else {
+          delete this.cart['连衣裙'];
+        }
+      }
+    },
+    total: function() {
+      var sum = 0;
+      var sumAcc = 0;
+      var bonusAcc = 0;
+      var numAcc = 0;
+      for (var i in this.cart) {
+        var c = this.cart[i][2].type.mainType;
+        if (c == "饰品") {
+          sumAcc += this.cart[i][0];
+          bonusAcc += this.cart[i][1];
+          numAcc ++;
+        } else {
+          sum += this.cart[i][0];
+        }
+      }
+      return sum + accScore(sumAcc, bonusAcc, numAcc);
+    }
+  };
 }
 
 function decide(cart) {
@@ -375,7 +440,7 @@ function calculateScore(criteria) {
     if ($('#accessoriesHelper')[0].checked && global.boostType == 1) {
       chooseAccessories();
     } else {
-      refreshShoppingCart();
+      refreshShoppingCart(criteria.boost1, criteria.boost2);
     }
   }
   refreshTable(criteria);
@@ -456,23 +521,22 @@ function chooseAccessories() {
     shoppingCart.remove(accCate[i]);
   }
   shoppingCart.putAll(filterTopAccessories(true));
-  refreshShoppingCart();
+  refreshShoppingCart(null, null);
 }
 
-function refreshShoppingCart() {
-  shoppingCart.calc();
+function refreshShoppingCart(boost1, boost2) {
+  shoppingCart.calc(boost1, boost2);
   drawTable(shoppingCart.toList(byCategoryAndScore), "shoppingCart", true);
-  refreshRanking();
 }
 
 function byCategoryAndScore(a, b) {
   var cata = category.indexOf(a.type.type);
   var catb = category.indexOf(b.type.type);
-  return (cata - catb == 0) ? b.tmpScore - a.tmpScore : cata - catb;
+  return (cata - catb == 0) ? b.totalScore - a.totalScore : cata - catb;
 }
 
 function byScore(a, b) {
-  return b.tmpScore - a.tmpScore;
+  return b.totalScore - a.totalScore;
 }
 
 function byId(a, b) {
@@ -480,10 +544,7 @@ function byId(a, b) {
 }
 
 function byBonusScore(a, b) {
-  if (a.tmpBonus != b.tmpBonus) {
-    return b.tmpBonus - a.tmpBonus;
-  }
-  return b.tmpScore - a.tmpScore;
+  return accScore(b.totalScore, b.totalBonus, 20) - accScore(a.totalScore, a.totalBonus, 20);
 }
 
 function filterTopAccessories(own) {
@@ -806,12 +867,12 @@ function renderRanking(cate, ranking) {
     var cls = "";
     if (shoppingCart.contains(c)) {
       cls = "class='blue'";
-    } else if (ranking == 0 || c.tmpScore == clothesRanking[cate][0].tmpScore)  {
+    } else if (ranking == 0 || c.totalScore == clothesRanking[cate][0].totalScore)  {
       cls = "class='red'";
     }
-    var ret = "<span " + cls + ">" + c.name + "(" + c.source.compact() + c.tmpScore + ")" + "</span>";
+    var ret = "<span " + cls + ">" + c.name + "(" + c.source.compact() + c.totalScore + ")" + "</span>";
     if (ranking > 0) {
-      if (clothesRanking[cate][ranking].tmpScore < clothesRanking[cate][ranking-1].tmpScore) {
+      if (clothesRanking[cate][ranking].totalScore < clothesRanking[cate][ranking-1].totalScore) {
         ret = "<span>&gt;<span>" + ret;
       } else {
         ret = "<span>=<span>" + ret;
@@ -881,7 +942,7 @@ function init() {
   switchCate(category[0]);
   updateSize(mine);
   setupSearch();
-  refreshShoppingCart();
+  refreshShoppingCart(null, null);
 
   global.float = $('table.mainTable');
   global.float.floatThead({
