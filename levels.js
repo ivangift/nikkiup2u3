@@ -45,7 +45,9 @@ var tasksRaw = {
   'g4-2': [-0.4, 0.67, 0.4, 0.67, 0.4],
   'g4-3': [1.0, 1.13, 1.13, 1.0, 1.0],
   'g4-4': [1.2, -1.07, -1.07, 1.07, -1.2],
-  
+  'g4-5': [-0.73, -0.53, -0.53, -0.53, 0.73],
+  'g4-6': [-0.87, 0.87, 0.93, 0.93, 0.87],
+  'g4-7': [-1.33, 1.07, 1.07, -1.33, 1.33],
 }
 
 var extraRaw = {
@@ -605,6 +607,8 @@ function addBonusInfo(base, weight, tag) {
   'g4-2': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 2, "中式现代")],
   'g4-3': [addBonusInfo('A', 0.5, "运动系")],
   'g4-4': [addBonusInfo('B', 0.5, "冬装")],
+  'g4-5': [addBonusInfo('SS', 1, "婚纱")],
+  'g4-6': [addBonusInfo('B', 1, "波西米亚")],
   '满天繁星: 喝茶听课': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
   '满天繁星: 星宿侠女': [addBonusInfo('A', 1, "侠客联盟")],
   '满天繁星: 朱雀翼火蛇': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],

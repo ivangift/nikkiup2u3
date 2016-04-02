@@ -532,15 +532,17 @@ function refreshShoppingCart(boost1, boost2) {
 function byCategoryAndScore(a, b) {
   var cata = category.indexOf(a.type.type);
   var catb = category.indexOf(b.type.type);
-  return (cata - catb == 0) ? b.totalScore - a.totalScore : cata - catb;
+  return (cata - catb == 0) ? byScore(a, b) : cata - catb;
 }
 
 function byScore(a, b) {
-  return b.totalScore - a.totalScore;
+  return b.totalScore - a.totalScore == 0 ? byId(a, b) : b.totalScore - a.totalScore;
 }
 
 function byId(a, b) {
-  return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0);
+  var ida = parseInt(a.id);
+  var idb = parseInt(b.id);
+  return ida - idb;
 }
 
 function byBonusScore(a, b) {
@@ -698,6 +700,7 @@ function changeMode(isFiltering) {
 function changeFilter() {
   $("#theme")[0].options[0].selected = true;
   currentLevel = null;
+  $("#drawSkill").empty();
   onChangeCriteria();
 }
 
@@ -707,6 +710,7 @@ function changeTheme() {
   var theme = $("#theme").val();
   if (allThemes[theme]) {
     setFilters(allThemes[theme]);
+    drawSkill(allThemes[theme].name);
   }
   onChangeCriteria();
 }
@@ -749,6 +753,32 @@ function drawTheme() {
     option.text = theme;
     option.value = theme;
     dropdown.add(option);
+  }
+}
+
+function drawSkill(currentLevel) {
+  var variations = ['', '少', '公'];
+  $("#skills").empty();
+  for (var i in variations) {
+    var s = currentLevel + variations[i];
+    if (npc[s]) {
+      var $section = $("<div>");
+      $section.html("<b>" + s +"</b>&nbsp;对方技能：");
+      var dummySkill = PlayerSkill();
+      for (var i in npc[s]) {
+        dummySkill.put(skillSet[npc[s][i]]);
+        $section.append(npc[s][i] + "&nbsp;&nbsp;");
+      }
+      var suggestion = skillSuggestion(dummySkill.skills);
+      var plan = [];
+      for (var i in suggestion) {
+        plan.push(suggestion[i].name);
+      }
+      $section.append("<br/>&nbsp;&nbsp;无伤技能顺序: ");
+      $section.append(plan.join("&nbsp;&nbsp;"));
+      $section.append("&nbsp;&nbsp;<a href='../nikkisim/index.html#npc=" + s + "&skills=" + plan.join(",") + "' target='_blank'>计算概率</a>");
+      $("#skills").append($section);
+    }
   }
 }
 

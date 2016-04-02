@@ -12,6 +12,8 @@
     <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
     <script type='text/javascript' charset="UTF-8" src='../nikkistats/model.js'></script>
     <script type='text/javascript' charset="UTF-8" src='../nikkistats/pattern.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='../nikkistats/skills.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='../nikkistats/npc.js'></script>
     <script type='text/javascript' charset="UTF-8" src='nikki.js'></script>
     <link rel="stylesheet" href="jquery.auto-complete.css">
     <style>
@@ -328,7 +330,9 @@
           <li>进游戏，不要用技能，躺着任其蹂躏</li>
           <li>假装被F吓到</li>
         </ol>
-        <li>联盟关卡更新了若干，剩下的今天继续</li>
+        <li>联盟关卡更新完毕，F品尚未添加，注意调整衣服。</li>
+        <li>已经整合了技能推荐功能。</li>
+        <li>已经修正了若干烦人的小bug。</li>
       </ul>
       衣服信息纠错请去<a href="http://tieba.baidu.com/p/3860789814" target="_blank">jillhx的新衣柜楼</a>汇报<br/>
       功能错误或者有新需求请去<a href="http://tieba.baidu.com/p/3792563906" target="_blank">主贴</a>汇报<br/>
@@ -438,6 +442,8 @@
           <input type="checkbox" name="inventory" value="missing" onClick="onChangeUiFilter()" checked /> 没有
         </div>
       </form>
+    </div>
+    <div id="skills">
     </div>
     <hr>
     <div id="summary" class="panel">
