@@ -238,6 +238,10 @@ var levelsRaw = {
   '12-支1': [-1.9, -1.3, -1.9, 1.3, -0.67],
   '12-支2': [1.33, 1.67, 1.33, 1.67, 1.67],
   '12-支3': [2.3, 1.0, 2.3, 1.67, 1.0],
+  '13-1': [-1.33, -0.8, -1.2, 0.8, 0.67],
+  '13-2': [2.67, 2.0, 1.9, 1.33, 2.5],
+  '13-3': [-3.0, -1.8, 2.9, -1.8, 1.2],
+
 };
 
 function tagMatcher(whitelist, clothes) {
@@ -568,6 +572,8 @@ function addBonusInfo(base, weight, tag) {
   '12-支1': [addBonusInfo('B', 1, "中式古典")],
   '12-支2': [addBonusInfo('A', 1, "居家服"), addBonusInfo('A', 1, "睡衣")],
   '12-支3': [addBonusInfo('B', 1, "运动系")],
+  '13-1': [addBonusInfo('A', 2, "波西米亚")],
+  '13-3': [addBonusInfo('A', 0.1, "摇滚风")],
   '月下舞会3': [addBonusInfo('S', 1, "欧式古典")],
   '仲夏夜之梦1': [addBonusInfo('S', 1, "童话系")],
   '仲夏夜之梦2': [replaceBonusInfo('SS', 1, "和风")],
