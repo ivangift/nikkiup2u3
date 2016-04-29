@@ -51,6 +51,10 @@ var tasksRaw = {
 }
 
 var extraRaw = {
+  '音乐会3': [2.0, 3.33, 2.0, 1.33, -1.33],
+  '音乐会4': [0.8, 1.33, -1.8, 1.67, 0.8],
+  '音乐会5': [2.0, -1.0, 1.0, 2.0, -2.67],
+
   /*
   '愚人节1': [-1.0, 2.0, -1.0, 2.67, 2.0],
   '愚人节2': [2.0, 3.33, 2.0, 1.33, -1.33],
@@ -642,6 +646,8 @@ function addBonusInfo(base, weight, tag) {
   '婚恋奇迹5': [addBonusInfo('A', 1, "中式现代"), addBonusInfo('A', 1, "中式古典")],
   '愚人节1': [addBonusInfo('A', 0.5, "和风")],
   '愚人节5': [addBonusInfo('A', 0.5, "冬装")],
+  '音乐会4': [addBonusInfo('S', 1, "欧式古典")],
+  '音乐会5': [addBonusInfo('A', 0.5, "冬装")],
  };
 
 var additionalLevelInfo = {
