@@ -51,11 +51,11 @@ var tasksRaw = {
 }
 
 var extraRaw = {
+  /*
   '音乐会3': [2.0, 3.33, 2.0, 1.33, -1.33],
   '音乐会4': [0.8, 1.33, -1.8, 1.67, 0.8],
   '音乐会5': [2.0, -1.0, 1.0, 2.0, -2.67],
 
-  /*
   '愚人节1': [-1.0, 2.0, -1.0, 2.67, 2.0],
   '愚人节2': [2.0, 3.33, 2.0, 1.33, -1.33],
   '愚人节3': [2.0, -3.33, -2.0, 1.27, -1.27],
@@ -257,6 +257,9 @@ var levelsRaw = {
 };
 
 function tagMatcher(whitelist, clothes) {
+  if (clothes.type.mainType == '萤光之灵') {
+    return false;
+  }
   for (var i in clothes.tags) {
     var tag = clothes.tags[i];
     if (tag.length > 0 && whitelist.indexOf(tag) >= 0) {
