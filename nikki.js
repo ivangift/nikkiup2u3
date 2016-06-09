@@ -15,7 +15,6 @@ var CATEGORY_HIERARCHY = function() {
 var global = {
   float: null,
   floating: true,
-  additionalBonus: null, // TODO: replace by UTS
   isFilteringMode: true,
   boostType: 1,
 };
@@ -239,9 +238,6 @@ function onChangeCriteria() {
   }
   tagToBonus(criteria, 'tag1');
   tagToBonus(criteria, 'tag2');
-  if (global.additionalBonus && global.additionalBonus.length > 0) {
-    criteria.bonus = global.additionalBonus;
-  }
   if (!global.isFilteringMode) {
     refreshBoost(criteria);
     setBoost(criteria, global.boostType);
@@ -265,9 +261,6 @@ function changeBoost(boostType) {
   }
   tagToBonus(criteria, 'tag1');
   tagToBonus(criteria, 'tag2');
-  if (global.additionalBonus && global.additionalBonus.length > 0) {
-    criteria.bonus = global.additionalBonus;
-  }
   if (boostType == 1) {
     $("#accessoriesPanel").show();
     $("#accessoriesWarning").hide();
@@ -718,7 +711,6 @@ function changeTheme() {
 var currentLevel; // used for post filtering.
 function setFilters(level) {
   currentLevel = level;
-  global.additionalBonus = currentLevel.additionalBonus;
   var weights = level.weight;
   for (var i in FEATURES) {
     var f = FEATURES[i];

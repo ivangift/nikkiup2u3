@@ -128,8 +128,8 @@ var levelsRaw = {
   '3-支1': [-3, -2, -2, 1, -1],
   '3-支2': [-1.0, -0.33, -0.6, -0.33, 0.67],
   '4-1': [3, 1, 2, 1, -3],
-  '4-2': [0.2, 3, 0.2, 3, 0.2],
-  '4-3': [0.2, -3, 0.2, -3, 0.2],
+  '4-2': [0.07, 3.07, 0.07, 2.67, 0.07],
+  '4-3': [0.07, -3.2, 0.07, -2.67, 0.07],
   '4-4': [1, 2, -2, 3, 1],
   '4-5': [2, -1, 2, 1, 3],
   '4-6': [-1, -2, -3, -2, -1],
@@ -176,7 +176,7 @@ var levelsRaw = {
   '7-3': [3, -2.5, 2, -3, 3],
   '7-4': [-1.25, -2, -2, 1.5, -1],
   '7-5': [3, 2, 3, 2, 2],
-  '7-6': [-2, -1, -2, 1.5, 1.5],
+  '7-6': [-2.0, -1.33, -2.0, 1.33, 1.33],
   '7-7': [-0.2, -0.2, -0.13, -0.13, 0.07],
   '7-8': [0.2, -0.13, 0.2, -0.13, 0.07],
   '7-9': [2, -3, 1.5, 2, -3],
@@ -368,67 +368,6 @@ function addScoreBonusFactory(bonus, multiplier, tagWhitelist, nameWhitelist) {
       nameWhitelist, featureBasedScoringFactory(bonus, multiplier));
 }
 
-function replaceScoreBonusFactory(bonus, multiplier, tagWhitelist, nameWhitelist) {
-  return abstractBonusFactory('各属性均视为相符，且替换为', true, bonus + " * " + multiplier,
-      tagWhitelist, nameWhitelist, featureBasedScoringFactory(bonus, multiplier));
-}
-
-function swimsuitFactory() {
-  return abstractBonusFactory('仅可爱/成熟与清纯/性感依权重加分', false, 'SS', "泳装",
-      null, function(criteria, clothes) {
-        var total = 0;
-        var onlyFeatures = ['cute', 'pure'];
-        var byFeature = {};
-        for (var i in onlyFeatures) {
-          var f = onlyFeatures[i];
-          var addon = Math.abs(criteria[f] * clothes.type.score['SS']);
-          byFeature[f] = addon;
-          total += addon;
-        }
-        return [total, byFeature];
-  });
-}
-
-function specialFactory76A() {
-  return abstractBonusFactory('华丽 成熟  优雅  清纯  清凉 分别按照权重增加', false, 'B, SS, B, C, C', "晚礼服",
-      null, function(criteria, clothes) {
-        var total = 0;
-        var byFeature = {};
-        byFeature['simple'] = Math.abs(criteria['simple'] * clothes.type.score['B']);
-        byFeature['cute'] = Math.abs(criteria['cute'] * clothes.type.score['SS']);
-        byFeature['active'] = Math.abs(criteria['active'] * clothes.type.score['B']);
-        byFeature['pure'] = Math.abs(criteria['pure'] * clothes.type.score['C']);
-        byFeature['cool'] = Math.abs(criteria['cool'] * clothes.type.score['C']);
-        
-        total += byFeature['simple'];
-        total += byFeature['cute'];
-        total += byFeature['active'];
-        total += byFeature['pure'];
-        total += byFeature['cool'];
-        return [total, byFeature];
-  });
-}
-
-function specialFactory76B() {
-  return abstractBonusFactory('华丽 成熟  优雅  清纯  清凉 分别按照权重增加', false, 'B, SS, B, C, C', "中式现代",
-      null, function(criteria, clothes) {
-        var total = 0;
-        var byFeature = {};
-        byFeature['simple'] = Math.abs(criteria['simple'] * clothes.type.score['B']);
-        byFeature['cute'] = Math.abs(criteria['cute'] * clothes.type.score['SS']);
-        byFeature['active'] = Math.abs(criteria['active'] * clothes.type.score['B']);
-        byFeature['pure'] = Math.abs(criteria['pure'] * clothes.type.score['C']);
-        byFeature['cool'] = Math.abs(criteria['cool'] * clothes.type.score['C']);
-        
-        total += byFeature['simple'];
-        total += byFeature['cute'];
-        total += byFeature['active'];
-        total += byFeature['pure'];
-        total += byFeature['cool'];
-        return [total, byFeature];
-  });
-}
-
 function bonusInfo(base, weight, tag, replace) {
   return {
     base: base,
@@ -436,10 +375,6 @@ function bonusInfo(base, weight, tag, replace) {
     tag: tag,
     replace: replace
   }
-}
-
-function replaceBonusInfo(base, weight, tag) {
-  return bonusInfo(base, weight, tag, true);
 }
 
 function addBonusInfo(base, weight, tag) {
@@ -488,6 +423,8 @@ function addBonusInfo(base, weight, tag) {
   "3-支1": [addBonusInfo('B', 1, "欧式古典")],
   "3-支2": [addBonusInfo('S', 3, '婚纱')],
   "4-1": [],
+  '4-2': [addBonusInfo('A', 2, '泳装')],
+  '4-3': [addBonusInfo('A', 2, '泳装')],
   "4-4": [],
   "4-5": [addBonusInfo('S', 0.25, "防晒")],
   "4-6": [],
@@ -534,6 +471,7 @@ function addBonusInfo(base, weight, tag) {
   '7-3': [],
   '7-4': [addBonusInfo('B', 1, "中式古典")],
   '7-5': [],
+  '7-6': [addBonusInfo('B', 1, "晚礼服"), addBonusInfo('B', 1, "中式现代")],
   '7-7': [addBonusInfo('S', 10, "欧式古典"), addBonusInfo('S', 10, "晚礼服")],
   '7-8': [addBonusInfo('S', 10, "中式古典"), addBonusInfo('S', 10, "侠客联盟")],
   '7-9': [addBonusInfo('A', 1, "冬装")],
@@ -667,12 +605,6 @@ function addBonusInfo(base, weight, tag) {
   '音乐会5': [addBonusInfo('A', 0.5, "冬装")],
  };
 
-var additionalLevelInfo = {
-  "4-2": [swimsuitFactory()],
-  "4-3": [swimsuitFactory()],
-  '7-6': [specialFactory76A(), specialFactory76B()]
-};
-
 function parseCriteriaList(criteria) {
   return {
     'simple': criteria[0],
@@ -694,18 +626,11 @@ function level(name, criteria) {
       bonusFilter.push(levelBonus[name][i]);
     }
   }
-  var additionalBonus = [];
-  if (additionalLevelInfo[name]) {
-    for (var i in additionalLevelInfo[name]) {
-      additionalBonus.push(additionalLevelInfo[name][i](criteria));
-    }
-  }
   return {
     name: name, // useful?
     weight: criteria,
     filter: filter,
     bonus: bonusFilter,
-    additionalBonus: additionalBonus
   }
 }
 
