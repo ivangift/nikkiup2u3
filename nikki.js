@@ -455,11 +455,7 @@ function tagToBonus(criteria, id) {
   if (tag.length > 0) {
     var base = $('#' + id + 'base :selected').text();
     var weight = parseFloat($('#' + id + 'weight').val());
-    if ($('input[name=' + id + 'method]:radio:checked').val() == 'replace') {
-      bonus = replaceScoreBonusFactory(base, weight, tag)(criteria);
-    } else {
-      bonus = addScoreBonusFactory(base, weight, tag)(criteria);
-    }
+    bonus = addScoreBonusFactory(base, weight, tag)(criteria);
     if (!criteria.bonus) {
       criteria.bonus = [];
     }
