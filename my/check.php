@@ -12,6 +12,7 @@ $CATEGORY_ARRAY = array(
 	7 => '鞋子',
 	8 => '饰品',
 	9 => '妆容',
+	10 => '萤光之灵',
 );
 $content = file_get_contents('data.txt');
 mb_convert_variables(APP_ENCODING, 'UTF-8', $CATEGORY_ARRAY, $content);
@@ -40,7 +41,7 @@ foreach($sections as $section) {
 		if(($fp = fopen('../nikkistats/raw/full.csv', 'r')) !== FALSE) {
 			while(($data = fgetcsv($fp, 1024, ',')) !== FALSE) {
 				mb_convert_variables(APP_ENCODING, 'UTF-8', $data);
-				if(empty($data[0]) || substr($data[0], 0, 1) != SELECT_CATEGORY_ID) continue;
+				if(empty($data[0]) || substr($data[0], 0, strlen(SELECT_CATEGORY_ID)) != SELECT_CATEGORY_ID) continue;
 				$names[$data[0]] = $data[1];
 			}
 		}
