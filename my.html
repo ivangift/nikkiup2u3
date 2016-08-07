@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我的衣柜</title>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../nikkistats/wardrobe.js"></script>
+<script type="text/javascript" src="../nikkistats/scoring.js"></script>
+<script type="text/javascript" src="../nikkistats/model.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<style type="text/css">
+.page-header a {text-decoration: none;}
+#inventoryDiv > div {
+	padding-bottom: 10px;
+}
+a[role="button"] {
+	text-align: left !important;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="page-header">
+    <h1>我的衣柜<small>Made by <a href="http://weibo.com/208882888/" target="_blank">@圣詹姆斯</a></small>
+      <small class="pull-right">
+      </small>
+    </h1>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-info">总收集<span id="inventoryCount" class="badge"></span></li>
+        <a class="list-group-item" href="javascript:void(0);">发型<span class="badge"></span></a>
+        <a class="list-group-item" href="javascript:void(0);">连衣裙<span class="badge"></span></a>
+        <a class="list-group-item" href="javascript:void(0);">外套<span class="badge"></span></a>
+        <a class="list-group-item" href="javascript:void(0);">上衣<span class="badge"></span></a>
+        <a class="list-group-item" href="javascript:void(0);">下装<span class="badge"></span></a>
+        <a class="list-group-item" href="javascript:void(0);">袜子<span class="badge"></span></a>
+        <a class="list-group-item" href="javascript:void(0);">鞋子<span class="badge"></span></a>
+        <a class="list-group-item" href="javascript:void(0);">饰品<span class="badge"></span></a>
+        <a class="list-group-item" href="javascript:void(0);">妆容<span class="badge"></span></a>
+      </ul>
+    </div>
+    <div class="col-xs-9">
+      <div id="inventoryDiv" class="row"></div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(function() {
+	var mydata = loadFromStorage();
+	var category;
+	function updateBadge() {
+		$('#inventoryCount').text(mydata.size);
+		var subcount = {};
+		for(c in mydata.mine) {
+			var type = c.split('-')[0];
+			if(!subcount[type]) {
+				subcount[type] = 0;
+			}
+			subcount[type] += mydata.mine[type].length;
+		}
+		for(c in subcount) {
+			$('a.list-group-item:contains("' + c + '")').children('span.badge').text(subcount[c]);
+		}
+	}
+	function displayItems(node) {
+		category = $.trim(node.contents().filter(function() {
+			return this.nodeType == 3; 
+		}).text());
+		if(typeof clothesSet[category] == 'undefined') return;
+		node.addClass('active').siblings().removeClass('active');
+		var clothes = [];
+		for(var i in clothesSet[category]) {
+			clothes.push(clothesSet[category][i]);
+		}
+		clothes.sort(function(a, b) {
+			return parseInt(a.id, 10) - parseInt(b.id, 10);
+		});
+		var part1 = '', part2 = '';
+		for(i in clothes) {
+			var cloth = clothes[i];
+			if(cloth.own) {
+				part1 += '<div class="col-xs-6"><a class="btn btn-default btn-block" href="javascript:void(0);" role="button">No.' + cloth.id + ' ' + cloth.name + '<span class="glyphicon glyphicon-log-out pull-right" aria-hidden="true"></span></a></div>';
+			}
+			else {
+				part2 += '<div class="col-xs-6"><a class="btn btn-default btn-block active" href="javascript:void(0);" role="button">No.' + cloth.id + ' ' + cloth.name + '<span class="glyphicon glyphicon-log-in pull-right" aria-hidden="true"></span></a></div>';
+			}
+		};
+		$('#inventoryDiv').html(part1 + part2);
+	}
+	$('a.list-group-item').click(function() {
+		displayItems($(this));
+	});
+	function saveInventory() {
+		mydata = save();
+		updateBadge();
+	}
+	$('#inventoryDiv').on('click', '[role="button"]', function() {
+		var idx = $(this).text().substring(3, $(this).text().indexOf(' '));
+		var cloth = clothesSet[category][idx];
+		if(cloth.own) {
+			confirm('你确认要将 [' + cloth.name + '] 移出衣柜吗？');
+		}
+		else {
+			confirm('你确认要将 [' + cloth.name + '] 加入衣柜吗？');
+		}
+		clothesSet[category][idx].own = !cloth.own;
+		saveInventory();
+		displayItems($('a.list-group-item').filter('.active'));
+	});
+	updateBadge();
+	displayItems($('a.list-group-item:first'));
+});
+</script>
+</body>
+</html>

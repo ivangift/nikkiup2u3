@@ -6,11 +6,12 @@
     <script type='text/javascript' charset="UTF-8" src='jquery.floatThead.min.js'></script>
     <script type='text/javascript' charset="UTF-8" src='jquery.collapse.js'></script>
     <script type='text/javascript' charset="UTF-8" src='jquery.auto-complete.min.js'></script>
-    <script type='text/javascript' charset="UTF-8" src='wardrobe.js'></script>
-    <script type='text/javascript' charset="UTF-8" src='scoring.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='../nikkistats/wardrobe.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='../nikkistats/scoring.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='../nikkistats/blacklist.js'></script>
     <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
-    <script type='text/javascript' charset="UTF-8" src='model.js'></script>
-    <script type='text/javascript' charset="UTF-8" src='pattern.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='../nikkistats/model.js'></script>
+    <script type='text/javascript' charset="UTF-8" src='../nikkistats/pattern.js'></script>
     <script type='text/javascript' charset="UTF-8" src='nikki.js'></script>
     <link rel="stylesheet" href="jquery.auto-complete.css">
     <style>
@@ -47,6 +48,11 @@
       td
       {
         color: #669;
+        padding: 4px 4px 4px 4px;
+      }
+      table.warning td
+      {
+        color: #c33;
         padding: 4px 4px 4px 4px;
       }
       table.mainTable td.own.deps .button {
@@ -223,11 +229,13 @@
       .red {
         color: red;
       }
+      .blue {
+        color: blue;
+      }
       select
       {
         width: 200px;
         height: 29px;
-        margin-top: 0.5em;
         border-radius: 3px;
         border: 1px solid #CCC;
         font-weight: 200;
@@ -260,105 +268,167 @@
       input.suggest {
         width: 30em;
       }
+      div.control {
+        height: 1.8em;
+      }
+      input[type=radio].nice, input[type=checkbox].nice {
+        display:none;
+      }
+      input[type=radio].nice + label, input[type=checkbox].nice + label {
+        display:inline-block;
+        margin:-2px;
+        padding: 4px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: #333;
+        text-align: center;
+        text-shadow: 0 1px 1px rgba(255,255,255,0.75);
+        vertical-align: middle;
+        cursor: pointer;
+        background-color: #f5f5f5;
+        background-image: -moz-linear-gradient(top,#fff,#e6e6e6);
+        background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6));
+        background-image: -webkit-linear-gradient(top,#fff,#e6e6e6);
+        background-image: -o-linear-gradient(top,#fff,#e6e6e6);
+        background-image: linear-gradient(to bottom,#fff,#e6e6e6);
+        background-repeat: repeat-x;
+        border: 1px solid #ccc;
+        border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+        border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+        border-bottom-color: #b3b3b3;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+        -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+        -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+      }
+      input[type=radio].nice:checked + label, input[type=checkbox].nice:checked + label{
+        background-image: none;
+        outline: 0;
+        -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+        -moz-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
+        box-shadow: inset 0 2px 4px rgba(1,0,0,0.15),0 1px 2px rgba(1,0,0,0.05);
+          background-color:#e0ffff;
+      }
     </style>
   </head>
   <body>
     <div class='announcement'>
       Nikki's wardrobe. By Ivan's workshop<br/>
-      服装数据来自jillhx@贴吧 20160108<br/>
-      设计图数据来自amy_翡翠@贴吧 1.5.2<br/>
-      Update 20160110:<br/>
+      服装数据来自amy_翡翠@贴吧 20160223<br/>
+      设计图数据来自amy_翡翠@贴吧<br/>
+      Update 20160402:<br/>
       <ul>
-        <li>关卡更新完毕，遇到F先脱外套再看关卡有没有特殊要求最后换身衣服看看。</li>
-        <li>玉人你给我出来！名花有主是什么意思！我跟花有半毛钱关系！！要不是看你已经病得不能说话早收拾你了。。。</li>
-        <li style="color:white">别同情得太早，我觉得她打字熬夜可一点都没受到影响。</li>
+        <li>迫于玉人的压力不得不强忍着时差配合更新的ip表示她的攻略岂止是界面有品位问题啊！</li>
+        <li>愚人节关卡已经更新，简单攻略如下：</li>
+        <ol>
+          <li>用标准权重在购物车搭配服装，不要穿鞋子免得对方有灰姑娘</li>
+          <li>第一关：80000分，第二关：90000分，第三关，75000分，第四关，85000分，第五关，70000分</li>
+          <li>进游戏，不要用技能，躺着任其蹂躏</li>
+          <li>假装被F吓到</li>
+        </ol>
+        <li>联盟关卡更新了若干，剩下的今天继续</li>
       </ul>
-      衣服信息纠错请去<a href="http://tieba.baidu.com/p/3860789814">jillhx的新衣柜楼</a>汇报<br/>
-      功能错误或者有新需求请去<a href="http://tieba.baidu.com/p/3792563906">主贴</a>汇报<br/>
+      衣服信息纠错请去<a href="http://tieba.baidu.com/p/3860789814" target="_blank">jillhx的新衣柜楼</a>汇报<br/>
+      功能错误或者有新需求请去<a href="http://tieba.baidu.com/p/3792563906" target="_blank">主贴</a>汇报<br/>
       <strong>主贴不负责回答为何搭配会F的问题，如果你的得分明显偏小（只有估计值的1/10），那么原因通常可能是：<br/>
         1.穿错了衣服，2.穿错了外套，3.既穿错了衣服又穿错了外套</strong><br/>
     </div>
     <hr/>
     <div id='filtersTop'>
       <form name="filter_form">
-        <div>
+        <div class='control'>
           <input type="radio" name="mode" value="filtering" onClick="changeMode(true)" /> 筛选
           <input type="radio" name="mode" value="ranking" onClick="changeMode(false)" checked/> 计分
           <select id="theme" onChange="changeTheme()" style="display: none"></select>
-          <span id="tagInfo"></span>
+          <input class="nice" type="radio" name="boost" id="boostStandard" value="standard" onClick="changeBoost(1)" checked/>
+          <label for="boostStandard">标准</label>
+          <input class="nice" type="radio" name="boost" id="boostExtreme" value="boostExtreme" onClick="changeBoost(2)" />
+          <label for="boostExtreme">极限-顶配</label>
+          <input class="nice" type="radio" name="boost" id="boostExtremeMine" value="boostExtremeMine" onClick="changeBoost(3)" />
+          <label for="boostExtremeMine">极限-我的衣柜</label>
         </div>
         <div class='facet'>
-          <div>
+          <div class='control'>
             <input type="radio" name="simple" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="simple" value="1" onClick="changeFilter()" /> 简约
             <input type="radio" name="simple" value="-1" onClick="changeFilter()" /> 华丽
             <div class='weightContainer' style="display: none" id = "simpleWeightContainer">
             	&nbsp;&nbsp;权重 <input type="text" id="simpleWeight" name="simpleWeight" value="1" onChange="changeFilter()" />
+              <span class="boost" id="simpleBoost"></span>
           	</div>
           </div>
-          <div>
+          <div class='control'>
             <input type="radio" name="cute" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="cute" value="1" onClick="changeFilter()" /> 可爱
             <input type="radio" name="cute" value="-1" onClick="changeFilter()" /> 成熟
             <div class='weightContainer' style="display: none" id = "cuteWeightContainer">
             	&nbsp;&nbsp;权重 <input type="text" id="cuteWeight" name="cuteWeight" value="1" onChange="changeFilter()" />
+              <span class="boost" id="cuteBoost"></span>
             </div>
           </div>
-          <div>
+          <div class='control'>
             <input type="radio" name="active" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="active" value="1" onClick="changeFilter()" /> 活泼
             <input type="radio" name="active" value="-1" onClick="changeFilter()" /> 优雅
             <div class='weightContainer' style="display: none" id = "activeWeightContainer">
               &nbsp;&nbsp;权重 <input type="text" id="activeWeight" name="activeWeight" value="1" onChange="changeFilter()" />
+              <span class="boost" id="activeBoost"></span>
             </div>
           </div>
-          <div>
+          <div class='control'>
             <input type="radio" name="pure" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="pure" value="1" onClick="changeFilter()" /> 清纯
             <input type="radio" name="pure" value="-1" onClick="changeFilter()" /> 性感
             <div class='weightContainer' style="display: none" id = "pureWeightContainer">
               &nbsp;&nbsp;权重 <input type="text" id="pureWeight" name="pureWeight" value="1" onChange="changeFilter()" />
+              <span class="boost" id="pureBoost"></span>
             </div>
           </div>
-          <div>
+          <div class='control'>
             <input type="radio" name="cool" value="0" onClick="changeFilter()" /> 皆可
             <input type="radio" name="cool" value="1" onClick="changeFilter()" /> 清凉
             <input type="radio" name="cool" value="-1" onClick="changeFilter()" /> 保暖
             <div class='weightContainer' style="display: none" id = "coolWeightContainer">
               &nbsp;&nbsp;权重 <input type="text" id="coolWeight" name="coolWeight" value="1" onChange="changeFilter()" />
+              <span class="boost" id="coolBoost"></span>
             </div>
           </div>
           <div id='tagFilter'>
-            Tag1
-            <input type="text" id="tag1" name="tag1" onChange="changeFilter()" />
-            <div class='tagContainer weightContainer' style="display: none" id = "tag1Container">
-              <input type="radio" name="tag1method" value="add" onClick="changeFilter()" checked/> 加分
-              <input type="radio" name="tag1method" value="replace" onClick="changeFilter()" /> 替换
-              <select id="tag1base" onChange="changeFilter()">
-                <option>SS</option>
-                <option>S</option>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-              </select>
-              &times;
-              <input type="text" id="tag1weight" name="tag1weight" value="1" onChange="changeFilter()" />
+            <div class='control'>
+              Tag1
+              <input type="text" id="tag1" name="tag1" onChange="changeFilter()" />
+              <div class='tagContainer weightContainer' style="display: none" id = "tag1Container">
+                <input type="radio" name="tag1method" value="add" onClick="changeFilter()" checked/> 加分
+                <input type="radio" name="tag1method" value="replace" onClick="changeFilter()" /> 替换
+                <select id="tag1base" onChange="changeFilter()">
+                  <option>SS</option>
+                  <option>S</option>
+                  <option>A</option>
+                  <option>B</option>
+                  <option>C</option>
+                </select>
+                &times;
+                <input type="text" id="tag1weight" name="tag1weight" value="1" onChange="changeFilter()" />
+              </div>
             </div>
-            <br/>
-            Tag2
-            <input type="text" id="tag2" name="tag2" onChange="changeFilter()" />
-            <div class='tagContainer weightContainer' style="display: none" id = "tag2Container">
-              <input type="radio" name="tag2method" value="add" onClick="changeFilter()" checked/> 加分
-              <input type="radio" name="tag2method" value="replace" onClick="changeFilter()" /> 替换
-              <select id="tag2base" onChange="changeFilter()">
-                <option>SS</option>
-                <option>S</option>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-              </select>
-              &times;
-              <input type="text" id="tag2weight" name="tag2weight" value="1" onChange="changeFilter()" />
+            <div class='control'>
+              Tag2
+              <input type="text" id="tag2" name="tag2" onChange="changeFilter()" />
+              <div class='tagContainer weightContainer' style="display: none" id = "tag2Container">
+                <input type="radio" name="tag2method" value="add" onClick="changeFilter()" checked/> 加分
+                <input type="radio" name="tag2method" value="replace" onClick="changeFilter()" /> 替换
+                <select id="tag2base" onChange="changeFilter()">
+                  <option>SS</option>
+                  <option>S</option>
+                  <option>A</option>
+                  <option>B</option>
+                  <option>C</option>
+                </select>
+                &times;
+                <input type="text" id="tag2weight" name="tag2weight" value="1" onChange="changeFilter()" />
+              </div>
             </div>
           </div>
         </div>
@@ -376,7 +446,10 @@
       </div>
     </div>
     <div id='shoppingCartContainer'>
-      已选择的衣服 <input type="checkbox" id="accessoriesHelper" checked />自动选择饰品 <button onclick="clearShoppingCart()">清空购物车</button>
+      已选择的衣服
+      <span id="accessoriesPanel"><input type="checkbox" id="accessoriesHelper" checked />自动选择饰品</span>
+      <span id="accessoriesWarning" class="red" style="display:none">极限模式下所有衣服均为自动推荐</span>
+      <button onclick="clearShoppingCart()">清空购物车</button>
       <input type="text" id="searchitem" placeholder="输入衣服名称或编号" class='suggest'/>
       <div id='shoppingCart'>
       </div>

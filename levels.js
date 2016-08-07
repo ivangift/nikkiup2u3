@@ -34,10 +34,34 @@ var tasksRaw = {
   'g2-5': [-0.87, 0.87, -0.6, 0.6, 0.6],
   'g2-6': [1.0, 1.2, 1.0, 1.2, 0.93],
   'g2-7': [0.8, 0.6, -0.8, 0.6, -0.6],
+  'g3-1': [-1.07, 1.33, 1.07, -1.33, 1.07],
+  'g3-2': [0.6, 0.8, 0.6, -0.6, 0.8],
+  'g3-3': [0.8, -1.0, 0.8, -1.0, 0.8],
+  'g3-4': [-0.53, 0.73, -0.53, 0.73, 0.53],
+  'g3-5': [-1.27, -1.0, -1.27, 1.0, 1.0],
+  'g3-6': [1.07, -0.93, -1.07, 0.93, 0.93],
+  'g3-7': [-0.87, 0.6, 0.87, -0.6, 0.6],
+  'g4-1': [-0.87, 1.0, 0.87, 1.0, 0.87],
+  'g4-2': [-0.4, 0.67, 0.4, 0.67, 0.4],
+  'g4-3': [1.0, 1.13, 1.13, 1.0, 1.0],
+  'g4-4': [1.2, -1.07, -1.07, 1.07, -1.2],
+  
 }
 
 var extraRaw = {
+  '愚人节1': [-1.0, 2.0, -1.0, 2.67, 2.0],
+  '愚人节2': [2.0, 3.33, 2.0, 1.33, -1.33],
+  '愚人节3': [2.0, -3.33, -2.0, 1.27, -1.27],
+  '愚人节4': [2.2, -2.87, 1.47, -2.87, 2.2],
+  '愚人节5': [2.0, -1.0, 1.0, 2.0, -2.67],
+
   /*
+  '婚恋奇迹1': [1.0, 1.33, 1.33, 1.33, 0.67],
+  '婚恋奇迹2': [1.33, -1.33, 0.67, -1.33, 1.0],
+  '婚恋奇迹3': [-1.33, -1.33, -1.33, -1.0, -0.67],
+  '婚恋奇迹4': [-1.33, 0.67, 1.33, 1.33, -1.0],
+  '婚恋奇迹5': [1.33, -1.0, -1.33, 1.33, -0.67],
+
   '满天繁星: 观星之夜': [1.33, 1.0, 0.67, 1.33, -1.33],
   '满天繁星: 射手座少女': [1.33, 1.33, 1.33, 1.0, 0.67],
   '满天繁星: 玄武女土蝠': [-1.0, -1.33, -1.33, -1.33, 0.67],
@@ -45,6 +69,12 @@ var extraRaw = {
   '满天繁星: 星宿侠女': [-1.33, -1.0, 1.33, -1.33, 0.67],
   '满天繁星: 玄武虚日鼠': [0.67, -1.33, -1.33, 1.33, -1.0],
   '满天繁星: 朱雀翼火蛇': [-1.33, -1.0, -1.33, 1.33, -0.67]
+  
+  '冰雪舞会1': [0.1, 0.2, 0.2, 0.1, -0.3],
+  '冰雪舞会2': [1.4, 0.67, -1.4, 2.2, 0.67],
+  '冰雪舞会3': [0.8, 1.5, -1.5, 2.33, 0.8],
+  '冰雪舞会4': [-0.8, 0.67, 0.67, 0.8, 0.6],
+  '冰雪舞会5': [-0.8, -0.8, -0.67, -0.67, 0.67]
   */
 };
 
@@ -193,7 +223,19 @@ var levelsRaw = {
   '11-9': [2.6, 1.33, 2.6, 2.0, 2.0],
   '11-支1': [2.7, -2.0, -2.7, 2.0, 1.33],
   '11-支2': [2.3, 1.6, -2.3, 1.6, 1.1],
-  '11-支3': [2.3, 2.9, 2.9, -1.6, 2.3]
+  '11-支3': [2.3, 2.9, 2.9, -1.6, 2.3],
+  '12-1': [-2.2, -2.2, 3, -1.5, -3],
+  '12-2': [1.9, -2.5, -2.5, -1.9, 1.33],
+  '12-3': [-1.9, 1.0, -1.9, 1.0, 1.0],
+  '12-4': [2.1, 2.8, -2.1, 2.8, -1.33],
+  '12-5': [3.0, 2.33, 3.0, -2.33, 1.67],
+  '12-6': [-1.2, -0.67, -2.1, 1.2, 0.67],
+  '12-7': [1.5, 1.1, 2.33, 1.1, 1.0],
+  '12-8': [-2.33, 2.33, 1.67, -1.67, 1.0],
+  '12-9': [1.3, 0.67, -1.3, 0.67, 0.67],
+  '12-支1': [-1.9, -1.3, -1.9, 1.3, -0.67],
+  '12-支2': [1.33, 1.67, 1.33, 1.67, 1.67],
+  '12-支3': [2.3, 1.0, 2.3, 1.67, 1.0],
 };
 
 function tagMatcher(whitelist, clothes) {
@@ -216,26 +258,6 @@ function nameMatcher(whitelist, clothes) {
   return false;
 }
 
-function weightedFilter(tagWhitelist, nameWhitelist, weight) {
-  return {
-    tagWhitelist: tagWhitelist,
-    nameWhitelist: nameWhitelist,
-    filter: function(clothes) {
-      if (tagWhitelist && tagMatcher(tagWhitelist, clothes)) {
-        return;
-      }
-      if (nameWhitelist && nameMatcher(nameWhitelist, clothes)) {
-        return;
-      }
-      clothes.tmpScore /= weight;
-    }
-  }
-}
-
-function normalFilter(tagWhitelist, nameWhitelist) {
-  return weightedFilter(tagWhitelist, nameWhitelist, 10);
-}
-
 function noOp() {
   return {
     filter: function() {
@@ -244,107 +266,41 @@ function noOp() {
   };
 }
 
+function blacklistFilter() {
+  return {
+    lvlList: {},
+    add: function(category, id) {
+      if (!this.lvlList[category]) {
+        this.lvlList[category] = {};
+      }
+      this.lvlList[category][id] = 1;
+    },
+    matches: function(c) {
+      return this.lvlList[c.type.mainType] && this.lvlList[c.type.mainType][c.id];
+    },
+    filter: function(c) {
+      if (this.matches(c)) {
+        c.tmpScore /= 10;
+        c.tmpScoreByCategory.f();
+        c.bonusByCategory.f();
+      }
+    }
+  }
+}
+
 // Note: filters decides which clothes will be penalized (usually 1/10 of the score)
 // Only applicable to dresses, coats, tops and bottoms
-var levelFilters = {
-  '1-1': noOp(),
-  '1-2': noOp(),
-  '1-3': normalFilter("中式古典/中式现代/旗袍/民国服饰"),
-  '1-4': noOp(),
-  '1-5': noOp(),
-  '1-6': noOp(),
-  '1-7': normalFilter("中性风"),
-  '1-8': noOp(),
-  '1-9': noOp(),
-  '2-1': noOp(),
-  '2-2': noOp(),
-  '2-3': noOp(),
-  '2-4': noOp(),
-  '2-5': noOp(),
-  '2-6': normalFilter("和风"),
-  '2-7': normalFilter("睡衣"),
-  '2-8': noOp(),
-  '2-9': normalFilter("欧式古典/晚礼服/女神系/波西米亚"),
-  '2-支1': normalFilter(""), // TODO: check
-  '2-支2': normalFilter("中性风"),
-  '3-1': normalFilter("英伦", "名媛连衣裙"),
-  '3-2': normalFilter("摇滚风"),
-  '3-3': noOp(),
-  '3-4': normalFilter("森女系列"),
-  '3-5': normalFilter("运动系", "运动"),
-  '3-6': weightedFilter("沐浴/和风", null, 160),
-  '3-7': normalFilter("运动系"), // TODO: double check
-  '3-8': noOp(),
-  '3-9': normalFilter("侠客联盟/摇滚风"),
-  '3-10': noOp(),
-  '3-11': normalFilter("欧式古典/晚礼服/女神系/波西米亚"),
-  '3-12': noOp(),
-  '3-支1': normalFilter("欧式古典/晚礼服/女神系/波西米亚"),
-  '3-支2': normalFilter("婚纱"),
-  '4-1': noOp(),
-  '4-2': weightedFilter("泳装", null, 32),
-  '4-3': weightedFilter("泳装", null, 32),
-  '4-4': noOp(),
-  '4-5': noOp(),
-  '4-6': normalFilter("OL"),
-  '4-7': normalFilter("欧式古典/晚礼服/女神系/波西米亚"),
-  '4-8': normalFilter("医务使者"),
-  '4-9': normalFilter("中式古典/中式现代/旗袍/民国服饰"),
-  '4-10': noOp(),
-  '4-11': noOp(),
-  '4-12': normalFilter("兔女郎"),
-  '4-支1': noOp(),
-  '4-支2': normalFilter("围裙"),
-  '4-支3': normalFilter("围裙"),
-  '5-1': normalFilter("运动系", "运动"),
-  '5-2': noOp(),
-  '5-3': noOp(),
-  '5-4': noOp(),
-  '5-5': noOp(),
-  '5-6': normalFilter("民国服饰"),
-  '5-7': normalFilter("波西米亚"),
-  '5-8': noOp(),
-  '5-9': noOp(),
-  '5-10': noOp(),
-  '5-11': normalFilter("侠客联盟"),
-  '5-12': normalFilter("中式古典/中式现代/旗袍/民国服饰"),
-  '5-支1': noOp(),
-  '5-支2': normalFilter("运动系"), // TODO: double check,
-  '5-支3': normalFilter("医务使者"),
-  '6-1': noOp(),
-  '6-2': normalFilter("中式古典/中式现代/旗袍/民国服饰"),
-  '6-3': normalFilter("和风"),
-  '6-4': noOp(),
-  '6-5': noOp(),
-  '6-6': normalFilter("中性风"),
-  '6-7': noOp(),
-  '6-8': normalFilter("中式现代/泳装"),
-  '6-9': normalFilter("旗袍"),
-  '6-10': normalFilter("中式现代/冬装"),
-  '6-11': normalFilter("中式古典/中式现代/旗袍/民国服饰"),
-  '6-支1': noOp(), // Not tested yet, not eligible for this level yet
-  '6-支2': noOp(), // Not tested yet, not eligible for this level yet
-  '6-支3': noOp(), // Not tested yet, not eligible for this level yet
-  '7-1': noOp(),
-  '7-2': noOp(),
-  '7-3': noOp(),
-  '7-4': noOp(),
-  '7-5': noOp(),
-  '7-6': noOp(),
-  '7-7': noOp(),
-  '7-8': noOp(),
-  '7-9': noOp(),
-  '7-支1': noOp(),
-  '7-支2': noOp(),
-  '7-支3': noOp(),
-  '7-支4': noOp(),
-  '7-支5': noOp(),
-  '仲夏夜之梦1': noOp(),
-  '仲夏夜之梦2': noOp(),
-  '仲夏夜之梦3': noOp(),
-  '仲夏夜之梦4': noOp(),
-  '仲夏夜之梦5': noOp()
-};
+var levelFilters = function() {
+  var ret = {};
+  for (var i in blacklist) {
+    var black = blacklist[i];
+    if (!ret[black[0]]) {
+      ret[black[0]] = blacklistFilter();
+    }
+    ret[black[0]].add(black[1], black[2]);
+  }
+  return ret;
+}();
 
 function abstractBonusFactory(note, replace, param, tagWhitelist, nameWhitelist, callback) {
   return function(criteria) {
@@ -601,6 +557,15 @@ function addBonusInfo(base, weight, tag) {
   '11-4': [addBonusInfo('A', 0.1, "冬装")],
   '11-7': [addBonusInfo('A', 0.5, "欧式古典")],
   '11-支2': [addBonusInfo('C', 1, "中性风")],
+  '12-3': [addBonusInfo('A', 0.5, "侠客联盟"), addBonusInfo('A', 0.5, "童话系")],
+  '12-5': [addBonusInfo('A', 0.25, "原宿系")],
+  '12-6': [addBonusInfo('A', 1, "中式古典")],
+  '12-7': [addBonusInfo('S', 1, "运动系")],
+  '12-8': [addBonusInfo('B', 1, "未来系")],
+  '12-9': [addBonusInfo('SS', 1.5, "波西米亚")],
+  '12-支1': [addBonusInfo('B', 1, "中式古典")],
+  '12-支2': [addBonusInfo('A', 1, "居家服"), addBonusInfo('A', 1, "睡衣")],
+  '12-支3': [addBonusInfo('B', 1, "运动系")],
   '月下舞会3': [addBonusInfo('S', 1, "欧式古典")],
   '仲夏夜之梦1': [addBonusInfo('S', 1, "童话系")],
   '仲夏夜之梦2': [replaceBonusInfo('SS', 1, "和风")],
@@ -631,9 +596,27 @@ function addBonusInfo(base, weight, tag) {
   'g2-5': [addBonusInfo('S', 1, "女仆装")],
   'g2-6': [addBonusInfo('B', 0.25, "海军风")],
   'g2-7': [addBonusInfo('S', 1, "中式现代")],
+  'g3-2': [addBonusInfo('A', 2, "沐浴")],
+  'g3-3': [addBonusInfo('S', 1, "泳装")],
+  'g3-4': [addBonusInfo('SS', 1, "和风")],
+  'g3-6': [addBonusInfo('A', 0.5, "中性风")],
+  'g3-7': [addBonusInfo('A', 1, "侠客联盟"), addBonusInfo('S', 0.25, "欧式古典")],
+  'g4-1': [addBonusInfo('A', 0.5, "小动物")],
+  'g4-2': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 2, "中式现代")],
+  'g4-3': [addBonusInfo('A', 0.5, "运动系")],
+  'g4-4': [addBonusInfo('B', 0.5, "冬装")],
   '满天繁星: 喝茶听课': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
   '满天繁星: 星宿侠女': [addBonusInfo('A', 1, "侠客联盟")],
-  '满天繁星: 朱雀翼火蛇': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")]
+  '满天繁星: 朱雀翼火蛇': [addBonusInfo('A', 1, "中式古典"), addBonusInfo('A', 1, "中式现代")],
+  '冰雪舞会1': [addBonusInfo('A', 4, "居家服"), addBonusInfo('A', 10, "睡衣")],
+  '冰雪舞会2': [addBonusInfo('S', 0.25, "森女系列")],
+  '冰雪舞会4': [addBonusInfo('S', 1, "童话系")],
+  '冰雪舞会5': [addBonusInfo('S', 1, "欧式古典")],
+  '婚恋奇迹3': [addBonusInfo('A', 1, "晚礼服")],
+  '婚恋奇迹4': [addBonusInfo('A', 1, "洛丽塔")],
+  '婚恋奇迹5': [addBonusInfo('A', 1, "中式现代"), addBonusInfo('A', 1, "中式古典")],
+  '愚人节1': [addBonusInfo('A', 0.5, "和风")],
+  '愚人节5': [addBonusInfo('A', 0.5, "冬装")],
  };
 
 var additionalLevelInfo = {
