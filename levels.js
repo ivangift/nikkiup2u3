@@ -60,6 +60,7 @@ var tasksRaw = {
 var extraRaw = {
   '七夕浪漫夜': [1.4, 1.53, 1.53, 1.4, 1.33],
   '特别的七夕装扮': [-0.4, -0.33, -1.67, 1.67, 0.33],
+  '相思脉脉': [0.07, -0.2, 0.07, -0.07, -0.2],
 
 
   /*
@@ -646,6 +647,8 @@ function addBonusInfo(base, weight, tag) {
   '医疗所之谜3': [addBonusInfo('B', 1, "医务使者")],
   '医疗所之谜5': [addBonusInfo('B', 0.66, "未来系")],
   '特别的七夕装扮': [addBonusInfo('S', 1, "旗袍")],
+  '相思脉脉': [addBonusInfo('S', 10, "军装"), addBonusInfo('S', 10, "冬装")],
+
  };
 
 function parseCriteriaList(criteria) {
